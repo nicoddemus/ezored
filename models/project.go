@@ -16,12 +16,8 @@ type ProjectConfig struct {
 }
 
 type ProjectTarget struct {
-	Name     string `json:"name"`
-	Location struct {
-		Name    string `json:"name"`
-		Type    string `json:"type"`
-		Version string `json:"version"`
-	} `json:"location"`
+	Name       string     `json:"name"`
+	Repository Repository `json:"repository"`
 }
 
 func (This *Project) HasTargets() bool {
