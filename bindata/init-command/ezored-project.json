@@ -6,7 +6,7 @@
 		{
 			"name": "ios",
 			"repository": {
-				"name": "ezored/target-project-ios",
+				"name": "ezored/target-ios",
 				"type": "github",
 				"version": "b:master"
 			}
@@ -14,7 +14,7 @@
 		{
 			"name": "android",
 			"repository": {
-				"name": "ezored/target-project-android",
+				"name": "ezored/target-android",
 				"type": "github",
 				"version": "b:master"
 			}

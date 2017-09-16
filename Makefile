@@ -38,6 +38,7 @@ format:
 	${GOFMT} models/copy-file.go
 	${GOFMT} models/project.go
 	${GOFMT} models/repository.go
+	${GOFMT} models/target-project.go
 	${GOFMT} models/vendor.go
 	${GOFMT} utils/file-utils/file-utils.go
 	${GOFMT} utils/flag-utils/flag-utils.go

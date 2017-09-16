@@ -3,7 +3,9 @@ package constants
 const (
 	PROJECT_FILENAME            = "ezored-project.json"
 	VENDOR_DEPENDENCY_FILENAME  = "ezored-vendor.json"
+	TARGET_PROJECT_FILENAME     = "ezored-target.json"
 	DEPENDENCIES_DIRECTORY      = "vendor"
+	TARGET_DIRECTORY            = "target"
 	TEMPORARY_DIRECTORY         = "temp"
 	SOURCE_DIRECTORY            = "source"
 	BUILD_DIRECTORY             = "build"

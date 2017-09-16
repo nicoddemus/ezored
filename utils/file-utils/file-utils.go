@@ -37,6 +37,10 @@ func CreateDependenciesDirectory() {
 	os.Mkdir(constants.DEPENDENCIES_DIRECTORY, constants.DIRECTORY_PERMISSIONS)
 }
 
+func CreateTargetDirectory() {
+	os.Mkdir(constants.TARGET_DIRECTORY, constants.DIRECTORY_PERMISSIONS)
+}
+
 func CreateTemporaryDirectory() {
 	os.Mkdir(constants.TEMPORARY_DIRECTORY, constants.DIRECTORY_PERMISSIONS)
 }
@@ -157,7 +161,7 @@ func IsDirectory(path string) (bool, error) {
 	return fileInfo.IsDir(), nil
 }
 
-func CopyAllFiles(copyFiles []models.CopyFile) {
+func CopyAllFiles(copyFiles []*models.CopyFile) {
 	for _, copyFile := range copyFiles {
 		isDir, err := IsDirectory(copyFile.From)
 
@@ -310,4 +314,22 @@ func GetProject() models.Project {
 	}
 
 	return project
+}
+
+func GetTarget(targetTempDirectory string) models.TargetProject {
+	// we dont return error, we want throw error here, because it never can happen
+	fileContent, err := ioutil.ReadFile(filepath.Join(targetTempDirectory, constants.TARGET_PROJECT_FILENAME))
+
+	if err != nil {
+		logger.F(err.Error())
+	}
+
+	var targetProject models.TargetProject
+	err = json.Unmarshal(fileContent, &targetProject)
+
+	if err != nil {
+		logger.F(err.Error())
+	}
+
+	return targetProject
 }

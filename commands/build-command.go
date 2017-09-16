@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -10,11 +11,10 @@ import (
 	"github.com/ezored/ezored/utils/file-utils"
 	"github.com/ezored/ezored/utils/flag-utils"
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"path/filepath"
-)
-
-const (
-	TASK_BUILD = "build"
+	"text/template"
 )
 
 type BuildCommand struct {
@@ -22,14 +22,8 @@ type BuildCommand struct {
 }
 
 func (This *BuildCommand) Init() {
-	if flagutils.CheckForArgsCount(2) {
-		task := flag.Arg(1)
-
-		switch task {
-		case TASK_BUILD:
-			This.Build()
-			break
-		}
+	if flagutils.CheckForArgsCount(1) {
+		This.Build()
 	} else {
 		logger.F("Invalid build task")
 	}
@@ -58,8 +52,10 @@ func (This *BuildCommand) Build() {
 	}
 
 	// check if we need build a specifc target or all targets
-	if len(flag.Args()) > 2 {
-		targetName = flag.Arg(2)
+	fmt.Print(flag.Args())
+
+	if len(flag.Args()) > 1 {
+		targetName = flag.Arg(1)
 
 		if len(targetName) > 0 {
 			buildAllTargets = false
@@ -72,7 +68,7 @@ func (This *BuildCommand) Build() {
 		logger.D(fmt.Sprintf("Build started for target: %s", targetName))
 	}
 
-	targetBuilt := 0
+	targetsBuilt := 0
 
 	// build targets
 	for _, target := range project.Targets {
@@ -126,354 +122,195 @@ func (This *BuildCommand) Build() {
 			logger.I("Your project has no dependencies")
 		}
 
-		// TODO: Need make the new build process here
-		// download target if it is not downloaded
+		logger.D("Checking target files...")
+
+		targetTempDirectory := ""
+
+		if target.Repository.Type == models.REPOSITORY_TYPE_GITHUB {
+			// prepare
+			logger.D("Obtaining target files: %s...", target.Name)
+
+			fileutils.CreateTargetDirectory()
+			fileutils.CreateTemporaryDirectory()
+
+			downloadUrl := target.Repository.GetDownloadUrl()
+			downloadDest := filepath.Join(constants.TEMPORARY_DIRECTORY, target.Repository.GetFileName())
+			workingDirectory := filepath.Join(constants.TEMPORARY_DIRECTORY, target.Repository.GetDirectoryName())
+			targetTempDirectory = workingDirectory
+
+			// download target files
+			if fileutils.Exists(downloadDest) {
+				logger.D("Target files already downloaded: %s", target.Name)
+			} else {
+				err := fileutils.DownloadFile(downloadDest, downloadUrl)
+
+				if err != nil {
+					logger.F("Problems when download target files: %s - %s", target.Name, err)
+				}
+
+				if fileutils.Exists(downloadDest) {
+					logger.D("Target files downloaded: %s", target.Name)
+				} else {
+					logger.F("Problems when obtain target files: %s", target.Name)
+				}
+			}
+
+			// extract target
+			logger.D("Extracting target: %s...", target.Name)
+
+			if fileutils.Exists(workingDirectory) {
+				logger.D("Target already extracted: %s", target.Name)
+			} else {
+				err := fileutils.Unzip(downloadDest, constants.TEMPORARY_DIRECTORY)
+
+				if err != nil {
+					logger.F("Problems when extract target: %s - %s", target.Name, err)
+				}
+
+				if fileutils.Exists(workingDirectory) {
+					logger.D("Target extracted: %s", target.Name)
+				} else {
+					logger.F("Problems when unzip target: %s - %s", target.Name, err)
+				}
+			}
+
+			// remove downloaded file
+			os.RemoveAll(downloadDest)
+		}
+
+		// preparing target
+		logger.D("Preparing target files...")
+
+		os.RemoveAll(filepath.Join(constants.TARGET_DIRECTORY, target.Name))
+
+		targetProject := fileutils.GetTarget(targetTempDirectory)
+
+		buildCommandParts := targetProject.Target.Build
+		head := buildCommandParts[0]
+		buildCommandParts = buildCommandParts[1:]
+
+		cmd := exec.Command(head, buildCommandParts...)
+		cmd.Dir = targetTempDirectory
+
+		// pass environment variables
+		currentDir, err := os.Getwd()
+
+		if err != nil {
+			logger.F("Problems when prepare to build target: %s - %s", target.Name, err)
+		}
+
+		env := os.Environ()
+		env = append(env, fmt.Sprintf("EZORED_PROJECT_ROOT=%s", currentDir))
+		cmd.Env = env
+
+		// execute
+		out, err := cmd.Output()
+
+		if err != nil {
+			logger.F("Problems when prepare to build target: %s - %s", target.Name, err)
+		}
+
+		if len(out) > 0 {
+			logger.D("Prepare target files to build log:\n\n%s\n", out)
+		}
+
+		// copy files to build directory
+		os.RemoveAll(filepath.Join(constants.BUILD_DIRECTORY, target.Name))
+		fileutils.CopyDir(filepath.Join(constants.TARGET_DIRECTORY, target.Name), filepath.Join(constants.BUILD_DIRECTORY, target.Name))
+
+		// parse files
+		if targetProject.Target.ParseFiles != nil && len(targetProject.Target.ParseFiles) > 0 {
+			for _, file := range targetProject.Target.ParseFiles {
+				templateFilePath := filepath.Join(constants.BUILD_DIRECTORY, target.Name, file)
+				fileContent, err := ioutil.ReadFile(templateFilePath)
+
+				if err != nil {
+					logger.F(err.Error())
+				}
+
+				t := template.New(file)
+				t, err = t.Parse(string(fileContent))
+
+				if err != nil {
+					logger.F(err.Error())
+				}
+
+				data := struct {
+					HeaderSearchPaths    []string
+					LibrarySearchPaths   []string
+					SourceFiles          []string
+					HeaderFiles          []string
+					LibraryLinks         []string
+					FrameworkLinks       []string
+					CFlags               []string
+					CXXFlags             []string
+					TargetCompileOptions []string
+					ProjectName          string
+				}{
+					HeaderSearchPaths:    targetHeaderSearchPaths,
+					LibrarySearchPaths:   targetLibrarySearchPaths,
+					SourceFiles:          targetSourceFiles,
+					HeaderFiles:          targetHeaderFiles,
+					LibraryLinks:         targetLibraryLinks,
+					FrameworkLinks:       targetFrameworkLinks,
+					CFlags:               targetCFlags,
+					CXXFlags:             targetCXXFlags,
+					TargetCompileOptions: targetTargetCompileOptions,
+					ProjectName:          constants.DEFAULT_PROJECT_NAME,
+				}
+
+				var fileContentBuffer bytes.Buffer
+				t.Execute(&fileContentBuffer, data)
+
+				// replace content
+				templateFilePathDir := filepath.Dir(templateFilePath)
+				templateFilePathFilename := filepath.Base(templateFilePath)
+				fileutils.CreateFileWithContent(templateFilePathDir, templateFilePathFilename, fileContentBuffer.Bytes())
+			}
+		}
+
+		logger.D("Building target project: %s", target.Name)
+
+		targetBuildDirectory := filepath.Join(constants.BUILD_DIRECTORY, target.Name)
+		targetProject = fileutils.GetTarget(targetBuildDirectory)
+
+		buildCommandParts = targetProject.Target.Build
+		head = buildCommandParts[0]
+		buildCommandParts = buildCommandParts[1:]
+
+		cmd = exec.Command(head, buildCommandParts...)
+		cmd.Dir = targetBuildDirectory
+
+		// pass environment variables
+		currentDir, err = os.Getwd()
+
+		if err != nil {
+			logger.F("Problems when prepare to build target project: %s - %s", target.Name, err)
+		}
+
+		env = os.Environ()
+		env = append(env, fmt.Sprintf("EZORED_PROJECT_ROOT=%s", currentDir))
+		cmd.Env = env
+
+		// execute
+		out, err = cmd.Output()
+
+		if err != nil {
+			logger.F("Problems when prepare to build target project: %s - %s", target.Name, err)
+		}
+
+		if len(out) > 0 {
+			logger.D("Target project build log:\n\n%s\n", out)
+		}
 
 		logger.D("Finished build target: %s", target.Name)
 
-		targetBuilt = targetBuilt + 1
+		targetsBuilt = targetsBuilt + 1
 	}
 
-	// prepare directories
-
-	/*
-		os.RemoveAll(filepath.Join(constants.BUILD_DIRECTORY, constants.IOS_DIRECTORY))
-		fileutils.CreateBuildDirectory()
-
-		workingDirectory := filepath.Join(constants.BUILD_DIRECTORY, constants.IOS_DIRECTORY, constants.BUILD_DIRECTORY)
-
-		// prepare template
-		buildFileContent := fileutils.GetAssetContent("bindata/ios/CMakeLists.txt")
-
-		t := template.New("ios")
-		t, err = t.Parse(string(buildFileContent))
-
-		if err != nil {
-			logger.F(err.Error())
-		}
-
-		data := struct {
-			HeaderSearchPaths    []string
-			LibrarySearchPaths   []string
-			SourceFiles          []string
-			HeaderFiles          []string
-			LibraryLinks         []string
-			FrameworkLinks       []string
-			CFlags               []string
-			CXXFlags             []string
-			TargetCompileOptions []string
-			ProjectName          string
-		}{
-			HeaderSearchPaths:    targetHeaderSearchPaths,
-			LibrarySearchPaths:   targetLibrarySearchPaths,
-			SourceFiles:          targetSourceFiles,
-			HeaderFiles:          targetHeaderFiles,
-			LibraryLinks:         targetLibraryLinks,
-			FrameworkLinks:       targetFrameworkLinks,
-			CFlags:               targetCFlags,
-			CXXFlags:             targetCXXFlags,
-			TargetCompileOptions: targetTargetCompileOptions,
-			ProjectName:          constants.DEFAULT_PROJECT_NAME,
-		}
-
-		var buildFileContentBuffer bytes.Buffer
-		t.Execute(&buildFileContentBuffer, data)
-
-		// create files
-		fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.IOS_DIRECTORY), constants.CMAKE_FILE, buildFileContentBuffer.Bytes())
-		fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.IOS_DIRECTORY, constants.FILES_DIRECTORY), "ios.cmake", fileutils.GetAssetContent("bindata/ios/files/ios.cmake"))
-
-		// copy files
-		fileutils.CopyAllFiles(targetCopyFiles)
-
-		// generate files
-		os.MkdirAll(workingDirectory, constants.DIRECTORY_PERMISSIONS)
-
-		buildCommand := []string{"cmake", "-DCMAKE_TOOLCHAIN_FILE=../files/ios.cmake", "-DIOS_PLATFORM=OS", "-GXcode", "../"}
-		output, err := osutils.Exec(buildCommand, workingDirectory)
-
-		if err != nil {
-			logger.F("Problems when generate files for iOS: %s", err)
-		}
-
-		if len(output) > 0 {
-			logger.D("Generate files for iOS log:\n\n%s\n", output)
-		}
-	*/
-
-	logger.D("Build for iOS finished")
+	if targetsBuilt == 0 {
+		logger.D("No targets built")
+	} else {
+		logger.D("Targets built: %d", targetsBuilt)
+	}
 }
-
-/*
-func (This *BuildCommand) buildForIOS() {
-	logger.D("Build for iOS started")
-
-	// initial build file content
-	headerSearchPaths := []string{}
-	librarySearchPaths := []string{}
-	sourceFiles := []string{}
-	headerFiles := []string{}
-	libraryLinks := []string{}
-	frameworkLinks := []string{}
-	cFlags := []string{}
-	cxxFlags := []string{}
-	targetCompileOptions := []string{}
-	copyFiles := []models.CopyFile{}
-
-	// analyze project dependencies
-	fileContent, err := ioutil.ReadFile(constants.PROJECT_FILENAME)
-
-	if err != nil {
-		logger.F(err.Error())
-	}
-
-	var dependencies []*models.Repository
-	err = json.Unmarshal(fileContent, &dependencies)
-
-	if err != nil {
-		logger.F(err.Error())
-	}
-
-	for _, dependency := range dependencies {
-		logger.D("Analyzing dependency: %s...", dependency.Name)
-
-		// get vendor file
-		workingDirectory := fmt.Sprintf("%s/%s", constants.TEMPORARY_DIRECTORY, dependency.GetDirectoryName())
-		fileContent, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", workingDirectory, constants.VENDOR_DEPENDENCY_FILENAME))
-
-		if err != nil {
-			logger.F(err.Error())
-		}
-
-		var vendorDependency models.Vendor
-		err = json.Unmarshal(fileContent, &vendorDependency)
-
-		if err != nil {
-			logger.F(err.Error())
-		}
-
-		headerSearchPaths = append(headerSearchPaths, vendorDependency.Build.IOS.HeaderSearchPaths...)
-		librarySearchPaths = append(librarySearchPaths, vendorDependency.Build.IOS.LibrarySearchPaths...)
-		sourceFiles = append(sourceFiles, vendorDependency.Build.IOS.SourceFiles...)
-		headerFiles = append(headerFiles, vendorDependency.Build.IOS.HeaderFiles...)
-		libraryLinks = append(libraryLinks, vendorDependency.Build.IOS.LibraryLinks...)
-		frameworkLinks = append(frameworkLinks, vendorDependency.Build.IOS.FrameworkLinks...)
-		cFlags = append(cFlags, vendorDependency.Build.IOS.CFlags...)
-		cxxFlags = append(cxxFlags, vendorDependency.Build.IOS.CXXFlags...)
-		targetCompileOptions = append(targetCompileOptions, vendorDependency.Build.IOS.TargetCompileOptions...)
-		copyFiles = append(copyFiles, vendorDependency.Build.Android.CopyFiles...)
-
-		logger.D("Analyzed dependency: %s", dependency.Name)
-	}
-
-	// prepare directories
-	os.RemoveAll(filepath.Join(constants.BUILD_DIRECTORY, constants.IOS_DIRECTORY))
-	fileutils.CreateBuildDirectory()
-
-	workingDirectory := filepath.Join(constants.BUILD_DIRECTORY, constants.IOS_DIRECTORY, constants.BUILD_DIRECTORY)
-
-	// prepare template
-	buildFileContent := fileutils.GetAssetContent("bindata/ios/CMakeLists.txt")
-
-	t := template.New("ios")
-	t, err = t.Parse(string(buildFileContent))
-
-	if err != nil {
-		logger.F(err.Error())
-	}
-
-	data := struct {
-		HeaderSearchPaths    []string
-		LibrarySearchPaths   []string
-		SourceFiles          []string
-		HeaderFiles          []string
-		LibraryLinks         []string
-		FrameworkLinks       []string
-		CFlags               []string
-		CXXFlags             []string
-		TargetCompileOptions []string
-		ProjectName          string
-	}{
-		HeaderSearchPaths:    headerSearchPaths,
-		LibrarySearchPaths:   librarySearchPaths,
-		SourceFiles:          sourceFiles,
-		HeaderFiles:          headerFiles,
-		LibraryLinks:         libraryLinks,
-		FrameworkLinks:       frameworkLinks,
-		CFlags:               cFlags,
-		CXXFlags:             cxxFlags,
-		TargetCompileOptions: targetCompileOptions,
-		ProjectName:          constants.DEFAULT_PROJECT_NAME,
-	}
-
-	var buildFileContentBuffer bytes.Buffer
-	t.Execute(&buildFileContentBuffer, data)
-
-	// create files
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.IOS_DIRECTORY), constants.CMAKE_FILE, buildFileContentBuffer.Bytes())
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.IOS_DIRECTORY, constants.FILES_DIRECTORY), "ios.cmake", fileutils.GetAssetContent("bindata/ios/files/ios.cmake"))
-
-	// copy files
-	fileutils.CopyAllFiles(copyFiles)
-
-	// generate files
-	os.MkdirAll(workingDirectory, constants.DIRECTORY_PERMISSIONS)
-
-	buildCommand := []string{"cmake", "-DCMAKE_TOOLCHAIN_FILE=../files/ios.cmake", "-DIOS_PLATFORM=OS", "-GXcode", "../"}
-	output, err := osutils.Exec(buildCommand, workingDirectory)
-
-	if err != nil {
-		logger.F("Problems when generate files for iOS: %s", err)
-	}
-
-	if len(output) > 0 {
-		logger.D("Generate files for iOS log:\n\n%s\n", output)
-	}
-
-	logger.D("Build for iOS finished")
-}
-
-func (This *BuildCommand) buildForAndroid() {
-	logger.D("Build for Android started")
-
-	// initial build file content
-	headerSearchPaths := []string{}
-	librarySearchPaths := []string{}
-	sourceFiles := []string{}
-	headerFiles := []string{}
-	libraryLinks := []string{}
-	frameworkLinks := []string{}
-	cFlags := []string{}
-	cxxFlags := []string{}
-	targetCompileOptions := []string{}
-	copyFiles := []models.CopyFile{}
-
-	// analyze project dependencies
-	fileContent, err := ioutil.ReadFile(constants.PROJECT_FILENAME)
-
-	if err != nil {
-		logger.F(err.Error())
-	}
-
-	var dependencies []*models.Repository
-	err = json.Unmarshal(fileContent, &dependencies)
-
-	if err != nil {
-		logger.F(err.Error())
-	}
-
-	for _, dependency := range dependencies {
-		logger.D("Analyzing dependency: %s...", dependency.Name)
-
-		// get vendor file
-		workingDirectory := fmt.Sprintf("%s/%s", constants.TEMPORARY_DIRECTORY, dependency.GetDirectoryName())
-		fileContent, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", workingDirectory, constants.VENDOR_DEPENDENCY_FILENAME))
-
-		if err != nil {
-			logger.F(err.Error())
-		}
-
-		var vendorDependency models.Vendor
-		err = json.Unmarshal(fileContent, &vendorDependency)
-
-		if err != nil {
-			logger.F(err.Error())
-		}
-
-		headerSearchPaths = append(headerSearchPaths, vendorDependency.Build.Android.HeaderSearchPaths...)
-		librarySearchPaths = append(librarySearchPaths, vendorDependency.Build.Android.LibrarySearchPaths...)
-		sourceFiles = append(sourceFiles, vendorDependency.Build.Android.SourceFiles...)
-		headerFiles = append(headerFiles, vendorDependency.Build.Android.HeaderFiles...)
-		libraryLinks = append(libraryLinks, vendorDependency.Build.Android.LibraryLinks...)
-		frameworkLinks = append(frameworkLinks, vendorDependency.Build.Android.FrameworkLinks...)
-		cFlags = append(cFlags, vendorDependency.Build.Android.CFlags...)
-		cxxFlags = append(cxxFlags, vendorDependency.Build.Android.CXXFlags...)
-		targetCompileOptions = append(targetCompileOptions, vendorDependency.Build.Android.TargetCompileOptions...)
-		copyFiles = append(copyFiles, vendorDependency.Build.Android.CopyFiles...)
-
-		logger.D("Analyzed dependency: %s", dependency.Name)
-	}
-
-	// prepare directories
-	os.RemoveAll(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY))
-	fileutils.CreateBuildDirectory()
-
-	workingDirectory := filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY)
-
-	// prepare template
-	buildFileContent := fileutils.GetAssetContent("bindata/android/library/CMakeLists.txt")
-
-	t := template.New("android")
-	t, err = t.Parse(string(buildFileContent))
-
-	if err != nil {
-		logger.F(err.Error())
-	}
-
-	data := struct {
-		HeaderSearchPaths    []string
-		LibrarySearchPaths   []string
-		SourceFiles          []string
-		HeaderFiles          []string
-		LibraryLinks         []string
-		FrameworkLinks       []string
-		CFlags               []string
-		CXXFlags             []string
-		TargetCompileOptions []string
-		ProjectName          string
-	}{
-		HeaderSearchPaths:    headerSearchPaths,
-		LibrarySearchPaths:   librarySearchPaths,
-		SourceFiles:          sourceFiles,
-		HeaderFiles:          headerFiles,
-		LibraryLinks:         libraryLinks,
-		FrameworkLinks:       frameworkLinks,
-		CFlags:               cFlags,
-		CXXFlags:             cxxFlags,
-		TargetCompileOptions: targetCompileOptions,
-		ProjectName:          constants.DEFAULT_PROJECT_NAME,
-	}
-
-	var buildFileContentBuffer bytes.Buffer
-	t.Execute(&buildFileContentBuffer, data)
-
-	// create files
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY, "library"), constants.CMAKE_FILE, buildFileContentBuffer.Bytes())
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY, "library"), "build.gradle", fileutils.GetAssetContent("bindata/android/library/build.gradle"))
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY, "library", "src", "main"), "AndroidManifest.xml", fileutils.GetAssetContent("bindata/android/library/src/main/AndroidManifest.xml"))
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY, "gradle", "wrapper"), "gradle-wrapper.jar", fileutils.GetAssetContent("bindata/android/gradle/wrapper/gradle-wrapper.jar"))
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY, "gradle", "wrapper"), "gradle-wrapper.properties", fileutils.GetAssetContent("bindata/android/gradle/wrapper/gradle-wrapper.properties"))
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY), "build.gradle", fileutils.GetAssetContent("bindata/android/build.gradle"))
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY), "gradle.properties", fileutils.GetAssetContent("bindata/android/gradle.properties"))
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY), "gradlew", fileutils.GetAssetContent("bindata/android/gradlew"))
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY), "gradlew.bat", fileutils.GetAssetContent("bindata/android/gradlew.bat"))
-	fileutils.CreateFileWithContent(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY), "settings.gradle", fileutils.GetAssetContent("bindata/android/settings.gradle"))
-
-	// make files executables
-	os.Chmod(filepath.Join(constants.BUILD_DIRECTORY, constants.ANDROID_DIRECTORY, "gradlew"), constants.EXECUTABLE_FILE_PERMISSIONS)
-
-	// copy files
-	fileutils.CopyAllFiles(copyFiles)
-
-	// generate files
-	prefixCommand := "./"
-
-	if osutils.IsWindows() {
-		prefixCommand = ""
-	}
-
-	buildCommand := []string{prefixCommand + "gradlew", "build", "--debug", "--stacktrace"}
-
-	output, err := osutils.Exec(buildCommand, workingDirectory)
-
-	if err != nil {
-		logger.F("Problems when generate files for Android: %s", err)
-	}
-
-	if len(output) > 0 {
-		logger.D("Generate files for Android log:\n\n%s\n", output)
-	}
-
-	logger.D("Build for Android finished")
-}
-*/
