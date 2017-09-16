@@ -35,17 +35,6 @@ func (This *BuildCommand) Build() {
 	buildAllTargets := true
 	project := fileutils.GetProject()
 
-	targetHeaderSearchPaths := []string{}
-	targetLibrarySearchPaths := []string{}
-	targetSourceFiles := []string{}
-	targetHeaderFiles := []string{}
-	targetLibraryLinks := []string{}
-	targetFrameworkLinks := []string{}
-	targetCFlags := []string{}
-	targetCXXFlags := []string{}
-	targetTargetCompileOptions := []string{}
-	targetCopyFiles := []*models.CopyFile{}
-
 	// check if project has targets
 	if !project.HasTargets() {
 		logger.F("Your project has no targets")
@@ -76,7 +65,19 @@ func (This *BuildCommand) Build() {
 			}
 		}
 
+		// setup
 		logger.D("Building target: %s...", target.Name)
+
+		targetHeaderSearchPaths := []string{}
+		targetLibrarySearchPaths := []string{}
+		targetSourceFiles := []string{}
+		targetHeaderFiles := []string{}
+		targetLibraryLinks := []string{}
+		targetFrameworkLinks := []string{}
+		targetCFlags := []string{}
+		targetCXXFlags := []string{}
+		targetTargetCompileOptions := []string{}
+		targetCopyFiles := []*models.CopyFile{}
 
 		// analyze project dependencies
 		if project.HasDependencies() {
