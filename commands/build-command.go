@@ -248,7 +248,7 @@ func (This *BuildCommand) Build() {
 			}
 		}
 
-		logger.D("Building target project: %s", target.Name)
+		logger.D("Building target project: %s...", target.Name)
 
 		targetBuildDirectory := filepath.Join(constants.BUILD_DIRECTORY, target.Name)
 		targetProject = fileutils.GetTarget(targetBuildDirectory)
