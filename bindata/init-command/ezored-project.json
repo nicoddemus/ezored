@@ -1,0 +1,35 @@
+{
+	"config": {
+		"name": "My Project"
+	},
+	"targets": [
+		{
+			"name": "ios",
+			"location": {
+				"name": "ezored/target-project-ios",
+				"type": "github",
+				"version": "b:master"
+			}
+		},
+		{
+			"name": "android",
+			"location": {
+				"name": "ezored/target-project-android",
+				"type": "github",
+				"version": "b:master"
+			}
+		}
+	],
+	"dependencies": [
+		{
+			"name": "ezored/dependency-djinni-support",
+			"type": "github",
+			"version": "b:master"
+		},
+		{
+			"name": "ezored/dependency-sample",
+			"type": "github",
+			"version": "b:master"
+		}
+	]
+}
