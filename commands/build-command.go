@@ -10,9 +10,9 @@ import (
 	"github.com/ezored/ezored/models"
 	"github.com/ezored/ezored/utils/file-utils"
 	"github.com/ezored/ezored/utils/flag-utils"
+	"github.com/ezored/ezored/utils/os-utils"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"text/template"
 )
@@ -52,8 +52,6 @@ func (This *BuildCommand) Build() {
 	}
 
 	// check if we need build a specifc target or all targets
-	fmt.Print(flag.Args())
-
 	if len(flag.Args()) > 1 {
 		targetName = flag.Arg(1)
 
@@ -185,33 +183,14 @@ func (This *BuildCommand) Build() {
 
 		targetProject := fileutils.GetTarget(targetTempDirectory)
 
-		buildCommandParts := targetProject.Target.Build
-		head := buildCommandParts[0]
-		buildCommandParts = buildCommandParts[1:]
-
-		cmd := exec.Command(head, buildCommandParts...)
-		cmd.Dir = targetTempDirectory
-
-		// pass environment variables
-		currentDir, err := os.Getwd()
+		output, err := osutils.Exec(targetProject.Target.Build, targetTempDirectory, This.GetEnviron())
 
 		if err != nil {
 			logger.F("Problems when prepare to build target: %s - %s", target.Name, err)
 		}
 
-		env := os.Environ()
-		env = append(env, fmt.Sprintf("EZORED_PROJECT_ROOT=%s", currentDir))
-		cmd.Env = env
-
-		// execute
-		out, err := cmd.Output()
-
-		if err != nil {
-			logger.F("Problems when prepare to build target: %s - %s", target.Name, err)
-		}
-
-		if len(out) > 0 {
-			logger.D("Prepare target files to build log:\n\n%s\n", out)
+		if len(output) > 0 {
+			logger.D("Prepare target files to build log:\n\n%s\n", output)
 		}
 
 		// copy files to build directory
@@ -274,33 +253,14 @@ func (This *BuildCommand) Build() {
 		targetBuildDirectory := filepath.Join(constants.BUILD_DIRECTORY, target.Name)
 		targetProject = fileutils.GetTarget(targetBuildDirectory)
 
-		buildCommandParts = targetProject.Target.Build
-		head = buildCommandParts[0]
-		buildCommandParts = buildCommandParts[1:]
-
-		cmd = exec.Command(head, buildCommandParts...)
-		cmd.Dir = targetBuildDirectory
-
-		// pass environment variables
-		currentDir, err = os.Getwd()
+		output, err = osutils.Exec(targetProject.Target.Build, targetBuildDirectory, This.GetEnviron())
 
 		if err != nil {
-			logger.F("Problems when prepare to build target project: %s - %s", target.Name, err)
+			logger.F("Problems when build target project: %s - %s", target.Name, err)
 		}
 
-		env = os.Environ()
-		env = append(env, fmt.Sprintf("EZORED_PROJECT_ROOT=%s", currentDir))
-		cmd.Env = env
-
-		// execute
-		out, err = cmd.Output()
-
-		if err != nil {
-			logger.F("Problems when prepare to build target project: %s - %s", target.Name, err)
-		}
-
-		if len(out) > 0 {
-			logger.D("Target project build log:\n\n%s\n", out)
+		if len(output) > 0 {
+			logger.D("Target project build log:\n\n%s\n", output)
 		}
 
 		logger.D("Finished build target: %s", target.Name)
@@ -313,4 +273,17 @@ func (This *BuildCommand) Build() {
 	} else {
 		logger.D("Targets built: %d", targetsBuilt)
 	}
+}
+
+func (This *BuildCommand) GetEnviron() []string {
+	env := os.Environ()
+
+	// pass current directory
+	currentDir, err := os.Getwd()
+
+	if err == nil {
+		env = append(env, fmt.Sprintf("EZORED_PROJECT_ROOT=%s", currentDir))
+	}
+
+	return env
 }

@@ -7,7 +7,7 @@ import (
 	"runtime"
 )
 
-func Exec(command []string, workingDirectory string) (string, error) {
+func Exec(command []string, workingDirectory string, environ []string) (string, error) {
 	head := command[0]
 	command = command[1:]
 
@@ -18,6 +18,7 @@ func Exec(command []string, workingDirectory string) (string, error) {
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 	cmd.Dir = workingDirectory
+	cmd.Env = environ
 
 	err := cmd.Run()
 
