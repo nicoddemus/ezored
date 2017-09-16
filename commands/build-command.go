@@ -193,9 +193,12 @@ func (This *BuildCommand) Build() {
 			logger.D("Prepare target files to build log:\n\n%s\n", output)
 		}
 
-		// copy files to build directory
+		// copy files from target to build directory
 		os.RemoveAll(filepath.Join(constants.BUILD_DIRECTORY, target.Name))
 		fileutils.CopyDir(filepath.Join(constants.TARGET_DIRECTORY, target.Name), filepath.Join(constants.BUILD_DIRECTORY, target.Name))
+
+		// copy files from dependencies to build directory
+		fileutils.CopyAllFiles(targetCopyFiles)
 
 		// parse files
 		if targetProject.Target.ParseFiles != nil && len(targetProject.Target.ParseFiles) > 0 {
