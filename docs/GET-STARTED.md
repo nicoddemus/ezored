@@ -9,10 +9,10 @@ Use the follow pattern to execute commands:
 
 More commands:  
 
-- `help`: show all available commands.
-- `init`: initialize a new project with sample dependencies and required files.
-- `dependencies update`: update all dependencies inside project file.
-- `build <build name>`: build library for iOS, Android or any other custom build in your project file.
+- `help`: Show all available commands.
+- `init`: Initialize a new project with sample dependencies and required files.
+- `dependencies update`: Update all dependencies inside project file.
+- `build <target name>`: Build the specified target. If target name is ommited, all targets will be builded.
 
 ### Prebuilt
 
@@ -26,10 +26,12 @@ Execute the following commands to create a initial directory with all required f
 > cd ezored-test  
 > ezored init  
 > ezored dependencies update  
-> ezored compile ios  
-> ezored compile android  
+> ezored build ios  
+> ezored build android  
 
-Obs: Add `"ezored"` binary to your PATH or use full-path on command line.
+Obs: 
+1. Add `"ezored"` binary to your PATH or use full-path on command line.
+2. You can use `"ezored build"` command to build all targets
 
 ### Compile from source
 

@@ -1,6 +1,6 @@
 # Dependency
 
-A dependency consists in a small part of software, like a HTTP library, ZIP libary or your custom business rule code, that will be reused by other your projects.  
+A dependency consists in a small part of software, like a HTTP library, ZIP libary or your custom business rule code, that will be reused by your other projects.  
 
 ### Dependency file
 

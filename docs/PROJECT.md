@@ -2,9 +2,9 @@
 
 A Ezored project file contains one or more targets inside, that can be build using the Ezored from command-line.
  
-The final target project generally is a library that have all native code compiled for target platform.
+The final target project generally is a library that have all native code compiled for target specific platform.
 
-To build each target inside Ezored project file, we use a bunch of rules included target project and all your dependencies rules.
+To build each target inside Ezored project file, we use a bunch of rules, including target project and all project dependencies rules.
 
 ### Project file
 
@@ -26,3 +26,45 @@ Today we have implemented officially this targets:
 
 - ios
 - android
+
+### Sample
+
+A sample Ezored project file:
+
+```json
+{
+	"config": {
+		"name": "MyProject"
+	},
+	"targets": [
+		{
+			"name": "ios",
+			"repository": {
+				"name": "ezored/target-ios",
+				"type": "github",
+				"version": "b:master"
+			}
+		},
+		{
+			"name": "android",
+			"repository": {
+				"name": "ezored/target-android",
+				"type": "github",
+				"version": "b:master"
+			}
+		}
+	],
+	"dependencies": [
+		{
+			"name": "ezored/dependency-djinni-support",
+			"type": "github",
+			"version": "b:master"
+		},
+		{
+			"name": "ezored/dependency-sample",
+			"type": "github",
+			"version": "b:master"
+		}
+	]
+}
+```
