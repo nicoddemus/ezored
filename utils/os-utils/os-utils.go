@@ -3,7 +3,10 @@ package osutils
 import (
 	"bytes"
 	"errors"
+	"github.com/ezored/ezored/logger"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 )
 
@@ -43,4 +46,14 @@ func IsWindows() bool {
 	}
 
 	return false
+}
+
+func GetCurrentDir() string {
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+
+	if err != nil {
+		logger.F(err.Error())
+	}
+
+	return dir
 }

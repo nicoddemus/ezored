@@ -3,15 +3,14 @@ package commands
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"github.com/ezored/ezored/constants"
 	"github.com/ezored/ezored/logger"
 	"github.com/ezored/ezored/models"
 	"github.com/ezored/ezored/utils/file-utils"
 	"github.com/ezored/ezored/utils/flag-utils"
+	"github.com/ezored/ezored/utils/os-utils"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 )
 
@@ -21,6 +20,7 @@ const (
 
 type DependenciesCommand struct {
 	BaseCommand
+	ProcessData *models.ProcessData
 }
 
 func (This *DependenciesCommand) Init() {
@@ -37,6 +37,10 @@ func (This *DependenciesCommand) Init() {
 }
 
 func (This *DependenciesCommand) Update() {
+	// setup
+	This.ProcessData = &models.ProcessData{}
+	This.ProcessData.Reset()
+
 	project := fileutils.GetProject()
 
 	if !project.HasDependencies() {
@@ -111,33 +115,14 @@ func (This *DependenciesCommand) Update() {
 				logger.F(err.Error())
 			}
 
-			buildCommandParts := vendorDependency.Dependency.Build
-			head := buildCommandParts[0]
-			buildCommandParts = buildCommandParts[1:]
-
-			cmd := exec.Command(head, buildCommandParts...)
-			cmd.Dir = workingDirectory
-
-			// pass environment variables
-			currentDir, err := os.Getwd()
+			output, err := osutils.Exec(vendorDependency.Dependency.Build, workingDirectory, This.ProcessData.GetEnviron())
 
 			if err != nil {
 				logger.F("Problems when build dependency: %s - %s", dependency.GetName(), err)
 			}
 
-			env := os.Environ()
-			env = append(env, fmt.Sprintf("EZORED_PROJECT_ROOT=%s", currentDir))
-			cmd.Env = env
-
-			// execute
-			out, err := cmd.Output()
-
-			if err != nil {
-				logger.F("Problems when build dependency: %s - %s", dependency.GetName(), err)
-			}
-
-			if len(out) > 0 {
-				logger.D("Dependency build log:\n\n%s\n", out)
+			if len(output) > 0 {
+				logger.D("Dependency build log:\n\n%s\n", output)
 			}
 
 			// remove downloaded file

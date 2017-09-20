@@ -19,6 +19,7 @@ import (
 
 type BuildCommand struct {
 	BaseCommand
+	ProcessData *models.ProcessData
 }
 
 func (This *BuildCommand) Init() {
@@ -31,16 +32,20 @@ func (This *BuildCommand) Init() {
 
 func (This *BuildCommand) Build() {
 	// setup
+	This.ProcessData = &models.ProcessData{}
+	This.ProcessData.Reset()
+
 	targetName := ""
 	buildAllTargets := true
 	project := fileutils.GetProject()
+	This.ProcessData.ProjectName = project.GetConfigValueAsString("name")
 
 	// check if project has targets
 	if !project.HasTargets() {
 		logger.F("Your project has no targets")
 	}
 
-	// check if we need build a specifc target or all targets
+	// check if we need build a specific target or all targets
 	if len(flag.Args()) > 1 {
 		targetName = flag.Arg(1)
 
@@ -68,21 +73,15 @@ func (This *BuildCommand) Build() {
 		// setup
 		logger.D("Building target: %s...", target.Name)
 
-		targetHeaderSearchPaths := []string{}
-		targetLibrarySearchPaths := []string{}
-		targetSourceFiles := []string{}
-		targetHeaderFiles := []string{}
-		targetLibraryLinks := []string{}
-		targetFrameworkLinks := []string{}
-		targetCFlags := []string{}
-		targetCXXFlags := []string{}
-		targetTargetCompileOptions := []string{}
-		targetCopyFiles := []*models.CopyFile{}
+		This.ProcessData.SetTargetName(target.Name)
+
+		targetData := &models.TargetData{}
 
 		// analyze project dependencies
 		if project.HasDependencies() {
 			for _, dependency := range project.Dependencies {
 				logger.D("Analyzing dependency: %s...", dependency.Name)
+				This.ProcessData.DependencyName = dependency.Name
 
 				// get vendor file
 				dependencyWorkingDirectory := filepath.Join(constants.TEMPORARY_DIRECTORY, dependency.GetDirectoryName())
@@ -103,23 +102,27 @@ func (This *BuildCommand) Build() {
 				vendorTarget, err := vendorDependency.GetTargetByName(target.Name)
 
 				if err == nil {
-					targetHeaderSearchPaths = append(targetHeaderSearchPaths, vendorTarget.Data.HeaderSearchPaths...)
-					targetLibrarySearchPaths = append(targetLibrarySearchPaths, vendorTarget.Data.LibrarySearchPaths...)
-					targetSourceFiles = append(targetSourceFiles, vendorTarget.Data.SourceFiles...)
-					targetHeaderFiles = append(targetHeaderFiles, vendorTarget.Data.HeaderFiles...)
-					targetLibraryLinks = append(targetLibraryLinks, vendorTarget.Data.LibraryLinks...)
-					targetFrameworkLinks = append(targetFrameworkLinks, vendorTarget.Data.FrameworkLinks...)
-					targetCFlags = append(targetCFlags, vendorTarget.Data.CFlags...)
-					targetCXXFlags = append(targetCXXFlags, vendorTarget.Data.CXXFlags...)
-					targetTargetCompileOptions = append(targetTargetCompileOptions, vendorTarget.Data.TargetCompileOptions...)
-					targetCopyFiles = append(targetCopyFiles, vendorTarget.Data.CopyFiles...)
+					targetData.HeaderSearchPaths = append(targetData.HeaderSearchPaths, vendorTarget.Data.HeaderSearchPaths...)
+					targetData.LibrarySearchPaths = append(targetData.LibrarySearchPaths, vendorTarget.Data.LibrarySearchPaths...)
+					targetData.SourceFiles = append(targetData.SourceFiles, vendorTarget.Data.SourceFiles...)
+					targetData.HeaderFiles = append(targetData.HeaderFiles, vendorTarget.Data.HeaderFiles...)
+					targetData.LibraryLinks = append(targetData.LibraryLinks, vendorTarget.Data.LibraryLinks...)
+					targetData.FrameworkLinks = append(targetData.FrameworkLinks, vendorTarget.Data.FrameworkLinks...)
+					targetData.CFlags = append(targetData.CFlags, vendorTarget.Data.CFlags...)
+					targetData.CXXFlags = append(targetData.CXXFlags, vendorTarget.Data.CXXFlags...)
+					targetData.CompileOptions = append(targetData.CompileOptions, vendorTarget.Data.TargetCompileOptions...)
+					targetData.CopyFiles = append(targetData.CopyFiles, vendorTarget.Data.CopyFiles...)
 				}
 
 				logger.D("Dependency analyzed: %s", dependency.Name)
 			}
+
+			This.ProcessData.DependencyName = ""
 		} else {
 			logger.I("Your project has no dependencies")
 		}
+
+		targetData.ParseAll(This.ProcessData)
 
 		logger.D("Checking target files...")
 
@@ -177,14 +180,13 @@ func (This *BuildCommand) Build() {
 			os.RemoveAll(downloadDest)
 		}
 
-		// preparing target
+		// preparing target (basically copy things from temp to target folder)
 		logger.D("Preparing target files...")
 
 		os.RemoveAll(filepath.Join(constants.TARGET_DIRECTORY, target.Name))
 
 		targetProject := fileutils.GetTarget(targetTempDirectory)
-
-		output, err := osutils.Exec(targetProject.Target.Build, targetTempDirectory, This.GetEnviron())
+		output, err := osutils.Exec(targetProject.Target.Build, targetTempDirectory, This.ProcessData.GetEnviron())
 
 		if err != nil {
 			logger.F("Problems when prepare to build target: %s - %s", target.Name, err)
@@ -194,18 +196,21 @@ func (This *BuildCommand) Build() {
 			logger.D("Prepare target files to build log:\n\n%s\n", output)
 		}
 
-		// copy files from target to build directory
-		os.RemoveAll(filepath.Join(constants.BUILD_DIRECTORY, target.Name))
-		fileutils.CopyDir(filepath.Join(constants.TARGET_DIRECTORY, target.Name), filepath.Join(constants.BUILD_DIRECTORY, target.Name))
+		targetDirectory := filepath.Join(constants.TARGET_DIRECTORY, target.Name)
+		targetProject = fileutils.GetTarget(targetDirectory)
 
-		// copy files from dependencies to build directory
-		fileutils.CopyAllFiles(targetCopyFiles)
+		// copy files from dependencies to target directory
+		logger.D("Copying files from dependencies...")
+		fileutils.CopyAllFiles(targetData.CopyFiles)
 
 		// parse files
+		logger.D("Parsing files...")
+		targetProject.Target.ParseFiles = This.ProcessData.ParseStringList(targetProject.Target.ParseFiles)
+
 		if targetProject.Target.ParseFiles != nil && len(targetProject.Target.ParseFiles) > 0 {
 			for _, file := range targetProject.Target.ParseFiles {
-				templateFilePath := filepath.Join(constants.BUILD_DIRECTORY, target.Name, file)
-				fileContent, err := ioutil.ReadFile(templateFilePath)
+				// parse file
+				fileContent, err := ioutil.ReadFile(file)
 
 				if err != nil {
 					logger.F(err.Error())
@@ -218,46 +223,23 @@ func (This *BuildCommand) Build() {
 					logger.F(err.Error())
 				}
 
-				data := struct {
-					HeaderSearchPaths    []string
-					LibrarySearchPaths   []string
-					SourceFiles          []string
-					HeaderFiles          []string
-					LibraryLinks         []string
-					FrameworkLinks       []string
-					CFlags               []string
-					CXXFlags             []string
-					TargetCompileOptions []string
-					ProjectName          string
-				}{
-					HeaderSearchPaths:    targetHeaderSearchPaths,
-					LibrarySearchPaths:   targetLibrarySearchPaths,
-					SourceFiles:          targetSourceFiles,
-					HeaderFiles:          targetHeaderFiles,
-					LibraryLinks:         targetLibraryLinks,
-					FrameworkLinks:       targetFrameworkLinks,
-					CFlags:               targetCFlags,
-					CXXFlags:             targetCXXFlags,
-					TargetCompileOptions: targetTargetCompileOptions,
-					ProjectName:          constants.DEFAULT_PROJECT_NAME,
-				}
-
 				var fileContentBuffer bytes.Buffer
-				t.Execute(&fileContentBuffer, data)
+				t.Execute(&fileContentBuffer, targetData)
 
 				// replace content
-				templateFilePathDir := filepath.Dir(templateFilePath)
-				templateFilePathFilename := filepath.Base(templateFilePath)
+				templateFilePathDir := filepath.Dir(file)
+				templateFilePathFilename := filepath.Base(file)
 				fileutils.CreateFileWithContent(templateFilePathDir, templateFilePathFilename, fileContentBuffer.Bytes())
 			}
 		}
 
+		// remove build directory to this target
+		logger.D("Removing build directory for this target...")
+		os.RemoveAll(filepath.Join(constants.BUILD_DIRECTORY, target.Name))
+
+		// build target (basically the project will be compiled and it need copy correct files to build folder)
 		logger.D("Building target project: %s...", target.Name)
-
-		targetBuildDirectory := filepath.Join(constants.BUILD_DIRECTORY, target.Name)
-		targetProject = fileutils.GetTarget(targetBuildDirectory)
-
-		output, err = osutils.Exec(targetProject.Target.Build, targetBuildDirectory, This.GetEnviron())
+		output, err = osutils.Exec(targetProject.Target.Build, targetDirectory, This.ProcessData.GetEnviron())
 
 		if err != nil {
 			logger.F("Problems when build target project: %s - %s", target.Name, err)
@@ -277,17 +259,4 @@ func (This *BuildCommand) Build() {
 	} else {
 		logger.D("Targets built: %d", targetsBuilt)
 	}
-}
-
-func (This *BuildCommand) GetEnviron() []string {
-	env := os.Environ()
-
-	// pass current directory
-	currentDir, err := os.Getwd()
-
-	if err == nil {
-		env = append(env, fmt.Sprintf("EZORED_PROJECT_ROOT=%s", currentDir))
-	}
-
-	return env
 }

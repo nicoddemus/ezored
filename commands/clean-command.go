@@ -13,5 +13,7 @@ func (This *CleanCommand) Init() {
 	logger.D("Cleaning...")
 	os.RemoveAll(constants.TEMPORARY_DIRECTORY)
 	os.RemoveAll(constants.BUILD_DIRECTORY)
+	os.RemoveAll(constants.TARGET_DIRECTORY)
+	os.RemoveAll(constants.VENDOR_DIRECTORY)
 	logger.D("Finished")
 }

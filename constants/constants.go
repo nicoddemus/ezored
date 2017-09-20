@@ -6,6 +6,7 @@ const (
 	TARGET_PROJECT_FILENAME     = "ezored-target.json"
 	DEPENDENCIES_DIRECTORY      = "vendor"
 	TARGET_DIRECTORY            = "target"
+	VENDOR_DIRECTORY            = "vendor"
 	TEMPORARY_DIRECTORY         = "temp"
 	SOURCE_DIRECTORY            = "source"
 	BUILD_DIRECTORY             = "build"
@@ -18,4 +19,5 @@ const (
 	EXECUTABLE_FILE_PERMISSIONS = 0744
 	DIRECTORY_PERMISSIONS       = 0744
 	DEFAULT_PROJECT_NAME        = "Ezored"
+	ENV_VAR_PREFIX              = "EZORED_"
 )

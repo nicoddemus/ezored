@@ -36,8 +36,10 @@ format:
 	${GOFMT} constants/constants.go
 	${GOFMT} logger/logger.go
 	${GOFMT} models/copy-file.go
+	${GOFMT} models/process-data.go
 	${GOFMT} models/project.go
 	${GOFMT} models/repository.go
+	${GOFMT} models/target-data.go
 	${GOFMT} models/target-project.go
 	${GOFMT} models/vendor.go
 	${GOFMT} utils/file-utils/file-utils.go
