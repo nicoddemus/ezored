@@ -2,13 +2,17 @@ package models
 
 import (
 	"fmt"
+	"github.com/ezored/ezored/constants"
+	"github.com/ezored/ezored/utils/os-utils"
 	"github.com/gosimple/slug"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
 
 const (
 	REPOSITORY_TYPE_GITHUB = "github"
+	REPOSITORY_TYPE_LOCAL  = "local"
 
 	GIT_REPOSITORY_TYPE_TAG    = "t"
 	GIT_REPOSITORY_TYPE_BRANCH = "b"
@@ -22,6 +26,11 @@ type Repository struct {
 }
 
 func (This *Repository) GetName() string {
+	if This.Type == REPOSITORY_TYPE_LOCAL {
+		_, file := filepath.Split(This.Name)
+		return file
+	}
+
 	return This.Name
 }
 
@@ -48,6 +57,9 @@ func (This *Repository) GetDirectoryName() string {
 		dependencyRepository, _, dependencyVersion := This.GetGitData()
 		dependencyRepositoryParts := strings.Split(dependencyRepository, "/")
 		return fmt.Sprintf("%s-%s", slug.Make(dependencyRepositoryParts[1]), dependencyVersion)
+	} else if This.Type == REPOSITORY_TYPE_LOCAL {
+		_, file := filepath.Split(This.Name)
+		return file
 	}
 
 	return ""
@@ -76,4 +88,30 @@ func (This *Repository) GetGitData() (string, string, string) {
 	dependencyVersion := groups[0][3]
 
 	return dependencyName, dependencyType, dependencyVersion
+}
+
+func (This *Repository) Prepare(processData *ProcessData) {
+	if This.Type == REPOSITORY_TYPE_LOCAL {
+		This.Name = processData.ParseString(This.Name)
+	}
+}
+
+func (This *Repository) GetTempWorkingDir() string {
+	if This.Type == REPOSITORY_TYPE_GITHUB {
+		return filepath.Join(constants.TEMPORARY_DIRECTORY, This.GetDirectoryName())
+	} else if This.Type == REPOSITORY_TYPE_LOCAL {
+		return This.Name
+	}
+
+	return ""
+}
+
+func (This *Repository) GetFullRepositoryDir() string {
+	if This.Type == REPOSITORY_TYPE_GITHUB {
+		return filepath.Join(osutils.GetCurrentDir(), constants.TEMPORARY_DIRECTORY, This.GetDirectoryName())
+	} else if This.Type == REPOSITORY_TYPE_LOCAL {
+		return This.Name
+	}
+
+	return ""
 }

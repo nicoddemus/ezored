@@ -80,11 +80,16 @@ func (This *BuildCommand) Build() {
 		// analyze project dependencies
 		if project.HasDependencies() {
 			for _, dependency := range project.Dependencies {
-				logger.D("Analyzing dependency: %s...", dependency.Name)
-				This.ProcessData.DependencyName = dependency.Name
+				dependency.Prepare(This.ProcessData)
+
+				logger.D("Analyzing dependency: %s...", dependency.GetName())
 
 				// get vendor file
-				dependencyWorkingDirectory := filepath.Join(constants.TEMPORARY_DIRECTORY, dependency.GetDirectoryName())
+				dependencyWorkingDirectory := dependency.GetTempWorkingDir()
+
+				This.ProcessData.DependencyName = dependency.GetName()
+				This.ProcessData.FullRepositoryDir = dependency.GetFullRepositoryDir()
+
 				fileContent, err := ioutil.ReadFile(filepath.Join(dependencyWorkingDirectory, constants.VENDOR_DEPENDENCY_FILENAME))
 
 				if err != nil {
@@ -114,15 +119,16 @@ func (This *BuildCommand) Build() {
 					targetData.CopyFiles = append(targetData.CopyFiles, vendorTarget.Data.CopyFiles...)
 				}
 
-				logger.D("Dependency analyzed: %s", dependency.Name)
+				targetData.ParseAll(This.ProcessData)
+
+				logger.D("Dependency analyzed: %s", dependency.GetName())
 			}
 
 			This.ProcessData.DependencyName = ""
+			This.ProcessData.FullRepositoryDir = ""
 		} else {
 			logger.I("Your project has no dependencies")
 		}
-
-		targetData.ParseAll(This.ProcessData)
 
 		logger.D("Checking target files...")
 
@@ -137,7 +143,7 @@ func (This *BuildCommand) Build() {
 
 			downloadUrl := target.Repository.GetDownloadUrl()
 			downloadDest := filepath.Join(constants.TEMPORARY_DIRECTORY, target.Repository.GetFileName())
-			workingDirectory := filepath.Join(constants.TEMPORARY_DIRECTORY, target.Repository.GetDirectoryName())
+			workingDirectory := target.Repository.GetTempWorkingDir()
 			targetTempDirectory = workingDirectory
 
 			// download target files
@@ -178,6 +184,15 @@ func (This *BuildCommand) Build() {
 
 			// remove downloaded file
 			os.RemoveAll(downloadDest)
+		} else if target.Repository.Type == models.REPOSITORY_TYPE_LOCAL {
+			// prepare
+			logger.D("Obtaining target files: %s...", target.Name)
+
+			fileutils.CreateTargetDirectory()
+			fileutils.CreateTemporaryDirectory()
+
+			workingDirectory := target.Repository.GetTempWorkingDir()
+			targetTempDirectory = workingDirectory
 		}
 
 		// preparing target (basically copy things from temp to target folder)

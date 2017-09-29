@@ -42,6 +42,7 @@ func (This *DependenciesCommand) Update() {
 	This.ProcessData.Reset()
 
 	project := fileutils.GetProject()
+	This.ProcessData.ProjectName = project.GetConfigValueAsString("name")
 
 	if !project.HasDependencies() {
 		logger.I("Your project has no dependencies")
@@ -51,6 +52,8 @@ func (This *DependenciesCommand) Update() {
 	logger.D("Updating dependencies...")
 
 	for _, dependency := range project.Dependencies {
+		dependency.Prepare(This.ProcessData)
+
 		if dependency.Type == models.REPOSITORY_TYPE_GITHUB {
 			// prepare
 			logger.D("Getting dependency: %s...", dependency.GetName())
@@ -60,7 +63,7 @@ func (This *DependenciesCommand) Update() {
 
 			downloadUrl := dependency.GetDownloadUrl()
 			downloadDest := filepath.Join(constants.TEMPORARY_DIRECTORY, dependency.GetFileName())
-			workingDirectory := filepath.Join(constants.TEMPORARY_DIRECTORY, dependency.GetDirectoryName())
+			workingDirectory := dependency.GetTempWorkingDir()
 
 			// download dependency
 			if fileutils.Exists(downloadDest) {
@@ -129,6 +132,41 @@ func (This *DependenciesCommand) Update() {
 			os.RemoveAll(downloadDest)
 
 			logger.D("Dependency built: %s", dependency.GetName())
+		} else if dependency.Type == models.REPOSITORY_TYPE_LOCAL {
+			// prepare
+			logger.D("Getting dependency: %s...", dependency.GetName())
+
+			fileutils.CreateDependenciesDirectory()
+			fileutils.CreateTemporaryDirectory()
+
+			workingDirectory := dependency.GetTempWorkingDir()
+
+			// build dependency
+			logger.D("Building dependency: %s...", dependency.GetName())
+
+			// process dependency build command
+			fileContent, err := ioutil.ReadFile(filepath.Join(workingDirectory, constants.VENDOR_DEPENDENCY_FILENAME))
+
+			if err != nil {
+				logger.F(err.Error())
+			}
+
+			var vendorDependency models.Vendor
+			err = json.Unmarshal(fileContent, &vendorDependency)
+
+			if err != nil {
+				logger.F(err.Error())
+			}
+
+			output, err := osutils.Exec(vendorDependency.Dependency.Build, workingDirectory, This.ProcessData.GetEnviron())
+
+			if err != nil {
+				logger.F("Problems when build dependency: %s - %s", dependency.GetName(), err)
+			}
+
+			if len(output) > 0 {
+				logger.D("Dependency build log:\n\n%s\n", output)
+			}
 		}
 	}
 
