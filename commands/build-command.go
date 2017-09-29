@@ -88,7 +88,7 @@ func (This *BuildCommand) Build() {
 				dependencyWorkingDirectory := dependency.GetTempWorkingDir()
 
 				This.ProcessData.DependencyName = dependency.GetName()
-				This.ProcessData.FullRepositoryDir = dependency.GetFullRepositoryDir()
+				This.ProcessData.RepositoryDir = dependency.GetFullRepositoryDir()
 
 				fileContent, err := ioutil.ReadFile(filepath.Join(dependencyWorkingDirectory, constants.VENDOR_DEPENDENCY_FILENAME))
 
@@ -125,14 +125,17 @@ func (This *BuildCommand) Build() {
 			}
 
 			This.ProcessData.DependencyName = ""
-			This.ProcessData.FullRepositoryDir = ""
+			This.ProcessData.RepositoryDir = ""
 		} else {
 			logger.I("Your project has no dependencies")
 		}
 
 		logger.D("Checking target files...")
 
+		// set data about target repository
 		targetTempDirectory := ""
+		This.ProcessData.RepositoryDir = target.Repository.GetFullRepositoryDir()
+		target.Repository.Prepare(This.ProcessData)
 
 		if target.Repository.Type == models.REPOSITORY_TYPE_GITHUB {
 			// prepare

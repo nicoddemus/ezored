@@ -10,17 +10,17 @@ import (
 )
 
 type ProcessData struct {
-	ProjectName       string
-	TargetName        string
-	DependencyName    string
-	ProjectRootDir    string
-	TargetDir         string
-	FullTargetDir     string
-	FullRepositoryDir string
-	TempDir           string
-	BuildDir          string
-	VendorDir         string
-	DirSep            string
+	ProjectName    string
+	TargetName     string
+	DependencyName string
+	ProjectRootDir string
+	TargetDir      string
+	FullTargetDir  string
+	RepositoryDir  string
+	TempDir        string
+	BuildDir       string
+	VendorDir      string
+	DirSep         string
 }
 
 func (This *ProcessData) GetEnviron() []string {
@@ -31,7 +31,7 @@ func (This *ProcessData) GetEnviron() []string {
 	env = append(env, fmt.Sprintf("%sTEMP_DIR=%s", constants.ENV_VAR_PREFIX, This.TempDir))
 	env = append(env, fmt.Sprintf("%sTARGET_DIR=%s", constants.ENV_VAR_PREFIX, This.TargetDir))
 	env = append(env, fmt.Sprintf("%sFULL_TARGET_DIR=%s", constants.ENV_VAR_PREFIX, This.FullTargetDir))
-	env = append(env, fmt.Sprintf("%sFULL_REPOSITORY_DIR=%s", constants.ENV_VAR_PREFIX, This.FullRepositoryDir))
+	env = append(env, fmt.Sprintf("%sREPOSITORY_DIR=%s", constants.ENV_VAR_PREFIX, This.RepositoryDir))
 	env = append(env, fmt.Sprintf("%sBUILD_DIR=%s", constants.ENV_VAR_PREFIX, This.BuildDir))
 	env = append(env, fmt.Sprintf("%sVENDOR_DIR=%s", constants.ENV_VAR_PREFIX, This.VendorDir))
 	env = append(env, fmt.Sprintf("%sTARGET_NAME=%s", constants.ENV_VAR_PREFIX, This.TargetName))
@@ -48,7 +48,7 @@ func (This *ProcessData) Reset() {
 	This.ProjectRootDir = osutils.GetCurrentDir()
 	This.TargetDir = filepath.Join(osutils.GetCurrentDir(), "target")
 	This.FullTargetDir = ""
-	This.FullRepositoryDir = ""
+	This.RepositoryDir = ""
 	This.BuildDir = filepath.Join(osutils.GetCurrentDir(), "build")
 	This.TempDir = filepath.Join(osutils.GetCurrentDir(), "temp")
 	This.VendorDir = filepath.Join(osutils.GetCurrentDir(), "vendor")
