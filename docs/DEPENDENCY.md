@@ -24,6 +24,12 @@ The property `"version"` define what version Ezored need download, ex: `"1.2.0"`
 - `1.2.0` = without prefix will download version from tag "1.2.0" 
 - `empty` = empty version field will download version from branch master 
 
+### Custom dependencies
+
+You can use official dependencies or you can copy one official and change it or build your own dependency from scratch. You only need configure a new block of dependency inside project file and make it local to test the dependency while you develop it.    
+
+One simple example is about your business logic. You can use a local dependency with your business logic in a private path or repository, develop your app and change or debug the dependency code at the same time. The only restriction is when you add new files to dependency project, you will need run `"ezored target build <target-name>"` to update target project with new files. 
+
 ### Example
 
 Some dependencies examples:

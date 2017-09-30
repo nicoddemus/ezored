@@ -2,6 +2,8 @@
 
 A target consists in a bunch of files that need exists to build a project. The target files can be parsed, like `CMakeLists.txt`.   
 
+The target project has all dependencies files, params, libraries, links and other things ready to build and compile.    
+
 ### Target block structure
 
 The target block structure has this properties:
@@ -25,6 +27,12 @@ The property `"version"` define what version Ezored need download, ex: `"1.2.0"`
 - `c:ef016c0` = will download version from commit "ef016c0" 
 - `1.2.0` = without prefix will download version from tag "1.2.0" 
 - `empty` = empty version field will download version from branch master 
+
+### Custom targets
+
+You can use official targets or you can copy one official and change it or build your own target from scratch. You only need configure a new block of target inside project file and make it local to test the target while you develop it.    
+
+One simple example is about Android and Gradle dependencies. Today we have a simple `build.gradle` file, but if your target have more dependencies with custom repositories and other things, you can clone our android target and change it to reach your needs.
 
 ### Example
 
