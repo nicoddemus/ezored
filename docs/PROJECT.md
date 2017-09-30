@@ -1,6 +1,6 @@
 # Project
 
-A Ezored project file contains one or more targets inside, that can be build using the Ezored from command-line.
+A Ezored project file contains one or more targets inside, that you can build using the Ezored from command-line.
  
 The final target project generally is a library that have all native code compiled for target specific platform.
 
@@ -68,3 +68,7 @@ A sample Ezored project file:
 	]
 }
 ```
+
+### Thoubleshoots
+
+- Use only valid chars on config "name" `[a-z][A-Z][0-9]`. Dont start the name with numbers.

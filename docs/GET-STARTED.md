@@ -5,14 +5,14 @@ We have created a lot of docs and prebuilt binaries to accelerate development pr
 ### Commands
 
 Use the follow pattern to execute commands:  
-> ezored \<command\> \<task\>  
+> ezored \<command\> \<task\> \<other-params-if-have\>    
 
 More commands:  
 
 - `help`: Show all available commands.
 - `init`: Initialize a new project with sample dependencies and required files.
 - `dependencies update`: Update all dependencies inside project file.
-- `build <target name>`: Build the specified target. If target name is ommited, all targets will be builded.
+- `build <target-name>`: Build the specified target. If target name is ommited, all targets will be builded.
 
 ### Prebuilt
 
@@ -36,4 +36,12 @@ Obs:
 ### Compile from source
 
 > go get -u github.com/ezored/ezored  
-> go install github.com/ezored/ezored    
+> go install github.com/ezored/ezored  
+    
+### Documentation Index
+
+- [Project](PROJECT.md)
+- [Dependencies](DEPENDENCY.md)
+- [Targets](TARGET.md)
+- [Release notes](RELEASE-NOTES.md)
+

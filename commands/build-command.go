@@ -76,6 +76,7 @@ func (This *BuildCommand) Build() {
 		This.ProcessData.SetTargetName(target.Name)
 
 		targetData := &models.TargetData{}
+		targetData.ProjectConfig = project.Config
 
 		// analyze project dependencies
 		if project.HasDependencies() {

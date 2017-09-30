@@ -13,5 +13,5 @@ func (This *HelpCommand) Init() {
 	fmt.Println("     - update")
 	fmt.Println("  > build")
 	fmt.Println("     - ios")
-	fmt.Println("     - buildForAndroid")
+	fmt.Println("     - android")
 }

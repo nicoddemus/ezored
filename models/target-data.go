@@ -2,6 +2,7 @@ package models
 
 type TargetData struct {
 	ProjectName        string
+	ProjectConfig      map[string]interface{}
 	HeaderSearchPaths  []string
 	LibrarySearchPaths []string
 	SourceFiles        []string

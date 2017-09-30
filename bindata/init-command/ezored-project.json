@@ -1,6 +1,18 @@
 {
 	"config": {
-		"name": "Ezored"
+		"name": "Ezored",
+		"ios": {
+			"developmentTeamId": "ABCDEFGHIJ",
+			"bundleId": "com.ezored.library",
+			"codeSignIdentity": "iPhone Developer",
+			"deploymentTarget": "8.0",
+			"deviceFamily": "1,2",
+			"version": "1.0.0",
+			"cppStandard": "11"
+		},
+		"android": {
+			"cppStandard": "11"
+		}
 	},
 	"targets": [
 		{
