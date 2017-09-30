@@ -1,10 +1,10 @@
-# Dependency
+# Dependencies
 
 A dependency consists in a small part of software, like a HTTP library, ZIP library, openssl, curl or your custom business code, that will be reused by your other projects.  
 
-### Dependency file
+### Dependency block structure
 
-The dependency file has this properties:  
+The dependency block structure has this properties:  
 - type
 - name
 - version
