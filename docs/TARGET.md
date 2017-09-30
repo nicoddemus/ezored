@@ -2,7 +2,7 @@
 
 A target consists in a bunch of files that need exists to build a project. The target files can be parsed, like `CMakeLists.txt`.   
 
-### Dependency block structure
+### Target block structure
 
 The target block structure has this properties:
 - name
