@@ -11,7 +11,7 @@ Today we have implemented officially this targets:
 
 ## Documentation
 
-To check out live docs, visit [docs](docs) folder.
+To check out live docs, visit [docs](docs/GET-STARTED.md) folder.
 
 ## Changelog
 
