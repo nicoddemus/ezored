@@ -72,3 +72,7 @@ A sample Ezored project file:
 ### Thoubleshoots
 
 - Use only valid chars on config "name" `[a-z][A-Z][0-9]`. Dont start the name with numbers.
+
+### Documentation Index
+
+- [Back to index](GET-STARTED.md)

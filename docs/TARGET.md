@@ -51,3 +51,6 @@ Some target examples:
 }
 ``` 
 
+### Documentation Index
+
+- [Back to index](GET-STARTED.md)

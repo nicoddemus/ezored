@@ -51,3 +51,6 @@ Some dependencies examples:
 }
 ``` 
 
+### Documentation Index
+
+- [Back to index](GET-STARTED.md)
