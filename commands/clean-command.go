@@ -2,8 +2,8 @@ package commands
 
 import (
 	"github.com/ezored/ezored/constants"
-	"github.com/prsolucoes/pickman/logger"
 	"os"
+	"github.com/ezored/ezored/logger"
 )
 
 type CleanCommand struct {

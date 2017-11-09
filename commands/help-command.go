@@ -1,6 +1,9 @@
 package commands
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/ezored/ezored/utils/file-utils"
+)
 
 type HelpCommand struct {
 }
@@ -12,6 +15,14 @@ func (This *HelpCommand) Init() {
 	fmt.Println("  > dependencies")
 	fmt.Println("     - update")
 	fmt.Println("  > build")
-	fmt.Println("     - ios")
-	fmt.Println("     - android")
+
+	project := fileutils.GetProject()
+
+	if project.HasTargets() {
+		for _, target := range project.Targets {
+			fmt.Println("     - " + target.Name)
+		}	
+	} else {
+		fmt.Println("     <no targets>")
+	}
 }
