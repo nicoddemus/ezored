@@ -1,0 +1,9 @@
+Thumbs.db
+.DS_Store
+.idea
+.vscode
+.cache
+.coverage
+*.egg-info
+build
+dist
