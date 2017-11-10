@@ -1,2 +1,3 @@
 from .hello import *
-from .dependencies import *
+from .dependency import *
+from .target import *
