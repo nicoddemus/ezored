@@ -36,10 +36,10 @@ def main():
 
     # Here we'll try to dynamically match the command the user is trying to run
     # with a pre-defined command class we've already created.
-    for (k, v) in options.items():
-        if hasattr(ezored.commands, k) and v:
-            module = getattr(ezored.commands, k)
-            ezored.commands = getmembers(module, isclass)
+    for (option_key, option_value) in options.items():
+        if hasattr(ezored.commands, option_key) and option_value:
+            command_module = getattr(ezored.commands, option_key)
+            ezored.commands = getmembers(command_module, isclass)
             command = [command[1] for command in ezored.commands if command[0] != 'Base'][0]
             command = command(options)
             command.run()
