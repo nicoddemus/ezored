@@ -1,8 +1,8 @@
-# Ezored
+# EzoRed
 
 Cross-platform tool to generate a library with single base code for multiple platforms.  
 
-Ezored uses a target list inside it project file to build process. Each target can be an official supported target or your custom target.
+EzoRed uses a target list inside it project file to build process. Each target can be an official supported target or your custom target.
 
 Today we have implemented officially this targets:
 
