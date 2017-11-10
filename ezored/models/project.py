@@ -24,6 +24,8 @@ class Project(object):
                     file_data = yaml.load(stream)
 
                     # configurations
+                    Logger.d("Loading project configurations...")
+
                     if "config" in file_data:
                         config = file_data["config"]
 
@@ -31,6 +33,8 @@ class Project(object):
                             project.config = config
 
                     # dependencies
+                    Logger.d("Loading project dependencies...")
+
                     if "dependencies" in file_data:
                         dependencies = file_data["dependencies"]
 
@@ -39,12 +43,17 @@ class Project(object):
                             project.dependencies.append(repository)
 
                     # targets
+                    Logger.d("Loading project targets...")
+
                     if "targets" in file_data:
                         targets = file_data["targets"]
 
                         for target_data in targets:
                             target = Target.from_dict(target_data)
                             project.targets.append(target)
+
+                    # finished
+                    Logger.d("Project loaded")
 
                     return project
                 except yaml.YAMLError as exc:

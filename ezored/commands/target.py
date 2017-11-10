@@ -14,6 +14,8 @@ class Target(Base):
         from ..models.logger import Logger
         from ..models.project import Project
 
+        Logger.d("Listing all targets...")
+
         project = Project.create_from_project_file()
         Logger.clean("Target List:")
 

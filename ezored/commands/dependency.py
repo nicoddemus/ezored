@@ -1,8 +1,6 @@
 """Dependency command"""
 
 from .base import Base
-from ..models.logger import Logger
-from ..models.project import Project
 
 
 class Dependency(Base):
@@ -15,9 +13,16 @@ class Dependency(Base):
             self.list()
 
     def update(self):
+        from ..models.logger import Logger
+
         Logger.d("Checking dependencies...")
 
     def list(self):
+        from ..models.logger import Logger
+        from ..models.project import Project
+
+        Logger.d("Listing all dependencies...")
+
         project = Project.create_from_project_file()
         Logger.clean("Dependency List:")
 

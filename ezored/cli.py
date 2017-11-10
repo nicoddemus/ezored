@@ -2,16 +2,17 @@
 EzoRed
 
 Usage:
-  ezored dependency list
-  ezored dependency update
-  ezored target list
+  ezored dependency list [-d]
+  ezored dependency update [-d]
+  ezored target list [-d]
   ezored hello
   ezored -h | --help
-  ezored --version
+  ezored [-d | --debug]
 
 Options:
   -h --help                         Show this screen.
   --version                         Show version.
+  -d --debug                        Enable debug messages.
 
 Examples:
   ezored dependency update
@@ -22,9 +23,12 @@ Help:
 """
 
 from inspect import getmembers, isclass
+from json import dumps
 
 import ezored.commands
 from docopt import docopt
+from models.constants import Constants
+from models.logger import Logger
 
 from . import __version__
 
@@ -33,10 +37,14 @@ def main():
     """Main CLI entrypoint."""
     options = docopt(__doc__, version=__version__)
 
-    # print('You supplied the following options: ', dumps(options, indent=2, sort_keys=False))
+    # show all params for debug
+    if ("--debug" in options and options["--debug"]) or ("-d" in options and options["-d"]):
+        Constants.DEBUG = True
+        Logger.d('You supplied the following options: ')
+        Logger.d("\n{}".format(dumps(options, indent=2, sort_keys=False)))
+        Logger.clean("")
 
-    # Here we'll try to dynamically match the command the user is trying to run
-    # with a pre-defined command class we've already created.
+    # dynamically match the command that user is trying to run
     for (option_key, option_value) in options.items():
         if hasattr(ezored.commands, option_key) and option_value:
             command_module = getattr(ezored.commands, option_key)

@@ -1,3 +1,6 @@
+from .constants import Constants
+
+
 class Logger(object):
     @staticmethod
     def clean(message):
@@ -5,7 +8,8 @@ class Logger(object):
 
     @staticmethod
     def d(message):
-        Logger.show("DEBUG", message)
+        if Constants.DEBUG:
+            Logger.show("DEBUG", message)
 
     @staticmethod
     def w(message):
