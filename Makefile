@@ -24,5 +24,5 @@ deps:
 	pip install -r requirements.txt
 
 clean:
-	find . -regex "\(.*__pycache__.*\|*.py[co]\)" -delete
+	find . -name "*.pyc" -exec rm -f {} \;
 	find . -type d -name __pycache__ -exec rm -r {} \+

@@ -6,9 +6,7 @@ Thumbs.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 *$py.class
 
 # C extensions
