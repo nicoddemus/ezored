@@ -31,6 +31,6 @@ class Logger(object):
     @staticmethod
     def show(prefix, message):
         if prefix == "":
-            print("{}".format(message))
+            print("{0}".format(message))
         else:
-            print("{}: {}".format(prefix, message))
+            print("{0}: {1}".format(prefix, message))

@@ -27,4 +27,4 @@ class Dependency(Base):
         Logger.clean("Dependency List:")
 
         for dependency in project.dependencies:
-            Logger.clean("  - {}".format(dependency.get_name()))
+            Logger.clean("  - {0}".format(dependency.get_name()))

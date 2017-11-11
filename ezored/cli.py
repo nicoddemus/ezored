@@ -42,7 +42,7 @@ def main():
     if ("--debug" in options and options["--debug"]) or ("-d" in options and options["-d"]):
         Constants.DEBUG = True
         Logger.d('You supplied the following options: ')
-        Logger.d("\n{}".format(dumps(options, indent=2, sort_keys=False)))
+        Logger.d("\n{0}".format(dumps(options, indent=2, sort_keys=False)))
         Logger.clean("")
 
     # dynamically match the command that user is trying to run

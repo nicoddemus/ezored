@@ -19,7 +19,7 @@ class Project(object):
             with open(Constants.PROJECT_FILE, 'r') as stream:
                 return Project.create_from_stream(stream)
         except IOError as exc:
-            Logger.f("Error while read project file: {}".format(exc))
+            Logger.f("Error while read project file: {0}".format(exc))
 
     @staticmethod
     def create_from_stream(stream):
@@ -63,4 +63,4 @@ class Project(object):
 
             return project
         except yaml.YAMLError as exc:
-            Logger.f("Error while load project data: {}".format(exc))
+            Logger.f("Error while load project data: {0}".format(exc))

@@ -20,4 +20,4 @@ class Target(Base):
         Logger.clean("Target List:")
 
         for target in project.targets:
-            Logger.clean("  - {}".format(target.target_name))
+            Logger.clean("  - {0}".format(target.target_name))
