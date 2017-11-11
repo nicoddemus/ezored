@@ -11,8 +11,8 @@ class Target(Base):
             self.list()
 
     def list(self):
-        from ..models.logger import Logger
-        from ..models.project import Project
+        from ezored.models.logger import Logger
+        from ezored.models.project import Project
 
         Logger.d("Listing all targets...")
 
