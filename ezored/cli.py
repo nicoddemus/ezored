@@ -28,8 +28,8 @@ from json import dumps
 
 import ezored.commands
 from docopt import docopt
-from models.constants import Constants
-from models.logger import Logger
+from ezored.models.constants import Constants
+from ezored.models.logger import Logger
 
 from . import __version__
 
