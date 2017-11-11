@@ -15,6 +15,7 @@ python:
 # command to install dependencies
 install:
   - make deps
+  - make install
 
 # command to run tests
 script:
