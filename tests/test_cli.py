@@ -7,16 +7,25 @@ from ezored import __version__ as VERSION
 class TestCLI(TestCase):
     def test_returns_usage_information(self):
         output = popen(['ezored', '-h'], stdout=PIPE).communicate()[0]
+        output = str(output)
+
         self.assertTrue('Usage:' in output)
 
         output = popen(['ezored', '--help'], stdout=PIPE).communicate()[0]
+        output = str(output)
+
         self.assertTrue('Usage:' in output)
 
     def test_returns_version_information(self):
         output = popen(['ezored', '--version'], stdout=PIPE).communicate()[0]
-        self.assertEqual(output.strip(), VERSION)
+        output = str(output)
+
+        self.assertTrue(VERSION in output)
 
     def test_debug(self):
-        required = """DEBUG: You supplied the following options: \nDEBUG: \n{\n  "target": false, \n  "list": false, \n  "update": false, \n  "--help": false, \n  "dependency": false, \n  "--debug": true, \n  "hello": false\n}"""
+        required = 'DEBUG: You supplied the following options:'
+
         output = popen(['ezored', '--debug'], stdout=PIPE).communicate()[0]
-        self.assertEqual(output.strip(), required)
+        output = str(output)
+
+        self.assertTrue(required in output)

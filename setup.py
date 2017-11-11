@@ -27,7 +27,8 @@ class RunTests(Command):
         """Run all tests!"""
         # html_path = '{0}'.format(os.path.join(os.getcwd(), "htmlcov"))
         # errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path])
-        errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing'])
+        # errno = call(['python3', '-m', 'pytest', '--cov=ezored', '--cov-report=term-missing'])
+        errno = call(['pytest', '--cov=ezored', '--cov-report=term-missing'])
         raise SystemExit(errno)
 
 
@@ -46,8 +47,13 @@ setup(
         'License :: Public Domain',
         'Natural Language :: English',
         'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),

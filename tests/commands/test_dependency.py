@@ -11,12 +11,16 @@ class TestDependency(TestCase):
     def test_dependency_list(self, d):
         os.chdir(d.path)
 
-        d.write(Constants.PROJECT_FILE, Constants.PROJECT_FILE_DATA)
-
-        required = """Dependency List:
-  - ezored/dependency-djinni-support
-  - ezored/dependency-sample
-"""
+        d.write(Constants.PROJECT_FILE, Constants.PROJECT_FILE_DATA.encode('utf-8'))
 
         output = popen(['ezored', 'dependency', 'list'], stdout=PIPE).communicate()[0]
-        self.assertTrue(output == required)
+        output = str(output)
+
+        required = 'Dependency List:'
+        self.assertTrue(required in output)
+
+        required = '- ezored/dependency-djinni-support'
+        self.assertTrue(required in output)
+
+        required = '- ezored/dependency-sample'
+        self.assertTrue(required in output)

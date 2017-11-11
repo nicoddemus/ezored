@@ -12,7 +12,7 @@ class TestProject(TestCase):
     def test_create_from_project_file(self, d):
         os.chdir(d.path)
 
-        d.write(Constants.PROJECT_FILE, Constants.PROJECT_FILE_DATA)
+        d.write(Constants.PROJECT_FILE, Constants.PROJECT_FILE_DATA.encode('utf-8'))
 
         project = Project.create_from_project_file()
 
@@ -31,7 +31,7 @@ class TestProject(TestCase):
     def test_project_file_invalid(self, d):
         with pytest.raises(SystemExit) as error:
             os.chdir(d.path)
-            d.write(Constants.PROJECT_FILE, "* invalid data *")
+            d.write(Constants.PROJECT_FILE, "* invalid data *".encode('utf-8'))
             Project.create_from_project_file()
 
         self.assertTrue(error.type == SystemExit)
