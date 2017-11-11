@@ -1,8 +1,8 @@
 from unittest import TestCase
 
 import pytest
-from ezored.models.logger import Logger
 from ezored.models.constants import Constants
+from ezored.models.logger import Logger
 
 
 class TestLogger(TestCase):
