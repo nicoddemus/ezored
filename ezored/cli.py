@@ -15,7 +15,8 @@ Options:
   -d --debug                        Enable debug messages.
 
 Examples:
-  ezored dependency update
+  ezored dependency list
+  ezored target list -d
 
 Help:
   For help using this tool, please open an issue on the Github repository:

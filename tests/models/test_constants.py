@@ -1,8 +1,17 @@
-class Constants(object):
-    DEBUG = False
-    PROJECT_FILE = "ezored-project.yml"
+from unittest import TestCase
 
-    PROJECT_FILE_DATA = """
+from ezored.models.constants import Constants
+
+
+class TestConstants(TestCase):
+    def test_initial_data(self):
+        self.assertTrue(Constants.DEBUG == False)
+
+    def test_project_file(self):
+        self.assertTrue(Constants.PROJECT_FILE == "ezored-project.yml")
+
+    def test_project_file_data(self):
+        file_data = """
 config:
   name: EzoRed
   ios:
@@ -34,3 +43,4 @@ dependencies:
   type: github
   version: b:master
 """
+        self.assertTrue(Constants.PROJECT_FILE_DATA == file_data)

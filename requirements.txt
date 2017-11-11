@@ -1,2 +1,4 @@
+testfixtures
+pytest
 pyyaml
 docopt

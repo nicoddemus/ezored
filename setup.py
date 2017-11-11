@@ -2,6 +2,8 @@
 
 from codecs import open
 from os.path import abspath, dirname, join
+
+import os
 from setuptools import Command, find_packages, setup
 from subprocess import call
 
@@ -25,7 +27,8 @@ class RunTests(Command):
 
     def run(self):
         """Run all tests!"""
-        errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing'])
+        html_path = '{}'.format(os.path.join(os.getcwd(), "htmlcov"))
+        errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path])
         raise SystemExit(errno)
 
 
