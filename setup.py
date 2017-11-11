@@ -27,8 +27,9 @@ class RunTests(Command):
 
     def run(self):
         """Run all tests!"""
-        html_path = '{}'.format(os.path.join(os.getcwd(), "htmlcov"))
-        errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path])
+        # html_path = '{}'.format(os.path.join(os.getcwd(), "htmlcov"))
+        # errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path])
+        errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing'])
         raise SystemExit(errno)
 
 
