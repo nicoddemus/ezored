@@ -7,8 +7,6 @@ class Target(Base):
     def run(self):
         if self.options["list"]:
             self.list()
-        else:
-            self.list()
 
     def list(self):
         from ezored.models.logger import Logger

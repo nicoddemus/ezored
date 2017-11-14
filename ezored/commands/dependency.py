@@ -9,8 +9,6 @@ class Dependency(Base):
             self.update()
         elif self.options["list"]:
             self.list()
-        else:
-            self.list()
 
     def update(self):
         from ezored.models.logger import Logger

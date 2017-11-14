@@ -4,6 +4,7 @@ from codecs import open
 from os.path import abspath, dirname, join
 from subprocess import call
 
+import os
 from ezored import __version__
 from setuptools import Command, find_packages, setup
 
@@ -25,10 +26,10 @@ class RunTests(Command):
 
     def run(self):
         """Run all tests!"""
-        # html_path = '{0}'.format(os.path.join(os.getcwd(), "htmlcov"))
-        # errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path])
+        html_path = '{0}'.format(os.path.join(os.getcwd(), "htmlcov"))
+        errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path])
         # errno = call(['python3', '-m', 'pytest', '--cov=ezored', '--cov-report=term-missing'])
-        errno = call(['pytest', '--cov=ezored', '--cov-report=term-missing'])
+        # errno = call(['pytest', '--cov=ezored', '--cov-report=term-missing'])
         raise SystemExit(errno)
 
 
