@@ -2,6 +2,7 @@
 EzoRed
 
 Usage:
+  ezored init [-d]
   ezored dependency list [-d]
   ezored dependency update [-d]
   ezored target list [-d]
@@ -15,6 +16,7 @@ Options:
   -d --debug                        Enable debug messages.
 
 Examples:
+  ezored init
   ezored dependency list
   ezored target list -d
 
