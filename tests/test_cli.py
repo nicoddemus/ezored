@@ -1,7 +1,10 @@
+import os
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
 
 from ezored import __version__ as VERSION
+from ezored.models.constants import Constants
+from testfixtures import tempdir
 
 
 class TestCLI(TestCase):
@@ -22,10 +25,14 @@ class TestCLI(TestCase):
 
         self.assertTrue(VERSION in output)
 
-    def test_debug(self):
+    @tempdir()
+    def test_debug(self, d):
+        os.chdir(d.path)
+        d.write(Constants.PROJECT_FILE, Constants.PROJECT_FILE_DATA.encode('utf-8'))
+        
         required = 'DEBUG: You supplied the following options:'
 
-        output = popen(['ezored', '--debug'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'init', '--debug'], stdout=PIPE).communicate()[0]
         output = str(output)
 
         self.assertTrue(required in output)

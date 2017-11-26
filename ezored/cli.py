@@ -2,13 +2,11 @@
 EzoRed
 
 Usage:
-  ezored init [-d]
-  ezored dependency list [-d]
-  ezored dependency update [-d]
-  ezored target list [-d]
-  ezored hello
+  ezored [options] init
+  ezored [options] dependency list
+  ezored [options] dependency update
+  ezored [options] target list
   ezored -h | --help
-  ezored [-d | --debug]
 
 Options:
   -h --help                         Show this screen.
