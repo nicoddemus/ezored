@@ -78,6 +78,8 @@ class Repository(object):
                 else:
                     Logger.f('Problems when obtain dependency: {0}'.format(self.rep_name))
 
+            # TODO: TERMINAR AQUI E O DEPOIS DE BAIXAR A FUNÇÃO DE EXECUTAR O BUILD UNICA PRA GITHUB E LOCAL
+
     def get_git_data(self):
         # it will return a tuple of 3 elements with this pattern
         # 1 = repository name
