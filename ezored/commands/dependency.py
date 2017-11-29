@@ -12,8 +12,17 @@ class Dependency(Base):
 
     def update(self):
         from ezored.models.logger import Logger
+        from ezored.models.project import Project
 
-        Logger.d("Checking dependencies...")
+        Logger.d("Updating all dependencies...")
+
+        project = Project.create_from_project_file()
+        total_deps = len(project.dependencies)
+
+        if total_deps > 0:
+            Logger.i("Updating {0} dependencies...".format(total_deps))
+        else:
+            Logger.i("Your project does not have dependencies")
 
     def list(self):
         from ezored.models.logger import Logger
