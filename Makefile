@@ -10,6 +10,7 @@ help:
 	@echo "- help"
 	@echo "- install"
 	@echo "- test"
+	@echo "- test-cov"
 	@echo "- deps"
 	@echo "- clean"
 	@echo ""
@@ -20,9 +21,13 @@ install:
 test:
 	python setup.py test
 
+test-cov:
+	python setup.py test --codecoverage=html
+
 deps:
 	pip install -r requirements.txt
 
 clean:
 	find . -name "*.pyc" -exec rm -f {} \;
 	find . -type d -name __pycache__ -exec rm -r {} \+
+	rm -rf htmlcov

@@ -1,10 +1,10 @@
 """Packaging settings."""
 
+import os
 from codecs import open
 from os.path import abspath, dirname, join
 from subprocess import call
 
-import os
 from ezored import __version__
 from setuptools import Command, find_packages, setup
 
@@ -16,18 +16,25 @@ with open(join(this_dir, 'README.md'), encoding='utf-8') as file:
 class RunTests(Command):
     """Run all tests."""
     description = 'run tests'
-    user_options = []
+    user_options = [
+        ('codecoverage=', None, 'With code coverage')
+    ]
 
     def initialize_options(self):
-        pass
+        self.codecoverage = None
 
     def finalize_options(self):
-        pass
+        assert self.codecoverage in (None, 'html')
 
     def run(self):
         """Run all tests!"""
-        html_path = '{0}'.format(os.path.join(os.getcwd(), "htmlcov"))
-        errno = call(['py.test', '--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path])
+        options = ['py.test']
+
+        if self.codecoverage == 'html':
+            html_path = '{0}'.format(os.path.join(os.getcwd(), "htmlcov"))
+            options += ['--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path]
+
+        errno = call(options)
         # errno = call(['python3', '-m', 'pytest', '--cov=ezored', '--cov-report=term-missing'])
         # errno = call(['pytest', '--cov=ezored', '--cov-report=term-missing'])
         raise SystemExit(errno)
