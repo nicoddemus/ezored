@@ -1,8 +1,7 @@
 class Constants(object):
     DEBUG = False
-    PROJECT_FILE = "ezored-project.yml"
-    SOURCE_DIR = "source"
-
+    PROJECT_FILE = 'ezored-project.yml'
+    SOURCE_DIR = 'source'
 
     PROJECT_FILE_DATA = """
 config:

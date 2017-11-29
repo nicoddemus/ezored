@@ -39,11 +39,11 @@ def main():
     options = docopt(__doc__, version=__version__)
 
     # show all params for debug
-    if ("--debug" in options and options["--debug"]) or ("-d" in options and options["-d"]):
+    if ('--debug' in options and options['--debug']) or ('-d' in options and options['-d']):
         Constants.DEBUG = True
         Logger.d('You supplied the following options: ')
-        Logger.d("\n{0}".format(dumps(options, indent=2, sort_keys=False)))
-        Logger.clean("")
+        Logger.d('\n{0}'.format(dumps(options, indent=2, sort_keys=False)))
+        Logger.clean('')
 
     # dynamically match the command that user is trying to run
     for (option_key, option_value) in options.items():

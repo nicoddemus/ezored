@@ -18,7 +18,7 @@ class DownloadUtil(object):
         """
         Download and save a file specified by url to dest directory,
         """
-        Logger.d("New download request")
+        Logger.d('New download request')
 
         u = urllib2.urlopen(url)
 
@@ -30,12 +30,12 @@ class DownloadUtil(object):
         if dest:
             filename = os.path.join(dest, filename)
 
-        Logger.d("Getting file metadata...")
+        Logger.d('Getting file metadata...')
 
-        with open(filename, "wb") as f:
+        with open(filename, 'wb') as f:
             meta = u.info()
-            meta_func = meta.getheaders if hasattr(meta, "getheaders") else meta.get_all
-            meta_length = meta_func("Content-Length")
+            meta_func = meta.getheaders if hasattr(meta, 'getheaders') else meta.get_all
+            meta_length = meta_func('Content-Length')
             file_size = None
             pbar = None
 
@@ -43,15 +43,15 @@ class DownloadUtil(object):
                 file_size = int(meta_length[0])
 
             if file_size:
-                Logger.d("File size in bytes: {0}".format(file_size))
-                Logger.clean("")
+                Logger.d('File size in bytes: {0}'.format(file_size))
+                Logger.clean('')
                 pbar = tqdm(total=file_size)
 
             file_size_dl = 0
             block_sz = 8192
 
             if not pbar:
-                Logger.d("Downloading, please wait...")
+                Logger.d('Downloading, please wait...')
 
             while True:
                 dbuffer = u.read(block_sz)
@@ -68,13 +68,13 @@ class DownloadUtil(object):
 
             if pbar:
                 pbar.close()
-                Logger.clean("")
+                Logger.clean('')
 
             return filename
 
     @staticmethod
     def get_filename_from_url(url):
-        Logger.d("Parsing URL to get filename...")
+        Logger.d('Parsing URL to get filename...')
 
         scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
         filename = os.path.basename(path)
@@ -82,6 +82,6 @@ class DownloadUtil(object):
         if not filename:
             filename = 'downloaded.file'
 
-        Logger.d("Filename from download URL: {0}".format(filename))
+        Logger.d('Filename from download URL: {0}'.format(filename))
 
         return filename
