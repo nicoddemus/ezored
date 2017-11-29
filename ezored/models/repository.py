@@ -1,9 +1,11 @@
 import os
 import re
+import tarfile
 
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
 from ezored.models.util.download_util import DownloadUtil
+from ezored.models.util.file_util import FileUtil
 from slugify import slugify
 
 
@@ -34,7 +36,11 @@ class Repository(object):
     def get_download_url(self):
         if self.rep_type == Repository.TYPE_GITHUB:
             git_data_name, _, git_data_version = self.get_git_data()
-            return 'https://github.com/{0}/archive/{1}.zip'.format(git_data_name, git_data_version)
+            return 'https://github.com/{0}/archive/{1}.{2}'.format(
+                git_data_name,
+                git_data_version,
+                Constants.GITHUB_DOWNLOAD_EXTENSION
+            )
         else:
             return ''
 
@@ -56,29 +62,7 @@ class Repository(object):
     def download(self):
         # check repository type
         if self.rep_type == Repository.TYPE_GITHUB:
-            Logger.i('Getting dependency: {0}...'.format(self.rep_name))
-
-            # prepare download data
-            download_url = self.get_download_url()
-            download_filename = self.get_download_filename()
-            download_dest_dir = Constants.TEMPORARY_DIR
-            download_dest_path = os.path.join(Constants.TEMPORARY_DIR, download_filename)
-
-            _, _, git_data_version = self.get_git_data()
-
-            # skip if exists
-            if os.path.isfile(download_dest_path):
-                Logger.i('Dependency already downloaded: {0}'.format(self.rep_name))
-            else:
-                DownloadUtil.download_file(download_url, download_dest_dir, download_filename)
-
-                # check if file was downloaded
-                if os.path.isfile(download_dest_path):
-                    Logger.i('Dependency downloaded: {0}'.format(self.rep_name))
-                else:
-                    Logger.f('Problems when obtain dependency: {0}'.format(self.rep_name))
-
-            # TODO: TERMINAR AQUI E O DEPOIS DE BAIXAR A FUNCAO DE EXECUTAR O BUILD UNICA PRA GITHUB E LOCAL
+            self.download_from_github()
 
     def get_git_data(self):
         # it will return a tuple of 3 elements with this pattern
@@ -116,6 +100,51 @@ class Repository(object):
             return slugify(filename)
         else:
             return ''
+
+    def download_from_github(self):
+        # download
+        Logger.i('Getting dependency: {0}...'.format(self.get_name()))
+
+        download_url = self.get_download_url()
+        download_filename = self.get_download_filename()
+        download_dest_dir = Constants.TEMPORARY_DIR
+        download_dest_path = os.path.join(Constants.TEMPORARY_DIR, download_filename)
+        unpacked_dir = self.get_temp_working_dir()
+        unpack_dir = Constants.TEMPORARY_DIR
+
+        _, _, git_data_version = self.get_git_data()
+
+        # skip if exists
+        if os.path.isfile(download_dest_path):
+            Logger.i('Dependency already downloaded: {0}'.format(self.get_name()))
+        else:
+            DownloadUtil.download_file(download_url, download_dest_dir, download_filename)
+
+            # check if file was downloaded
+            if os.path.isfile(download_dest_path):
+                Logger.i('Dependency downloaded: {0}'.format(self.get_name()))
+            else:
+                Logger.f('Problems when download dependency: {0}'.format(self.get_name()))
+
+        # unpack
+        Logger.i('Unpacking dependency: {0}...'.format(self.get_name()))
+
+        if os.path.isdir(unpacked_dir):
+            Logger.i('Dependency already unpacked: {0}...'.format(self.get_name()))
+        else:
+            # untar file
+            FileUtil.create_dir(unpack_dir)
+            print(download_dest_path)
+            tar = tarfile.open(download_dest_path)
+            tar.extractall(path=unpack_dir)
+            tar.close()
+
+            if os.path.isdir(unpacked_dir):
+                Logger.i('Dependency unpacked: {0}'.format(self.get_name()))
+            else:
+                Logger.f('Problems when unpack dependency: {0}'.format(self.get_name()))
+
+                # TODO: Descompactado. Falta executar o build.
 
     @staticmethod
     def from_dict(dict_data):

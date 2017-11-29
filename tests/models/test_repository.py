@@ -120,7 +120,7 @@ class TestRepository(TestCase):
 
         download_url = repository.get_download_url()
 
-        self.assertEqual(download_url, 'https://github.com/ezored/dependency-sample/archive/1.0.0.zip')
+        self.assertEqual(download_url, 'https://github.com/ezored/dependency-sample/archive/1.0.0.tar.gz')
 
     def test_github_download_filename(self):
         repository = Repository.from_dict({
