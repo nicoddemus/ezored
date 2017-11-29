@@ -3,6 +3,14 @@ class Constants(object):
     PROJECT_FILE = 'ezored-project.yml'
     SOURCE_DIR = 'source'
 
+    DEPENDENCIES_DIR = 'vendor'
+    TARGET_DIR = 'target'
+    VENDOR_DIR = 'vendor'
+    TEMPORARY_DIR = 'temp'
+    BUILD_DIR = 'build'
+
+    GITHUB_DOWNLOAD_EXTENSION = 'tar.gz'
+
     PROJECT_FILE_DATA = """
 config:
   name: EzoRed

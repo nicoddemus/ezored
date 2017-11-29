@@ -65,3 +65,16 @@ class TestDownloadUtil(TestCase):
 
         self.assertTrue(os.path.isfile(os.path.join(download_dest, download_filename)))
         self.assertEqual(os.path.getsize(os.path.join(download_dest, download_filename)), 5627)
+
+    @tempdir()
+    def test_download_file_with_auto_create_dest_dir(self, d):
+        os.chdir(d.path)
+
+        download_url = 'https://raw.githubusercontent.com/ezored/ezored/python-version/extras/images/jetbrains-logo.png'
+        download_dest = 'download'
+        download_filename = DownloadUtil.get_filename_from_url(download_url)
+
+        DownloadUtil.download_file(download_url, download_dest)
+
+        self.assertTrue(os.path.isfile(os.path.join(download_dest, download_filename)))
+        self.assertEqual(os.path.getsize(os.path.join(download_dest, download_filename)), 5627)

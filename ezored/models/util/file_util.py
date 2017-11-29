@@ -1,6 +1,7 @@
 import os
 import shutil
 
+from ezored.models.constants import Constants
 from ezored.models.logger import Logger
 
 
@@ -37,3 +38,7 @@ class FileUtil(object):
         with open(full_file_path, 'w') as f:
             f.write(content)
             f.close()
+
+    @staticmethod
+    def create_dependencies_dir(dir_path):
+        FileUtil.create_dir(Constants.VENDOR_DIR)

@@ -2,6 +2,7 @@ import os
 import sys
 
 from ezored.models.logger import Logger
+from ezored.models.util.file_util import FileUtil
 from tqdm import tqdm
 
 if sys.version_info >= (3,):
@@ -28,6 +29,7 @@ class DownloadUtil(object):
             filename = DownloadUtil.get_filename_from_url(path)
 
         if dest:
+            FileUtil.create_dir(dest)
             filename = os.path.join(dest, filename)
 
         Logger.d('Getting file metadata...')

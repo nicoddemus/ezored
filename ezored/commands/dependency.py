@@ -1,4 +1,5 @@
 """Dependency command"""
+from ezored.models.util.file_util import FileUtil
 
 from .base import Base
 
@@ -21,6 +22,9 @@ class Dependency(Base):
 
         if total_deps > 0:
             Logger.i('Updating {0} dependencies...'.format(total_deps))
+
+            for dep in project.dependencies:
+                dep.download()
         else:
             Logger.i('Your project does not have dependencies')
 
