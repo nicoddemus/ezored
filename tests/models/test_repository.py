@@ -131,7 +131,7 @@ class TestRepository(TestCase):
 
         download_filename = repository.get_download_filename()
 
-        self.assertEqual(download_filename, 'ezored-dependency-sample-1-0-0.tar.gz')
+        self.assertEqual(download_filename, 'dependency-sample-1-0-0.tar.gz')
 
     def test_local_download_filename(self):
         repository = Repository.from_dict({

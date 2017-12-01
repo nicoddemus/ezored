@@ -1,5 +1,7 @@
 import os
 import shutil
+import subprocess
+from subprocess import PIPE
 
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
@@ -42,3 +44,22 @@ class FileUtil(object):
     @staticmethod
     def create_dependencies_dir(dir_path):
         FileUtil.create_dir(Constants.VENDOR_DIR)
+
+    @staticmethod
+    def get_current_dir():
+        return os.getcwd()
+
+    @staticmethod
+    def run(args, cwd, env):
+        proc = subprocess.Popen(
+            args,
+            env=env,
+            cwd=cwd,
+            stdout=PIPE,
+            stderr=PIPE
+        )
+
+        out, err = proc.communicate()
+        exitcode = proc.returncode
+
+        return exitcode, err, out

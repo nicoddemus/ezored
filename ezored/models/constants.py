@@ -1,6 +1,7 @@
 class Constants(object):
     DEBUG = False
     PROJECT_FILE = 'ezored-project.yml'
+    VENDOR_FILE = 'ezored-vendor.yml'
     SOURCE_DIR = 'source'
 
     DEPENDENCIES_DIR = 'vendor'

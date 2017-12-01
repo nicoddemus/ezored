@@ -2,6 +2,7 @@ import os
 import re
 import tarfile
 
+import yaml
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
 from ezored.models.util.download_util import DownloadUtil
@@ -46,13 +47,16 @@ class Repository(object):
 
     def get_download_filename(self):
         if self.rep_type == Repository.TYPE_GITHUB:
-            _, _, git_data_version = self.get_git_data()
+            git_data_name, _, git_data_version = self.get_git_data()
+            git_data_name_list = str(git_data_name).split('/')
+
             return '{0}.{1}'.format(
                 slugify('{0}-{1}'.format(
-                    self.rep_name,
+                    git_data_name_list[1],
                     git_data_version)
                 ),
-                Constants.GITHUB_DOWNLOAD_EXTENSION)
+                Constants.GITHUB_DOWNLOAD_EXTENSION
+            )
         elif self.rep_type == Repository.TYPE_LOCAL:
             _, filename = os.path.split(self.rep_name)
             return slugify(filename)
@@ -60,7 +64,6 @@ class Repository(object):
             return ''
 
     def download(self):
-        # check repository type
         if self.rep_type == Repository.TYPE_GITHUB:
             self.download_from_github()
 
@@ -103,7 +106,7 @@ class Repository(object):
 
     def download_from_github(self):
         # download
-        Logger.i('Getting dependency: {0}...'.format(self.get_name()))
+        Logger.i('Downloading repository: {0}...'.format(self.get_name()))
 
         download_url = self.get_download_url()
         download_filename = self.get_download_filename()
@@ -111,40 +114,91 @@ class Repository(object):
         download_dest_path = os.path.join(Constants.TEMPORARY_DIR, download_filename)
         unpacked_dir = self.get_temp_working_dir()
         unpack_dir = Constants.TEMPORARY_DIR
+        force_download = False
 
-        _, _, git_data_version = self.get_git_data()
+        _, git_data_type, git_data_version = self.get_git_data()
+
+        if git_data_type == Repository.GIT_TYPE_BRANCH:
+            force_download = True
 
         # skip if exists
-        if os.path.isfile(download_dest_path):
-            Logger.i('Dependency already downloaded: {0}'.format(self.get_name()))
+        if not force_download and os.path.isfile(download_dest_path):
+            Logger.i('Repository already downloaded: {0}'.format(self.get_name()))
         else:
+            FileUtil.remove_file(download_dest_path)
+
             DownloadUtil.download_file(download_url, download_dest_dir, download_filename)
 
             # check if file was downloaded
             if os.path.isfile(download_dest_path):
-                Logger.i('Dependency downloaded: {0}'.format(self.get_name()))
+                Logger.i('Repository downloaded: {0}'.format(self.get_name()))
             else:
-                Logger.f('Problems when download dependency: {0}'.format(self.get_name()))
+                Logger.f('Problems when download repository: {0}'.format(self.get_name()))
 
         # unpack
-        Logger.i('Unpacking dependency: {0}...'.format(self.get_name()))
+        Logger.i('Unpacking repository: {0}...'.format(self.get_name()))
 
-        if os.path.isdir(unpacked_dir):
-            Logger.i('Dependency already unpacked: {0}...'.format(self.get_name()))
+        if not force_download and os.path.isdir(unpacked_dir):
+            Logger.i('Repository already unpacked: {0}...'.format(self.get_name()))
         else:
+            FileUtil.remove_dir(unpacked_dir)
+
             # untar file
             FileUtil.create_dir(unpack_dir)
-            print(download_dest_path)
+
             tar = tarfile.open(download_dest_path)
             tar.extractall(path=unpack_dir)
             tar.close()
 
             if os.path.isdir(unpacked_dir):
-                Logger.i('Dependency unpacked: {0}'.format(self.get_name()))
+                Logger.i('Repository unpacked: {0}'.format(self.get_name()))
             else:
-                Logger.f('Problems when unpack dependency: {0}'.format(self.get_name()))
+                Logger.f('Problems when unpack repository: {0}'.format(self.get_name()))
 
-                # TODO: Descompactado. Falta executar o build.
+    def build(self):
+        Logger.i('Building repository: {0}...'.format(self.get_name()))
+
+        if self.rep_type == Repository.TYPE_GITHUB:
+            vendor_file_data = self.load_vendor_file_data()
+
+            if 'vendor' in vendor_file_data:
+                vendor_data = vendor_file_data['vendor']
+
+                if 'build' in vendor_data:
+                    vendor_data_build = vendor_data['build']
+
+                    env_data = dict(os.environ)
+                    env_data['EZORED_PROJECT_ROOT'] = FileUtil.get_current_dir()
+
+                    exitcode, stderr, stdout = FileUtil.run(vendor_data_build, self.get_temp_working_dir(), env_data)
+
+                    print(FileUtil.get_current_dir())
+
+                    if exitcode == 0:
+                        Logger.i('Build finished for repository: {0}'.format(self.get_name()))
+                    else:
+                        if stdout:
+                            Logger.i('Build output for repository: {0}'.format(self.get_name()))
+                            Logger.clean(stdout)
+
+                        if stderr:
+                            Logger.i('Error output while build repository: {0}'.format(self.get_name()))
+                            Logger.clean(stderr)
+
+                        Logger.f('Failed to build repository: {0}'.format(self.get_name()))
+
+    def load_vendor_file_data(self):
+        Logger.d('Loading vendor file...')
+
+        if self.rep_type == Repository.TYPE_GITHUB:
+            unpacked_dir = self.get_temp_working_dir()
+            vendor_file_path = os.path.join(unpacked_dir, Constants.VENDOR_FILE)
+
+            try:
+                with open(vendor_file_path, 'r') as stream:
+                    return yaml.load(stream)
+            except IOError as exc:
+                Logger.f('Error while read vendor file: {0}'.format(exc))
 
     @staticmethod
     def from_dict(dict_data):

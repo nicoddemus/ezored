@@ -1,5 +1,4 @@
 """Dependency command"""
-from ezored.models.util.file_util import FileUtil
 
 from .base import Base
 
@@ -25,6 +24,7 @@ class Dependency(Base):
 
             for dep in project.dependencies:
                 dep.download()
+                dep.build()
         else:
             Logger.i('Your project does not have dependencies')
 
