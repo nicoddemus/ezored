@@ -158,47 +158,43 @@ class Repository(object):
     def build(self):
         Logger.i('Building repository: {0}...'.format(self.get_name()))
 
-        if self.rep_type == Repository.TYPE_GITHUB:
-            vendor_file_data = self.load_vendor_file_data()
+        vendor_file_data = self.load_vendor_file_data()
 
-            if 'vendor' in vendor_file_data:
-                vendor_data = vendor_file_data['vendor']
+        if 'vendor' in vendor_file_data:
+            vendor_data = vendor_file_data['vendor']
 
-                if 'build' in vendor_data:
-                    vendor_data_build = vendor_data['build']
+            if 'build' in vendor_data:
+                vendor_data_build = vendor_data['build']
 
-                    env_data = dict(os.environ)
-                    env_data['EZORED_PROJECT_ROOT'] = FileUtil.get_current_dir()
+                env_data = dict(os.environ)
+                env_data['EZORED_PROJECT_ROOT'] = FileUtil.get_current_dir()
 
-                    exitcode, stderr, stdout = FileUtil.run(vendor_data_build, self.get_temp_working_dir(), env_data)
+                exitcode, stderr, stdout = FileUtil.run(vendor_data_build, self.get_temp_working_dir(), env_data)
 
-                    print(FileUtil.get_current_dir())
+                if exitcode == 0:
+                    Logger.i('Build finished for repository: {0}'.format(self.get_name()))
+                else:
+                    if stdout:
+                        Logger.i('Build output for repository: {0}'.format(self.get_name()))
+                        Logger.clean(stdout)
 
-                    if exitcode == 0:
-                        Logger.i('Build finished for repository: {0}'.format(self.get_name()))
-                    else:
-                        if stdout:
-                            Logger.i('Build output for repository: {0}'.format(self.get_name()))
-                            Logger.clean(stdout)
+                    if stderr:
+                        Logger.i('Error output while build repository: {0}'.format(self.get_name()))
+                        Logger.clean(stderr)
 
-                        if stderr:
-                            Logger.i('Error output while build repository: {0}'.format(self.get_name()))
-                            Logger.clean(stderr)
-
-                        Logger.f('Failed to build repository: {0}'.format(self.get_name()))
+                    Logger.f('Failed to build repository: {0}'.format(self.get_name()))
 
     def load_vendor_file_data(self):
         Logger.d('Loading vendor file...')
 
-        if self.rep_type == Repository.TYPE_GITHUB:
-            unpacked_dir = self.get_temp_working_dir()
-            vendor_file_path = os.path.join(unpacked_dir, Constants.VENDOR_FILE)
+        vendor_dir = self.get_temp_working_dir()
+        vendor_file_path = os.path.join(vendor_dir, Constants.VENDOR_FILE)
 
-            try:
-                with open(vendor_file_path, 'r') as stream:
-                    return yaml.load(stream)
-            except IOError as exc:
-                Logger.f('Error while read vendor file: {0}'.format(exc))
+        try:
+            with open(vendor_file_path, 'r') as stream:
+                return yaml.load(stream)
+        except IOError as exc:
+            Logger.f('Error while read vendor file: {0}'.format(exc))
 
     @staticmethod
     def from_dict(dict_data):
