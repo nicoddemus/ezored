@@ -19,8 +19,31 @@ class TestDependency(TestCase):
         required = 'Dependency List:'
         self.assertTrue(required in output)
 
-        required = '- ezored/dependency-djinni-support'
+        required = '- dependency-djinni-support'
         self.assertTrue(required in output)
 
-        required = '- ezored/dependency-sample'
+        required = '- dependency-sample'
+        self.assertTrue(required in output)
+
+    @tempdir()
+    def test_dependency_github_update(self, d):
+        os.chdir(d.path)
+
+        project_file_data = """
+config:
+  name: EzoRed
+dependencies:
+  - name: ezored/dependency-github-test
+    repository:
+      name: ezored/dependency-github-test
+      type: github
+      version: b:master
+"""
+
+        d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
+
+        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = str(output)
+
+        required = 'Build finished for repository: ezored/dependency-github-test'
         self.assertTrue(required in output)

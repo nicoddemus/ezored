@@ -23,8 +23,8 @@ class Dependency(Base):
             Logger.i('Updating {0} dependencies...'.format(total_deps))
 
             for dep in project.dependencies:
-                dep.download()
-                dep.build()
+                dep.repository.download()
+                dep.repository.build()
         else:
             Logger.i('Your project does not have dependencies')
 

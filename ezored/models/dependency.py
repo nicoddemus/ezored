@@ -1,7 +1,7 @@
 from .repository import Repository
 
 
-class Target(object):
+class Dependency(object):
     name = ''
     repository = Repository
 
@@ -19,9 +19,9 @@ class Target(object):
     def from_dict(dict_data):
         repository_data = dict_data['repository'] if 'repository' in dict_data else {}
 
-        target = Target(
+        dependency = Dependency(
             name=dict_data['name'] if 'name' in dict_data else '',
             repository=Repository.from_dict(repository_data)
         )
 
-        return target
+        return dependency

@@ -1,4 +1,5 @@
 import yaml
+from ezored.models.dependency import Dependency
 
 from .constants import Constants
 from .logger import Logger
@@ -45,8 +46,8 @@ class Project(object):
                 dependencies = file_data['dependencies']
 
                 for dependency_data in dependencies:
-                    repository = Repository.from_dict(dependency_data)
-                    project.dependencies.append(repository)
+                    dependency = Dependency.from_dict(dependency_data)
+                    project.dependencies.append(dependency)
 
             # targets
             Logger.d('Loading project targets...')

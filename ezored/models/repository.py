@@ -87,7 +87,7 @@ class Repository(object):
 
     def get_temp_working_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
-            return os.path.join(Constants.TEMPORARY_DIR, self.get_dir_name())
+            return os.path.join(Constants.TEMP_DIR, self.get_dir_name())
         elif self.rep_type == Repository.TYPE_LOCAL:
             return self.rep_name
         else:
@@ -110,10 +110,10 @@ class Repository(object):
 
         download_url = self.get_download_url()
         download_filename = self.get_download_filename()
-        download_dest_dir = Constants.TEMPORARY_DIR
-        download_dest_path = os.path.join(Constants.TEMPORARY_DIR, download_filename)
+        download_dest_dir = Constants.TEMP_DIR
+        download_dest_path = os.path.join(Constants.TEMP_DIR, download_filename)
         unpacked_dir = self.get_temp_working_dir()
-        unpack_dir = Constants.TEMPORARY_DIR
+        unpack_dir = Constants.TEMP_DIR
         force_download = False
 
         _, git_data_type, git_data_version = self.get_git_data()
@@ -167,7 +167,7 @@ class Repository(object):
                 vendor_data_build = vendor_data['build']
 
                 env_data = dict(os.environ)
-                env_data['EZORED_PROJECT_ROOT'] = FileUtil.get_current_dir()
+                env_data['EZORED_PROJECT_HOME'] = FileUtil.get_current_dir()
 
                 exitcode, stderr, stdout = FileUtil.run(vendor_data_build, self.get_temp_working_dir(), env_data)
 

@@ -153,7 +153,7 @@ class TestRepository(TestCase):
 
         temp_working_dir = repository.get_temp_working_dir()
 
-        self.assertEqual(temp_working_dir, os.path.join(Constants.TEMPORARY_DIR, 'dependency-sample-1-0-0'))
+        self.assertEqual(temp_working_dir, os.path.join(Constants.TEMP_DIR, 'dependency-sample-1-0-0'))
 
     def test_local_temp_working_dir(self):
         repository = Repository.from_dict({
