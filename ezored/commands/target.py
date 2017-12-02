@@ -63,3 +63,6 @@ class Target(Base):
                     dependency.prepare_from_process_data(process_data)
                     current_target_data = dependency.get_target_data_by_target_name_and_parse(target_name, process_data)
                     target_data.merge(current_target_data)
+
+                # copy files from dependencies to target directory
+                
