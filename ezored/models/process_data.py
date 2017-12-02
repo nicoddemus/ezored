@@ -8,22 +8,39 @@ class ProcessData(object):
     project_name = ''
     project_home_dir = ''
 
-    repository_temp_dir = ''
-    repository_vendor_dir = ''
-    repository_name = ''
-
     temp_dir = ''
     build_dir = ''
     vendor_dir = ''
 
+    target_temp_dir = ''
+    target_source_dir = ''
+    target_vendor_dir = ''
+    target_build_dir = ''
+    target_name = ''
+
+    dependency_temp_dir = ''
+    dependency_source_dir = ''
+    dependency_vendor_dir = ''
+    dependency_build_dir = ''
+    dependency_name = ''
+
     def get_environ(self):
         env_data = dict(os.environ)
+
         env_data['{0}PROJECT_NAME'.format(Constants.ENV_VAR_PREFIX)] = self.project_name
         env_data['{0}PROJECT_HOME'.format(Constants.ENV_VAR_PREFIX)] = self.project_home_dir
 
-        env_data['{0}REPOSITORY_TEMP_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.repository_temp_dir
-        env_data['{0}REPOSITORY_VENDOR_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.repository_vendor_dir
-        env_data['{0}REPOSITORY_NAME'.format(Constants.ENV_VAR_PREFIX)] = self.repository_name
+        env_data['{0}TARGET_TEMP_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.target_temp_dir
+        env_data['{0}TARGET_SOURCE_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.target_source_dir
+        env_data['{0}TARGET_VENDOR_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.target_vendor_dir
+        env_data['{0}TARGET_BUILD_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.target_build_dir
+        env_data['{0}TARGET_NAME'.format(Constants.ENV_VAR_PREFIX)] = self.target_name
+
+        env_data['{0}DEPENDENCY_TEMP_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.dependency_temp_dir
+        env_data['{0}DEPENDENCY_SOURCE_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.dependency_source_dir
+        env_data['{0}DEPENDENCY_VENDOR_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.dependency_vendor_dir
+        env_data['{0}DEPENDENCY_BUILD_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.dependency_build_dir
+        env_data['{0}DEPENDENCY_NAME'.format(Constants.ENV_VAR_PREFIX)] = self.dependency_name
 
         env_data['{0}TEMP_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.temp_dir
         env_data['{0}BUILD_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.build_dir
@@ -35,18 +52,35 @@ class ProcessData(object):
         self.project_name = ''
         self.project_home_dir = FileUtil.get_current_dir()
 
-        self.repository_temp_dir = ''
-        self.repository_vendor_dir = ''
-        self.repository_name = ''
+        self.target_temp_dir = ''
+        self.target_source_dir = ''
+        self.target_vendor_dir = ''
+        self.target_build_dir = ''
+        self.target_name = ''
+
+        self.dependency_temp_dir = ''
+        self.dependency_source_dir = ''
+        self.dependency_vendor_dir = ''
+        self.dependency_build_dir = ''
+        self.dependency_name = ''
 
         self.temp_dir = os.path.join(self.project_home_dir, Constants.TEMP_DIR)
         self.build_dir = os.path.join(self.project_home_dir, Constants.BUILD_DIR)
         self.vendor_dir = os.path.join(self.project_home_dir, Constants.VENDOR_DIR)
 
-    def set_repository_name_and_dir(self, rep_name, rep_dir):
-        self.repository_name = rep_name
-        self.repository_temp_dir = os.path.join(self.project_home_dir, Constants.TEMP_DIR, rep_dir)
-        self.repository_vendor_dir = os.path.join(self.project_home_dir, Constants.VENDOR_DIR, rep_dir)
+    def set_dependency_data(self, name, temp_dir, vendor_dir, source_dir, build_dir):
+        self.dependency_name = self.parse_text(name)
+        self.dependency_temp_dir = self.parse_text(temp_dir)
+        self.dependency_vendor_dir = self.parse_text(vendor_dir)
+        self.dependency_source_dir = self.parse_text(source_dir)
+        self.dependency_build_dir = self.parse_text(build_dir)
+
+    def set_target_data(self, name, temp_dir, vendor_dir, source_dir, build_dir):
+        self.target_name = self.parse_text(name)
+        self.target_temp_dir = self.parse_text(temp_dir)
+        self.target_vendor_dir = self.parse_text(vendor_dir)
+        self.target_source_dir = self.parse_text(source_dir)
+        self.target_build_dir = self.parse_text(build_dir)
 
     def parse_text(self, text):
         var_list = self.get_environ()
@@ -71,8 +105,8 @@ class ProcessData(object):
     def parse_copy_file_list(self, copy_file_list):
         if copy_file_list:
             for copy_file in copy_file_list:
-                copy_file.from_path = self.parse_text(copy_file.from_path)
-                copy_file.to_path = self.parse_text(copy_file.to_path)
+                copy_file['from_path'] = self.parse_text(copy_file['from_path'])
+                copy_file['to_path'] = self.parse_text(copy_file['to_path'])
 
         return copy_file_list
 

@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from ezored.models.constants import Constants
 from ezored.models.process_data import ProcessData
+from ezored.models.repository import Repository
 from ezored.models.util.file_util import FileUtil
 from testfixtures import tempdir
 
@@ -27,9 +28,17 @@ class TestProcessData(TestCase):
         self.assertEqual(process_data.project_name, Constants.PROJECT_NAME)
         self.assertEqual(process_data.project_home_dir, current_dir)
 
-        self.assertEqual(process_data.repository_temp_dir, '')
-        self.assertEqual(process_data.repository_vendor_dir, '')
-        self.assertEqual(process_data.repository_name, '')
+        self.assertEqual(process_data.dependency_name, '')
+        self.assertEqual(process_data.dependency_source_dir, '')
+        self.assertEqual(process_data.dependency_build_dir, '')
+        self.assertEqual(process_data.dependency_temp_dir, '')
+        self.assertEqual(process_data.dependency_vendor_dir, '')
+
+        self.assertEqual(process_data.target_name, '')
+        self.assertEqual(process_data.target_source_dir, '')
+        self.assertEqual(process_data.target_build_dir, '')
+        self.assertEqual(process_data.target_temp_dir, '')
+        self.assertEqual(process_data.target_vendor_dir, '')
 
         self.assertEqual(process_data.temp_dir, os.path.join(current_dir, Constants.TEMP_DIR))
         self.assertEqual(process_data.build_dir, os.path.join(current_dir, Constants.BUILD_DIR))
@@ -39,26 +48,15 @@ class TestProcessData(TestCase):
     def test_set_repository_name(self, d):
         os.chdir(d.path)
 
-        current_dir = FileUtil.get_current_dir()
         repository_name = 'test-repository'
 
         process_data = ProcessData()
         process_data.reset()
-        process_data.set_repository_name_and_dir(repository_name, repository_name)
+        process_data.set_dependency_data(
+            name=repository_name
+        )
 
-        self.assertEqual(process_data.repository_temp_dir, os.path.join(
-            current_dir,
-            Constants.TEMP_DIR,
-            repository_name
-        ))
-
-        self.assertEqual(process_data.repository_vendor_dir, os.path.join(
-            current_dir,
-            Constants.VENDOR_DIR,
-            repository_name
-        ))
-
-        self.assertEqual(process_data.repository_name, repository_name)
+        self.assertEqual(process_data.dependency_name, repository_name)
 
     @tempdir()
     def test_parse_text(self, d):
@@ -68,9 +66,22 @@ class TestProcessData(TestCase):
 
         process_data = ProcessData()
         process_data.reset()
-        process_data.set_repository_name_and_dir(repository_name, repository_name)
 
-        parsed_text = process_data.parse_text('${EZORED_REPOSITORY_NAME}')
+        repository = Repository.from_dict({
+            'type': 'github',
+            'name': 'ezored/dependency-sample',
+            'version': 't:1.0.0',
+        })
+
+        process_data.set_dependency_data(
+            name=repository.get_name(),
+            temp_dir=repository.get_temp_dir(),
+            vendor_dir=repository.get_vendor_dir(),
+            source_dir=repository.get_source_dir(),
+            build_dir=repository.get_build_dir(),
+        )
+
+        parsed_text = process_data.parse_text('${EZORED_DEPENDENCY_TEMP_DIR}')
         self.assertEqual(parsed_text, repository_name)
 
         parsed_text = process_data.parse_text('${EZORED_REPOSITORY_TEMP_DIR}')

@@ -33,8 +33,7 @@ class TestTarget(TestCase):
 config:
   name: EzoRed
 targets:
-  - name: github-test
-    repository:
+  - repository:
       name: ezored/target-github-test
       type: github
       version: b:master
@@ -61,11 +60,10 @@ targets:
 config:
   name: EzoRed
 targets:
-  - name: github-test
-    repository:
-      name: ezored/target-github-test
-      type: github
-      version: b:master
+  - repository:
+    name: ezored/target-github-test
+    type: github
+    version: b:master
 """
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))

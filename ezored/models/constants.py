@@ -44,13 +44,11 @@ targets:
       type: github
       version: b:master
 dependencies:
-  - name: dependency-djinni-support
-    repository:
+  - repository:
       name: ezored/dependency-djinni-support
       type: github
       version: b:master
-  - name: dependency-sample
-    repository:
+  - repository:
       name: ezored/dependency-sample
       type: github
       version: b:master

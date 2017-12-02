@@ -30,9 +30,9 @@ class Repository(object):
     def get_name(self):
         if self.rep_type == Repository.TYPE_LOCAL:
             rep_path, rep_file = os.path.split(self.rep_name)
-            return rep_file
+            return slugify(rep_file)
         else:
-            return self.rep_name
+            return slugify(self.rep_name)
 
     def get_download_url(self):
         if self.rep_type == Repository.TYPE_GITHUB:
@@ -87,7 +87,7 @@ class Repository(object):
 
     def get_temp_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
-            return os.path.join(Constants.TEMP_DIR, self.get_dir_name())
+            return os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_dir_name())
         elif self.rep_type == Repository.TYPE_LOCAL:
             return self.rep_name
         else:
@@ -95,9 +95,17 @@ class Repository(object):
 
     def get_vendor_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
-            return os.path.join(Constants.VENDOR_DIR, self.get_dir_name())
+            return os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
         elif self.rep_type == Repository.TYPE_LOCAL:
-            return os.path.join(Constants.VENDOR_DIR, self.get_dir_name())
+            return os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+        else:
+            return ''
+
+    def get_source_dir(self):
+        if self.rep_type == Repository.TYPE_GITHUB:
+            return os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+        elif self.rep_type == Repository.TYPE_LOCAL:
+            return os.path.join(self.rep_name, 'build')
         else:
             return ''
 
@@ -220,7 +228,6 @@ class Repository(object):
     def prepare_from_process_data(self, process_data):
         if process_data:
             self.rep_name = process_data.parse_text(self.rep_name)
-            process_data.set_repository_name_and_dir(self.get_name(), self.get_dir_name())
 
     @staticmethod
     def from_dict(dict_data):

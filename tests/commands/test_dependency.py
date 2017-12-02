@@ -33,8 +33,7 @@ class TestDependency(TestCase):
 config:
   name: EzoRed
 dependencies:
-  - name: ezored/dependency-github-test
-    repository:
+  - repository:
       name: ezored/dependency-github-test
       type: github
       version: b:master

@@ -13,7 +13,6 @@ class TestDependency(TestCase):
         )
 
         dependency = Dependency(
-            name='repository-test',
             repository=repository
         )
 
@@ -30,7 +29,6 @@ class TestDependency(TestCase):
         )
 
         dependency = Dependency(
-            name='repository-test',
             repository=repository
         )
 
@@ -44,7 +42,6 @@ class TestDependency(TestCase):
         )
 
         dependency = Dependency(
-            name='repository-test-diff',
             repository=repository
         )
 
@@ -58,7 +55,6 @@ class TestDependency(TestCase):
         )
 
         dependency = Dependency(
-            name=None,
             repository=repository
         )
 

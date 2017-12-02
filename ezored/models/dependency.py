@@ -6,22 +6,23 @@ from .repository import Repository
 
 
 class Dependency(object):
-    name = ''
     repository = Repository
 
-    def __init__(self, name, repository):
-        self.name = name
+    def __init__(self, repository):
         self.repository = repository
 
     def get_name(self):
-        if self.name:
-            return self.name
-        else:
-            return self.repository.get_name()
+        return self.repository.get_name()
 
     def prepare_from_process_data(self, process_data):
         if process_data:
-            self.name = process_data.parse_text(self.get_name())
+            process_data.set_dependency_data(
+                name=self.repository.get_name(),
+                temp_dir=self.repository.get_temp_dir(),
+                vendor_dir=self.repository.get_vendor_dir(),
+                source_dir=self.repository.get_source_dir(),
+                build_dir=self.repository.get_vendor_dir(),
+            )
 
             if self.repository:
                 self.repository.prepare_from_process_data(process_data)
@@ -36,7 +37,7 @@ class Dependency(object):
 
             for target_data_item in targets_data:
                 current_target_name = target_data_item['name']
-
+                
                 if current_target_name == target_name:
                     # get target data
                     target_data = TargetData()
@@ -87,7 +88,6 @@ class Dependency(object):
         repository_data = dict_data['repository'] if 'repository' in dict_data else {}
 
         dependency = Dependency(
-            name=dict_data['name'] if 'name' in dict_data else '',
             repository=Repository.from_dict(repository_data)
         )
 

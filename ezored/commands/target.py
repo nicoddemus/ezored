@@ -27,7 +27,7 @@ class Target(Base):
         Logger.clean('Target List:')
 
         for target in project.targets:
-            Logger.clean('  - {0}'.format(target.name))
+            Logger.clean('  - {0}'.format(target.get_name()))
 
     def build(self, target_name):
         from ezored.models.logger import Logger
@@ -44,6 +44,8 @@ class Target(Base):
         else:
             Logger.d('Build all targets')
 
+        target_found = False
+
         for target in project.targets:
             can_build = False
 
@@ -54,6 +56,7 @@ class Target(Base):
 
             if can_build:
                 Logger.i('Getting target data by target name: {0}...'.format(target_name))
+                target_found = True
 
                 # targets need be deleted to be always fresh with target data from dependencies
                 target.remove()
@@ -132,3 +135,6 @@ class Target(Base):
                                 Logger.clean(stderr)
 
                             Logger.f('Failed to build target: {0}'.format(target.get_name()))
+
+        if not target_found:
+            Logger.f('Target not found: {0}'.format(target_name))
