@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/ezored/ezored.svg?branch=python-version)](https://travis-ci.org/ezored/ezored)
 
+[![Coverage Status](https://coveralls.io/repos/github/ezored/ezored/badge.svg?branch=python-version)](https://coveralls.io/github/ezored/ezored?branch=python-version)
+
 Cross-platform tool to generate a library with single base code for multiple platforms.  
 
 EzoRed uses a target list inside it project file to build process. Each target can be an official supported target or your custom target.
