@@ -15,15 +15,15 @@ class TestConstants(TestCase):
 config:
   name: EzoRed
   ios:
-    developmentTeamId: ABCDEFGHIJ
-    bundleId: com.ezored.library
-    codeSignIdentity: iPhone Developer
-    deploymentTarget: '8.0'
-    deviceFamily: '1,2'
+    development_team_id: ABCDEFGHIJ
+    bundle_id: com.ezored.library
+    code_sign_identity: iPhone Developer
+    deployment_target: '8.0'
+    device_family: '1,2'
     version: 1.0.0
-    cppStandard: '11'
+    cpp_standard: '11'
   android:
-    cppStandard: '11'
+    cpp_standard: '11'
 targets:
   - name: ios
     repository:

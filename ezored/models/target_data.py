@@ -3,7 +3,7 @@ from ezored.models.logger import Logger
 
 class TargetData(object):
     project_name = ''
-    project_config = ''
+    project_config = {}
 
     header_search_paths = []
     library_search_paths = []

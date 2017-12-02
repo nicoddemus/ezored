@@ -72,6 +72,7 @@ class Dependency(object):
 
                     if len(target_data_header_files) > 0 or len(target_data_source_files) > 0:
                         target_data_source_group = SourceGroup()
+                        target_data_source_group.name = self.get_name()
                         target_data_source_group.header_files = target_data_header_files
                         target_data_source_group.source_files = target_data_source_files
 

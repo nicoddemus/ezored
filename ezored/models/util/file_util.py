@@ -30,7 +30,7 @@ class FileUtil(object):
 
     @staticmethod
     def write_to_file(dir_path, filename, content):
-        Logger.d('Create file {0} in dir {1} with {2} bytes'.format(filename, dir_path, len(content)))
+        Logger.d('Creating file {0} in directory {1} with {2} bytes...'.format(filename, dir_path, len(content)))
 
         full_file_path = os.path.join(dir_path, filename)
         FileUtil.remove_file(full_file_path)
@@ -39,6 +39,18 @@ class FileUtil(object):
         with open(full_file_path, 'w') as f:
             f.write(content)
             f.close()
+
+        Logger.d('Created file {0} in directory {1}'.format(filename, dir_path))
+
+    @staticmethod
+    def read_file(file_path):
+        Logger.d('Reading file: {0}'.format(file_path))
+
+        with open(file_path, 'r') as f:
+            content = f.readlines()
+            f.close()
+
+        return content
 
     @staticmethod
     def get_current_dir():
