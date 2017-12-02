@@ -13,8 +13,13 @@ python:
 # command to install dependencies
 install:
   - make deps
+  - pip install coveralls
   - make install
 
 # command to run tests
 script:
-  - make test
+  - make test-cov
+
+# run after success
+after_success:
+  - coveralls
