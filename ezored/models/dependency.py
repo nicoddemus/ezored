@@ -27,7 +27,7 @@ class Dependency(object):
                 self.repository.prepare_from_process_data(process_data)
 
     def get_target_data_by_target_name_and_parse(self, target_name, process_data):
-        Logger.i('Getting target data by target name: {0}...'.format(target_name))
+        Logger.i('Getting target data from dependency: {0}...'.format(self.get_name()))
 
         target_file_data = self.repository.load_target_file_data()
 
@@ -42,18 +42,33 @@ class Dependency(object):
                     target_data = TargetData()
                     target_data_dict = target_data_item['data']
 
-                    target_data.header_search_paths.append(target_data_dict['header_search_paths'])
-                    target_data.library_search_paths.append(target_data_dict['header_search_paths'])
+                    if 'header_search_paths' in target_data_dict:
+                        target_data.header_search_paths.extend(target_data_dict['header_search_paths'])
 
-                    target_data.c_flags.append(target_data_dict['c_flags'])
-                    target_data.cxx_flags.append(target_data_dict['cxx_flags'])
-                    target_data.framework_links.append(target_data_dict['framework_links'])
+                    if 'library_search_paths' in target_data_dict:
+                        target_data.library_search_paths.extend(target_data_dict['library_search_paths'])
 
-                    target_data.copy_files.append(target_data_dict['copy_files'])
+                    if 'c_flags' in target_data_dict:
+                        target_data.c_flags.extend(target_data_dict['c_flags'])
+
+                    if 'cxx_flags' in target_data_dict:
+                        target_data.cxx_flags.extend(target_data_dict['cxx_flags'])
+
+                    if 'framework_links' in target_data_dict:
+                        target_data.framework_links.extend(target_data_dict['framework_links'])
+
+                    if 'copy_files' in target_data_dict:
+                        target_data.copy_files.extend(target_data_dict['copy_files'])
 
                     # create source group if have files for it
-                    target_data_header_files = target_data_dict['header_files']
-                    target_data_source_files = target_data_dict['source_files']
+                    target_data_header_files = []
+                    target_data_source_files = []
+
+                    if 'header_files' in target_data_dict:
+                        target_data_header_files = target_data_dict['header_files']
+
+                    if 'source_files' in target_data_dict:
+                        target_data_source_files = target_data_dict['source_files']
 
                     if len(target_data_header_files) > 0 or len(target_data_source_files) > 0:
                         target_data_source_group = SourceGroup()
@@ -63,8 +78,8 @@ class Dependency(object):
                         target_data.source_groups.append(target_data_source_group)
 
                     # parse all things
-                    target_data.parse_all(process_data)
-
+                    target_data.parse(process_data)
+                    return target_data
 
     @staticmethod
     def from_dict(dict_data):

@@ -49,6 +49,8 @@ class Target(Base):
                 can_build = True
 
             if can_build:
+                Logger.i('Getting target data by target name: {0}...'.format(target_name))
+
                 # build the target repository after download
                 target.prepare_from_process_data(process_data)
                 target.repository.download()
@@ -61,5 +63,3 @@ class Target(Base):
                     dependency.prepare_from_process_data(process_data)
                     current_target_data = dependency.get_target_data_by_target_name_and_parse(target_name, process_data)
                     target_data.merge(current_target_data)
-
-                print(target_data)

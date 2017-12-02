@@ -151,7 +151,7 @@ class TestRepository(TestCase):
             'version': 't:1.0.0',
         })
 
-        temp_working_dir = repository.get_temp_working_dir()
+        temp_working_dir = repository.get_temp_dir()
 
         self.assertEqual(temp_working_dir, os.path.join(Constants.TEMP_DIR, 'dependency-sample-1-0-0'))
 
@@ -162,7 +162,7 @@ class TestRepository(TestCase):
             'version': '',
         })
 
-        temp_working_dir = repository.get_temp_working_dir()
+        temp_working_dir = repository.get_temp_dir()
 
         self.assertEqual(temp_working_dir, '/opt/ezored/sample-dependency')
 

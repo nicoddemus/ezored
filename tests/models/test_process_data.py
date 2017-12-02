@@ -44,7 +44,7 @@ class TestProcessData(TestCase):
 
         process_data = ProcessData()
         process_data.reset()
-        process_data.set_repository_name(repository_name)
+        process_data.set_repository_name_and_dir(repository_name, repository_name)
 
         self.assertEqual(process_data.repository_temp_dir, os.path.join(
             current_dir,
@@ -68,7 +68,7 @@ class TestProcessData(TestCase):
 
         process_data = ProcessData()
         process_data.reset()
-        process_data.set_repository_name(repository_name)
+        process_data.set_repository_name_and_dir(repository_name, repository_name)
 
         parsed_text = process_data.parse_text('${EZORED_REPOSITORY_NAME}')
         self.assertEqual(parsed_text, repository_name)
@@ -90,9 +90,9 @@ class TestProcessData(TestCase):
 
         process_data = ProcessData()
         process_data.reset()
-        process_data.set_repository_name(repository_name)
+        process_data.set_repository_name_and_dir(repository_name, repository_name)
 
-        parse_text_list =[
+        parse_text_list = [
             '${EZORED_REPOSITORY_NAME}',
             '${EZORED_REPOSITORY_TEMP_DIR}',
             '${EZORED_REPOSITORY_VENDOR_DIR}',

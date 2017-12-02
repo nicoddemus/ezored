@@ -97,8 +97,7 @@ class Repository(object):
         if self.rep_type == Repository.TYPE_GITHUB:
             return os.path.join(Constants.VENDOR_DIR, self.get_dir_name())
         elif self.rep_type == Repository.TYPE_LOCAL:
-            _, filename = os.path.split(self.rep_name)
-            return slugify(filename)
+            return os.path.join(Constants.VENDOR_DIR, self.get_dir_name())
         else:
             return ''
 
