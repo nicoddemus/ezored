@@ -1,8 +1,8 @@
 # EzoRed
 
 [![Build Status](https://travis-ci.org/ezored/ezored.svg?branch=python-version)](https://travis-ci.org/ezored/ezored)
-
 [![Coverage Status](https://coveralls.io/repos/github/ezored/ezored/badge.svg?branch=python-version)](https://coveralls.io/github/ezored/ezored?branch=python-version)
+[![Github All Releases](https://img.shields.io/github/downloads/ezored/ezored/total.svg)]()
 
 Cross-platform tool to generate a library with single base code for multiple platforms.  
 
