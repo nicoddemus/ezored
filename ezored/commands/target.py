@@ -1,6 +1,7 @@
 """Target command"""
 from ezored.models.process_data import ProcessData
 from ezored.models.target_data import TargetData
+from ezored.models.util.file_util import FileUtil
 
 from .base import Base
 
@@ -51,12 +52,15 @@ class Target(Base):
             if can_build:
                 Logger.i('Getting target data by target name: {0}...'.format(target_name))
 
+                # targets need be deleted to be always fresh with target data from dependencies
+                target.remove()
+
                 # build the target repository after download
                 target.prepare_from_process_data(process_data)
                 target.repository.download()
                 target.repository.build(process_data)
 
-                # get all dependencies data for this target
+                # get all target data from project dependencies
                 target_data = TargetData()
 
                 for dependency in project.dependencies:
@@ -65,4 +69,32 @@ class Target(Base):
                     target_data.merge(current_target_data)
 
                 # copy files from dependencies to target directory
-                
+                FileUtil.copy_files_from_list(target_data.copy_files)
+
+                # parse files path and it content
+                target_project_file_data = target.load_target_project_file_data()
+
+                if 'target' in target_project_file_data:
+                    target_project_data = target_project_file_data['target']
+
+                    if 'build' in target_project_data:
+                        target_project_data_build = target_project_data['build']
+
+                        exitcode, stderr, stdout = FileUtil.run(
+                            target_project_data_build,
+                            target.repository.get_vendor_dir(),
+                            process_data.get_environ()
+                        )
+
+                        if exitcode == 0:
+                            Logger.i('Build finished for target: {0}'.format(target.get_name()))
+                        else:
+                            if stdout:
+                                Logger.i('Build output for target: {0}'.format(target.get_name()))
+                                Logger.clean(stdout)
+
+                            if stderr:
+                                Logger.i('Error output while build target: {0}'.format(target.get_name()))
+                                Logger.clean(stderr)
+
+                            Logger.f('Failed to build target: {0}'.format(target.get_name()))

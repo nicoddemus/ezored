@@ -35,21 +35,23 @@ config:
 targets:
   - name: github-test
     repository:
-      name: ${HOME}/Developer/workspaces/cpp/target-github-test
-      type: local
+      name: ezored/target-github-test
+      type: github
+      version: b:master
 """
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
         output = popen(['ezored', 'target', 'build'], stdout=PIPE).communicate()[0]
         output = str(output)
+        print(output)
 
-        required = 'Build finished for repository: target-github-test'
+        required = 'Build finished for target: github-test'
         self.assertTrue(required in output)
 
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'file-to-parse.txt')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'ezored-target.yml')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'build.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'file-to-parse.txt')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored-target.yml')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'build.py')))
 
     @tempdir()
     def test_target_github_build_single(self, d):
@@ -61,18 +63,20 @@ config:
 targets:
   - name: github-test
     repository:
-      name: ${HOME}/Developer/workspaces/cpp/target-github-test
-      type: local
+      name: ezored/target-github-test
+      type: github
+      version: b:master
 """
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
         output = popen(['ezored', 'target', 'build', 'github-test'], stdout=PIPE).communicate()[0]
         output = str(output)
+        print(output)
 
-        required = 'Build finished for repository: target-github-test'
+        required = 'Build finished for target: github-test'
         self.assertTrue(required in output)
 
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'file-to-parse.txt')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'ezored-target.yml')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'build.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'file-to-parse.txt')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored-target.yml')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'build.py')))

@@ -58,3 +58,9 @@ class FileUtil(object):
         exitcode = proc.returncode
 
         return exitcode, err, out
+
+    @staticmethod
+    def copy_files_from_list(copy_file_list):
+        if copy_file_list:
+            for copy_file in copy_file_list:
+                shutil.copyfile(copy_file.from_path, copy_file.to_path)

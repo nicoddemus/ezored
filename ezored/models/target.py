@@ -3,6 +3,7 @@ import os
 import yaml
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
+from ezored.models.util.file_util import FileUtil
 
 from .repository import Repository
 
@@ -40,6 +41,10 @@ class Target(object):
         except IOError as exc:
             Logger.f('Error while read target project file: {0}'.format(exc))
 
+    def remove(self):
+        Logger.d('Removing files for target: {0}...'.format(self.get_name()))
+        vendor_dir = self.repository.get_vendor_dir()
+        FileUtil.remove_dir(vendor_dir)
 
     @staticmethod
     def from_dict(dict_data):
