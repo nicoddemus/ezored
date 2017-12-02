@@ -36,3 +36,19 @@ class TestProject(TestCase):
 
         self.assertEqual(error.type, SystemExit)
         self.assertEqual(error.value.code, 1)
+
+    @tempdir()
+    def test_project_get_valid_config(self, d):
+        os.chdir(d.path)
+        d.write(Constants.PROJECT_FILE, Constants.PROJECT_FILE_DATA.encode('utf-8'))
+        project = Project.create_from_project_file()
+
+        self.assertEqual(project.get_config_value('name'), Constants.PROJECT_NAME)
+
+    @tempdir()
+    def test_project_get_invalid_config(self, d):
+        os.chdir(d.path)
+        d.write(Constants.PROJECT_FILE, Constants.PROJECT_FILE_DATA.encode('utf-8'))
+        project = Project.create_from_project_file()
+
+        self.assertEqual(project.get_config_value('unknown'), None)

@@ -155,7 +155,7 @@ class Repository(object):
             else:
                 Logger.f('Problems when unpack repository: {0}'.format(self.get_name()))
 
-    def build(self):
+    def build(self, process_data):
         Logger.i('Building repository: {0}...'.format(self.get_name()))
 
         vendor_file_data = self.load_vendor_file_data()
@@ -166,10 +166,11 @@ class Repository(object):
             if 'build' in vendor_data:
                 vendor_data_build = vendor_data['build']
 
-                env_data = dict(os.environ)
-                env_data['EZORED_PROJECT_HOME'] = FileUtil.get_current_dir()
-
-                exitcode, stderr, stdout = FileUtil.run(vendor_data_build, self.get_temp_working_dir(), env_data)
+                exitcode, stderr, stdout = FileUtil.run(
+                    vendor_data_build,
+                    self.get_temp_working_dir(),
+                    process_data.get_environ()
+                )
 
                 if exitcode == 0:
                     Logger.i('Build finished for repository: {0}'.format(self.get_name()))
@@ -195,6 +196,11 @@ class Repository(object):
                 return yaml.load(stream)
         except IOError as exc:
             Logger.f('Error while read vendor file: {0}'.format(exc))
+
+    def prepare_from_process_data(self, process_data):
+        if process_data:
+            self.rep_name = process_data.parse_text(self.rep_name)
+            process_data.set_repository_name(self.get_name())
 
     @staticmethod
     def from_dict(dict_data):

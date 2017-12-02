@@ -15,6 +15,13 @@ class Target(object):
         else:
             return self.repository.get_name()
 
+    def prepare_from_process_data(self, process_data):
+        if process_data:
+            self.name = process_data.parse_string(self.get_name())
+
+            if self.repository:
+                self.repository.prepare_from_process_data(process_data)
+
     @staticmethod
     def from_dict(dict_data):
         repository_data = dict_data['repository'] if 'repository' in dict_data else {}

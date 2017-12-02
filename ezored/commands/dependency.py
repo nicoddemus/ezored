@@ -1,4 +1,5 @@
 """Dependency command"""
+from ezored.models.process_data import ProcessData
 
 from .base import Base
 
@@ -22,9 +23,14 @@ class Dependency(Base):
         if total_deps > 0:
             Logger.i('Updating {0} dependencies...'.format(total_deps))
 
+            process_data = ProcessData()
+            process_data.reset()
+            process_data.project_name = project.get_config_value('name')
+
             for dep in project.dependencies:
+                dep.prepare_from_process_data(process_data)
                 dep.repository.download()
-                dep.repository.build()
+                dep.repository.build(process_data)
         else:
             Logger.i('Your project does not have dependencies')
 

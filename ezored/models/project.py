@@ -3,7 +3,6 @@ from ezored.models.dependency import Dependency
 
 from .constants import Constants
 from .logger import Logger
-from .repository import Repository
 from .target import Target
 
 
@@ -65,3 +64,9 @@ class Project(object):
             return project
         except yaml.YAMLError as exc:
             Logger.f('Error while load project data: {0}'.format(exc))
+
+    def get_config_value(self, key):
+        if self.config and key in self.config:
+            return self.config[key]
+
+        return None
