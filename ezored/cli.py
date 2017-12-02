@@ -6,6 +6,8 @@ Usage:
   ezored [options] dependency list
   ezored [options] dependency update
   ezored [options] target list
+  ezored [options] target build
+  ezored [options] target build <target-name>
   ezored -h | --help
 
 Options:

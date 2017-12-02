@@ -43,10 +43,10 @@ class ProcessData(object):
         self.build_dir = os.path.join(self.project_home_dir, Constants.BUILD_DIR)
         self.vendor_dir = os.path.join(self.project_home_dir, Constants.VENDOR_DIR)
 
-    def set_repository_name(self, name):
-        self.repository_name = name
-        self.repository_temp_dir = os.path.join(self.project_home_dir, Constants.TEMP_DIR, self.repository_name)
-        self.repository_vendor_dir = os.path.join(self.project_home_dir, Constants.VENDOR_DIR, self.repository_name)
+    def set_repository_name_and_dir(self, rep_name, rep_dir):
+        self.repository_name = rep_name
+        self.repository_temp_dir = os.path.join(self.project_home_dir, Constants.TEMP_DIR, rep_dir)
+        self.repository_vendor_dir = os.path.join(self.project_home_dir, Constants.VENDOR_DIR, rep_dir)
 
     def parse_text(self, text):
         var_list = self.get_environ()
@@ -67,3 +67,20 @@ class ProcessData(object):
                 count = count + 1
 
         return text_list
+
+    def parse_copy_file_list(self, copy_file_list):
+        if copy_file_list:
+            for copy_file in copy_file_list:
+                copy_file.from_path = self.parse_text(copy_file.from_path)
+                copy_file.to_path = self.parse_text(copy_file.to_path)
+
+        return copy_file_list
+
+    def parse_sourge_group_list(self, source_group_list):
+        if source_group_list:
+            for source_group in source_group_list:
+                source_group.name = self.parse_text(source_group.name)
+                source_group.header_files = self.parse_text_list(source_group.header_files)
+                source_group.source_files = self.parse_text_list(source_group.source_files)
+
+        return source_group_list

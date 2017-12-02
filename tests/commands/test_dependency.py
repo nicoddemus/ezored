@@ -45,7 +45,5 @@ dependencies:
         output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
         output = str(output)
 
-        print(output)
-
         required = 'Build finished for repository: ezored/dependency-github-test'
         self.assertTrue(required in output)

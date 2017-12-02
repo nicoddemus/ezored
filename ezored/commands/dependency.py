@@ -27,10 +27,10 @@ class Dependency(Base):
             process_data.reset()
             process_data.project_name = project.get_config_value('name')
 
-            for dep in project.dependencies:
-                dep.prepare_from_process_data(process_data)
-                dep.repository.download()
-                dep.repository.build(process_data)
+            for dependency in project.dependencies:
+                dependency.prepare_from_process_data(process_data)
+                dependency.repository.download()
+                dependency.repository.build(process_data)
         else:
             Logger.i('Your project does not have dependencies')
 

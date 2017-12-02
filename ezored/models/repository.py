@@ -85,11 +85,20 @@ class Repository(object):
 
         return self.rep_name, git_data[0], git_data[2]
 
-    def get_temp_working_dir(self):
+    def get_temp_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
             return os.path.join(Constants.TEMP_DIR, self.get_dir_name())
         elif self.rep_type == Repository.TYPE_LOCAL:
             return self.rep_name
+        else:
+            return ''
+
+    def get_vendor_dir(self):
+        if self.rep_type == Repository.TYPE_GITHUB:
+            return os.path.join(Constants.VENDOR_DIR, self.get_dir_name())
+        elif self.rep_type == Repository.TYPE_LOCAL:
+            _, filename = os.path.split(self.rep_name)
+            return slugify(filename)
         else:
             return ''
 
@@ -112,7 +121,7 @@ class Repository(object):
         download_filename = self.get_download_filename()
         download_dest_dir = Constants.TEMP_DIR
         download_dest_path = os.path.join(Constants.TEMP_DIR, download_filename)
-        unpacked_dir = self.get_temp_working_dir()
+        unpacked_dir = self.get_temp_dir()
         unpack_dir = Constants.TEMP_DIR
         force_download = False
 
@@ -168,7 +177,7 @@ class Repository(object):
 
                 exitcode, stderr, stdout = FileUtil.run(
                     vendor_data_build,
-                    self.get_temp_working_dir(),
+                    self.get_temp_dir(),
                     process_data.get_environ()
                 )
 
@@ -188,7 +197,7 @@ class Repository(object):
     def load_vendor_file_data(self):
         Logger.d('Loading vendor file...')
 
-        vendor_dir = self.get_temp_working_dir()
+        vendor_dir = self.get_temp_dir()
         vendor_file_path = os.path.join(vendor_dir, Constants.VENDOR_FILE)
 
         try:
@@ -197,10 +206,22 @@ class Repository(object):
         except IOError as exc:
             Logger.f('Error while read vendor file: {0}'.format(exc))
 
+    def load_target_file_data(self):
+        Logger.d('Loading target file...')
+
+        vendor_dir = self.get_vendor_dir()
+        target_file_path = os.path.join(vendor_dir, Constants.TARGET_FILE)
+
+        try:
+            with open(target_file_path, 'r') as stream:
+                return yaml.load(stream)
+        except IOError as exc:
+            Logger.f('Error while read target file: {0}'.format(exc))
+
     def prepare_from_process_data(self, process_data):
         if process_data:
             self.rep_name = process_data.parse_text(self.rep_name)
-            process_data.set_repository_name(self.get_name())
+            process_data.set_repository_name_and_dir(self.get_name(), self.get_dir_name())
 
     @staticmethod
     def from_dict(dict_data):

@@ -5,6 +5,7 @@ class Constants(object):
 
     PROJECT_FILE = 'ezored-project.yml'
     VENDOR_FILE = 'ezored-vendor.yml'
+    TARGET_FILE = 'ezored-target.yml'
     SOURCE_DIR = 'source'
 
     ENV_VAR_PREFIX = 'EZORED_'
