@@ -15,14 +15,15 @@ class TestDependency(TestCase):
 
         output = popen(['ezored', 'dependency', 'list'], stdout=PIPE).communicate()[0]
         output = str(output)
+        print(output)
 
         required = 'Dependency List:'
         self.assertTrue(required in output)
 
-        required = '- dependency-djinni-support'
+        required = '- ezored-dependency-djinni-support'
         self.assertTrue(required in output)
 
-        required = '- dependency-sample'
+        required = '- ezored-dependency-sample'
         self.assertTrue(required in output)
 
     @tempdir()
@@ -43,6 +44,7 @@ dependencies:
 
         output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
         output = str(output)
+        print(output)
 
-        required = 'Build finished for repository: ezored/dependency-github-test'
+        required = 'Build finished for repository: ezored-dependency-github-test'
         self.assertTrue(required in output)

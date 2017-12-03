@@ -33,7 +33,8 @@ class TestTarget(TestCase):
 config:
   name: EzoRed
 targets:
-  - repository:
+  - name: github-test
+    repository:
       name: ezored/target-github-test
       type: github
       version: b:master
@@ -41,7 +42,7 @@ targets:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'target', 'build'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'target', 'build', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -60,15 +61,16 @@ targets:
 config:
   name: EzoRed
 targets:
-  - repository:
-    name: ezored/target-github-test
-    type: github
-    version: b:master
+  - name: github-test 
+    repository:
+      name: ezored/target-github-test
+      type: github
+      version: b:master
 """
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'target', 'build', 'github-test'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'target', 'build', 'github-test', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 

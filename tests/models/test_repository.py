@@ -3,6 +3,8 @@ from unittest import TestCase
 
 from ezored.models.constants import Constants
 from ezored.models.repository import Repository
+from ezored.models.util.file_util import FileUtil
+from testfixtures import tempdir
 
 
 class TestRepository(TestCase):
@@ -33,7 +35,7 @@ class TestRepository(TestCase):
             rep_version='b:master',
         )
 
-        self.assertEqual(repository.get_name(), 'ezored/dependency-sample')
+        self.assertEqual(repository.get_name(), 'ezored-dependency-sample')
 
     def test_from_dict(self):
         repository = Repository.from_dict({
@@ -144,7 +146,10 @@ class TestRepository(TestCase):
 
         self.assertEqual(download_filename, 'sample-dependency')
 
-    def test_github_temp_working_dir(self):
+    @tempdir()
+    def test_github_temp_working_dir(self, d):
+        os.chdir(d.path)
+
         repository = Repository.from_dict({
             'type': 'github',
             'name': 'ezored/dependency-sample',
@@ -153,7 +158,10 @@ class TestRepository(TestCase):
 
         temp_working_dir = repository.get_temp_dir()
 
-        self.assertEqual(temp_working_dir, os.path.join(Constants.TEMP_DIR, 'dependency-sample-1-0-0'))
+        self.assertEqual(
+            temp_working_dir,
+            os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, repository.get_dir_name())
+        )
 
     def test_local_temp_working_dir(self):
         repository = Repository.from_dict({
