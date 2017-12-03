@@ -29,7 +29,7 @@ class Target(object):
                 temp_dir=self.repository.get_temp_dir(),
                 vendor_dir=self.repository.get_vendor_dir(),
                 source_dir=self.repository.get_source_dir(),
-                build_dir=os.path.join(Constants.BUILD_DIR, self.repository.get_dir_name()),
+                build_dir=os.path.join(FileUtil.get_current_dir(), Constants.BUILD_DIR, self.repository.get_dir_name()),
             )
 
             if self.repository:

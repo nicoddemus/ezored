@@ -37,7 +37,7 @@ class Dependency(object):
 
             for target_data_item in targets_data:
                 current_target_name = target_data_item['name']
-                
+
                 if current_target_name == target_name:
                     # get target data
                     target_data = TargetData()

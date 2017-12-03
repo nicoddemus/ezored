@@ -72,8 +72,13 @@ class Target(Base):
 
                 for dependency in project.dependencies:
                     dependency.prepare_from_process_data(process_data)
-                    current_target_data = dependency.get_target_data_by_target_name_and_parse(target_name, process_data)
-                    target_data.merge(current_target_data)
+
+                    new_target_data = dependency.get_target_data_by_target_name_and_parse(
+                        target.get_name(),
+                        process_data
+                    )
+
+                    target_data.merge(new_target_data)
 
                 # back to target data
                 target.prepare_from_process_data(process_data)
