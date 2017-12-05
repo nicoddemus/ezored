@@ -4,11 +4,14 @@
 [![Coverage Status](https://coveralls.io/repos/github/ezored/ezored/badge.svg?branch=python-version)](https://coveralls.io/github/ezored/ezored?branch=python-version)
 [![Github All Releases](https://img.shields.io/github/downloads/ezored/ezored/total.svg)]()
 
-Cross-platform tool to generate a library with single base code for multiple platforms.  
 
-EzoRed uses a target list inside it project file to build process. Each target can be an official supported target or your custom target.
+![EzoRed](extras/images/doc-logo.png "EzoRed")  
 
-Today we have implemented officially this targets:
+Cross-platform tool to generate a library with single base code for multiple platforms.    
+
+EzoRed uses a target list inside it project file to build process. Each target can be an official supported target or your custom target.  
+
+Today we have implemented officially this targets:  
 
 - ios
 - android
