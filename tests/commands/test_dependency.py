@@ -48,3 +48,21 @@ dependencies:
 
         required = 'Build finished for repository: ezored-dependency-github-test'
         self.assertTrue(required in output)
+
+    @tempdir()
+    def test_no_dependencies(self, d):
+        os.chdir(d.path)
+
+        project_file_data = """
+config:
+  name: EzoRed
+"""
+
+        d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
+
+        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = str(output)
+        print(output)
+
+        required = 'Your project does not have dependencies'
+        self.assertTrue(required in output)

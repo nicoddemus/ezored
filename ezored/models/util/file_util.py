@@ -47,7 +47,7 @@ class FileUtil(object):
         Logger.d('Reading file: {0}'.format(file_path))
 
         with open(file_path, 'r') as f:
-            content = f.readlines()
+            content = f.read()
             f.close()
 
         return content

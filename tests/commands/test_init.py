@@ -13,6 +13,7 @@ class TestInit(TestCase):
 
         output = popen(['ezored', 'init'], stdout=PIPE).communicate()[0]
         output = str(output)
+        print(output)
 
         required = 'EzoRed was initialized with success'
         self.assertTrue(required in output)
@@ -25,6 +26,7 @@ class TestInit(TestCase):
 
         output = popen(['ezored', 'init'], stdout=PIPE).communicate()[0]
         output = str(output)
+        print(output)
 
         required = 'EzoRed was initialized with success'
         self.assertTrue(required in output)

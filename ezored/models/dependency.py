@@ -32,56 +32,67 @@ class Dependency(object):
 
         target_file_data = self.repository.load_target_file_data()
 
-        if 'targets' in target_file_data:
-            targets_data = target_file_data['targets']
+        if target_file_data:
+            if 'targets' in target_file_data:
+                targets_data = target_file_data['targets']
 
-            for target_data_item in targets_data:
-                current_target_name = target_data_item['name']
+                for target_data_item in targets_data:
+                    current_target_name = target_data_item['name']
 
-                if current_target_name == target_name:
-                    # get target data
-                    target_data = TargetData()
-                    target_data_dict = target_data_item['data']
+                    if current_target_name == target_name:
+                        # get target data
+                        target_data = TargetData()
 
-                    if 'header_search_paths' in target_data_dict:
-                        target_data.header_search_paths.extend(target_data_dict['header_search_paths'])
+                        if 'data' in target_data_item:
+                            target_data_dict = target_data_item['data']
 
-                    if 'library_search_paths' in target_data_dict:
-                        target_data.library_search_paths.extend(target_data_dict['library_search_paths'])
+                            if 'header_search_paths' in target_data_dict:
+                                if target_data_dict['header_search_paths']:
+                                    target_data.header_search_paths.extend(target_data_dict['header_search_paths'])
 
-                    if 'c_flags' in target_data_dict:
-                        target_data.c_flags.extend(target_data_dict['c_flags'])
+                            if 'library_search_paths' in target_data_dict:
+                                if target_data_dict['library_search_paths']:
+                                    target_data.library_search_paths.extend(target_data_dict['library_search_paths'])
 
-                    if 'cxx_flags' in target_data_dict:
-                        target_data.cxx_flags.extend(target_data_dict['cxx_flags'])
+                            if 'c_flags' in target_data_dict:
+                                if target_data_dict['c_flags']:
+                                    target_data.c_flags.extend(target_data_dict['c_flags'])
 
-                    if 'framework_links' in target_data_dict:
-                        target_data.framework_links.extend(target_data_dict['framework_links'])
+                            if 'cxx_flags' in target_data_dict:
+                                if target_data_dict['cxx_flags']:
+                                    target_data.cxx_flags.extend(target_data_dict['cxx_flags'])
 
-                    if 'copy_files' in target_data_dict:
-                        target_data.copy_files.extend(target_data_dict['copy_files'])
+                            if 'framework_links' in target_data_dict:
+                                if target_data_dict['framework_links']:
+                                    target_data.framework_links.extend(target_data_dict['framework_links'])
 
-                    # create source group if have files for it
-                    target_data_header_files = []
-                    target_data_source_files = []
+                            if 'copy_files' in target_data_dict:
+                                if target_data_dict['copy_files']:
+                                    target_data.copy_files.extend(target_data_dict['copy_files'])
 
-                    if 'header_files' in target_data_dict:
-                        target_data_header_files = target_data_dict['header_files']
+                            # create source group if have files for it
+                            target_data_header_files = []
+                            target_data_source_files = []
 
-                    if 'source_files' in target_data_dict:
-                        target_data_source_files = target_data_dict['source_files']
+                            if 'header_files' in target_data_dict:
+                                if target_data_dict['header_files']:
+                                    target_data_header_files = target_data_dict['header_files']
 
-                    if len(target_data_header_files) > 0 or len(target_data_source_files) > 0:
-                        target_data_source_group = SourceGroup()
-                        target_data_source_group.name = self.get_name()
-                        target_data_source_group.header_files = target_data_header_files
-                        target_data_source_group.source_files = target_data_source_files
+                            if 'source_files' in target_data_dict:
+                                if target_data_dict['source_files']:
+                                    target_data_source_files = target_data_dict['source_files']
 
-                        target_data.source_groups.append(target_data_source_group)
+                            if len(target_data_header_files) > 0 or len(target_data_source_files) > 0:
+                                target_data_source_group = SourceGroup()
+                                target_data_source_group.name = self.get_name()
+                                target_data_source_group.header_files = target_data_header_files
+                                target_data_source_group.source_files = target_data_source_files
 
-                    # parse all things
-                    target_data.parse(process_data)
-                    return target_data
+                                target_data.source_groups.append(target_data_source_group)
+
+                            # parse all things
+                            target_data.parse(process_data)
+                            return target_data
 
     @staticmethod
     def from_dict(dict_data):
