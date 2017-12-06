@@ -5,7 +5,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/ezored/ezored/total.svg)]()
 
 
-<img src="extras/images/doc-logo.png" width="100" height="100" alt="EzoRed">  
+<img src="extras/images/doc-logo.png" style="max-width: 600px" alt="EzoRed">  
 
 Cross-platform tool to generate a library with single base code for multiple platforms.    
 
