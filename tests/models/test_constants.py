@@ -15,6 +15,7 @@ class TestConstants(TestCase):
 config:
   name: EzoRed
   ios:
+    cmake_version: 3.9
     development_team_id: ABCDEFGHIJ
     bundle_id: com.ezored.library
     code_sign_identity: iPhone Developer
@@ -23,6 +24,7 @@ config:
     version: 1.0.0
     cpp_standard: '11'
   android:
+    cmake_version: 3.6
     cpp_standard: '11'
 targets:
   - name: ios

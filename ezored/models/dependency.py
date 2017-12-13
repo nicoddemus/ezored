@@ -28,7 +28,7 @@ class Dependency(object):
                 self.repository.prepare_from_process_data(process_data)
 
     def get_target_data_by_target_name_and_parse(self, target_name, process_data):
-        Logger.i('Getting target data from dependency: {0}...'.format(self.get_name()))
+        Logger.d('Getting target data from dependency: {0}...'.format(self.get_name()))
 
         target_file_data = self.repository.load_target_file_data()
 

@@ -40,9 +40,9 @@ class Target(Base):
         process_data.project_name = project.get_config_value('name')
 
         if target_name:
-            Logger.d('Build only target: {0}'.format(target_name))
+            Logger.i('Build only target: {0}'.format(target_name))
         else:
-            Logger.d('Build all targets')
+            Logger.i('Build all targets')
 
         target_found = False
 
@@ -55,7 +55,7 @@ class Target(Base):
                 can_build = True
 
             if can_build:
-                Logger.i('Getting target data by target name: {0}...'.format(target_name))
+                Logger.d('Getting target data by target name: {0}...'.format(target_name))
                 target_found = True
 
                 # targets need be deleted to be always fresh with target data from dependencies
@@ -120,6 +120,8 @@ class Target(Base):
 
                     # build target
                     if 'build' in target_project_data:
+                        Logger.i('Building target: {0}...'.format(target.get_name()))
+
                         target_project_data_build = target_project_data['build']
 
                         exitcode, stderr, stdout = FileUtil.run(

@@ -13,6 +13,7 @@ More commands:
 - `init`: Initialize a new project with sample dependencies and required files.
 - `dependency update`: Update all dependencies inside project file.
 - `target build <target-name>`: Build the specified target. If target name is ommited, all targets will be builded.
+- `clean`: Clean all temporary data
 
 ### Installing
 

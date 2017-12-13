@@ -8,6 +8,7 @@ Usage:
   ezored [options] target list
   ezored [options] target build
   ezored [options] target build <target-name>
+  ezored [options] clean
   ezored -h | --help
 
 Options:
@@ -19,6 +20,7 @@ Examples:
   ezored init
   ezored dependency list
   ezored target list -d
+  ezored clean
 
 Help:
   For help using this tool, please open an issue on the Github repository:
