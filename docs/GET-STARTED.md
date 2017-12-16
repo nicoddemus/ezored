@@ -39,6 +39,7 @@ Obs:
 
 ### Documentation Index
 
+- [Workflows](WORKFLOWS.md)
 - [Project](PROJECT.md)
 - [Dependencies](DEPENDENCY.md)
 - [Targets](TARGET.md)
