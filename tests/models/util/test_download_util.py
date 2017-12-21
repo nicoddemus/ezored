@@ -7,7 +7,7 @@ from testfixtures import tempdir
 
 class TestDownloadUtil(TestCase):
     def test_get_filename_from_url(self):
-        download_url = 'https://raw.githubusercontent.com/ezored/ezored/python-version/extras/images/jetbrains-logo.png'
+        download_url = 'https://raw.githubusercontent.com/ezored/ezored/master/extras/images/jetbrains-logo.png'
         download_filename = DownloadUtil.get_filename_from_url(download_url)
 
         self.assertEqual(download_filename, 'jetbrains-logo.png')
@@ -16,7 +16,7 @@ class TestDownloadUtil(TestCase):
     def test_download_file(self, d):
         os.chdir(d.path)
 
-        download_url = 'https://raw.githubusercontent.com/ezored/ezored/python-version/extras/images/jetbrains-logo.png'
+        download_url = 'https://raw.githubusercontent.com/ezored/ezored/master/extras/images/jetbrains-logo.png'
         download_filename = DownloadUtil.get_filename_from_url(download_url)
 
         DownloadUtil.download_file(download_url)
@@ -28,7 +28,7 @@ class TestDownloadUtil(TestCase):
     def test_download_file_with_custom_destination(self, d):
         os.chdir(d.path)
 
-        download_url = 'https://raw.githubusercontent.com/ezored/ezored/python-version/extras/images/jetbrains-logo.png'
+        download_url = 'https://raw.githubusercontent.com/ezored/ezored/master/extras/images/jetbrains-logo.png'
         download_dest = 'download'
         download_filename = DownloadUtil.get_filename_from_url(download_url)
 
@@ -43,7 +43,7 @@ class TestDownloadUtil(TestCase):
     def test_download_file_with_custom_filename(self, d):
         os.chdir(d.path)
 
-        download_url = 'https://raw.githubusercontent.com/ezored/ezored/python-version/extras/images/jetbrains-logo.png'
+        download_url = 'https://raw.githubusercontent.com/ezored/ezored/master/extras/images/jetbrains-logo.png'
         download_filename = 'file.png'
 
         DownloadUtil.download_file(download_url, filename=download_filename)
@@ -55,7 +55,7 @@ class TestDownloadUtil(TestCase):
     def test_download_file_with_custom_dest_and_filename(self, d):
         os.chdir(d.path)
 
-        download_url = 'https://raw.githubusercontent.com/ezored/ezored/python-version/extras/images/jetbrains-logo.png'
+        download_url = 'https://raw.githubusercontent.com/ezored/ezored/master/extras/images/jetbrains-logo.png'
         download_dest = 'download'
         download_filename = 'file.png'
 
@@ -70,7 +70,7 @@ class TestDownloadUtil(TestCase):
     def test_download_file_with_auto_create_dest_dir(self, d):
         os.chdir(d.path)
 
-        download_url = 'https://raw.githubusercontent.com/ezored/ezored/python-version/extras/images/jetbrains-logo.png'
+        download_url = 'https://raw.githubusercontent.com/ezored/ezored/master/extras/images/jetbrains-logo.png'
         download_dest = 'download'
         download_filename = DownloadUtil.get_filename_from_url(download_url)
 
