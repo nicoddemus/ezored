@@ -31,8 +31,8 @@ Execute the following commands to create a initial directory with all required f
 > cd ezored-test  
 > ezored init  
 > ezored dependency update  
-> ezored target build ios  
-> ezored target build android  
+> ezored target build  
+
 
 Obs: 
 1. You can use only `"ezored build"` command to build all targets
