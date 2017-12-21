@@ -19,9 +19,9 @@ More commands:
 
 Install EzoRed typing in your terminal:
 
-````
+```
 pip install ezored 
-````
+```
 
 ### Get started NOW, please!
 

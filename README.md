@@ -18,11 +18,15 @@ Today we have implemented officially this targets:
 
 ## Install
 
-> pip install ezored
+```
+pip install ezored 
+```
 
 If you use python3 with pip3, use:
 
-> pip3 install ezored
+```
+pip3 install ezored 
+```
 
 ## Documentation
 
