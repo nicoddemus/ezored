@@ -2,6 +2,14 @@
 
 There is a lot of docs and ready tools to accelerate development process.  
 
+### Installing
+
+Install EzoRed typing in your terminal:
+
+```
+pip install ezored 
+```
+
 ### Commands
 
 Use the follow pattern to execute commands:  
@@ -14,14 +22,6 @@ More commands:
 - `dependency update`: Update all dependencies inside project file.
 - `target build <target-name>`: Build the specified target. If target name is ommited, all targets will be builded.
 - `clean`: Clean all temporary data
-
-### Installing
-
-Install EzoRed typing in your terminal:
-
-```
-pip install ezored 
-```
 
 ### Get started NOW, please!
 
