@@ -65,9 +65,20 @@ setup(
     ],
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),
-    install_requires=['docopt'],
+    install_requires=[
+        'pyyaml==3.12',
+        'docopt==0.6.2',
+        'python-slugify==1.2.4',
+        'tqdm==4.19.4',
+        'jinja2==2.10'
+    ],
     extras_require={
-        'test': ['coverage', 'pytest', 'pytest-cov'],
+        'test': [
+            'coverage',
+            'pytest',
+            'pytest-cov',
+            'testfixtures'
+        ],
     },
     entry_points={
         'console_scripts': [
