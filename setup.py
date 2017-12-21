@@ -35,8 +35,6 @@ class RunTests(Command):
             options += ['--cov=ezored', '--cov-report=term-missing', '--cov-report=html:' + html_path]
 
         errno = call(options)
-        # errno = call(['python3', '-m', 'pytest', '--cov=ezored', '--cov-report=term-missing'])
-        # errno = call(['pytest', '--cov=ezored', '--cov-report=term-missing'])
         raise SystemExit(errno)
 
 

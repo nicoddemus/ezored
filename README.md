@@ -16,6 +16,14 @@ Today we have implemented officially this targets:
 - ios
 - android
 
+## Install
+
+> pip install ezored
+
+If you use python3 with pip3, use:
+
+> pip3 install ezored
+
 ## Documentation
 
 To check out live docs, visit [docs](docs/GET-STARTED.md) folder.
