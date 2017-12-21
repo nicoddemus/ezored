@@ -13,6 +13,8 @@ help:
 	@echo "- test-cov"
 	@echo "- deps"
 	@echo "- clean"
+	@echo "- pip-package"
+	@echo "- pip-upload"
 	@echo ""
 
 install:
@@ -31,3 +33,10 @@ clean:
 	find . -name "*.pyc" -exec rm -f {} \;
 	find . -type d -name __pycache__ -exec rm -r {} \+
 	rm -rf htmlcov
+	rm -rf dist
+
+pip-package:
+	python setup.py sdist
+
+pip-upload:
+	twine upload dist/*
