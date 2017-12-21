@@ -34,8 +34,7 @@ Execute the following commands to create a initial directory with all required f
 > ezored target build  
 
 
-Obs: 
-1. You can use only `"ezored build"` command to build all targets
+You can use only `"ezored build <target-name>"` command to build a single target.
 
 ### Documentation Index
 
