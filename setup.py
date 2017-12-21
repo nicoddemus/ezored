@@ -49,6 +49,7 @@ setup(
     author='Paulo Coutinho',
     author_email='paulo@prsolucoes.com',
     license='MIT',
+    version='0.1.0',
     classifiers=[
         'Intended Audience :: Developers',
         'Topic :: Utilities',
