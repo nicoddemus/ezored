@@ -98,6 +98,8 @@ class TestTarget(TestCase):
         process_data.reset()
         process_data.project_name = project.get_config_value('name')
 
+        print(project.targets)
+        
         # process target data
         for target in project.targets:
             # get all target data from project dependencies
@@ -111,7 +113,7 @@ class TestTarget(TestCase):
 
                 target_data.merge(new_target_data)
 
-                print(new_target_data)
-                print(target_data)
+                print(new_target_data.c_flags)
+                print(target_data.c_flags)
 
             self.assertEqual(len(target_data.c_flags), 1)
