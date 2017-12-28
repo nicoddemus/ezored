@@ -80,18 +80,32 @@ class TestTarget(TestCase):
         project = Project()
         project.config['name'] = Constants.PROJECT_NAME
 
-        # create dependencies
-        repository = Repository(
+        # create dependency
+        dep_repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
             rep_name='/tmp/repository-test',
             rep_version='1.0.0',
         )
 
         dependency = Dependency(
-            repository=repository
+            repository=dep_repository
         )
 
         project.dependencies = [dependency]
+
+        # create target
+        target_repository = Repository(
+            rep_type=Repository.TYPE_LOCAL,
+            rep_name='/tmp/repository-test',
+            rep_version='1.0.0',
+        )
+
+        target = Target(
+            name='test',
+            repository=target_repository
+        )
+
+        project.targets = [target]
 
         # process data
         process_data = ProcessData()
@@ -102,13 +116,19 @@ class TestTarget(TestCase):
         for target in project.targets:
             # get all target data from project dependencies
             print('Who is the target:')
-            print(target)
+            print(target.get_name())
+            print("")
+
             target_data = TargetData()
 
             print('There is {0} dependencies'.format(len(project.dependencies)))
+            print("")
 
             for dependency in project.dependencies:
+                print('Who is the dependency:')
                 print(dependency.get_name())
+                print("")
+
                 dependency.prepare_from_process_data(process_data)
 
                 new_target_data = TargetData()
@@ -117,11 +137,13 @@ class TestTarget(TestCase):
                 print('Who is the objects:')
                 print(target_data)
                 print(new_target_data)
+                print("")
 
                 # show before data
                 print('Before data:')
                 print(target_data.c_flags)
                 print(new_target_data.c_flags)
+                print("")
 
                 new_target_data.c_flags.extend(['flag'])
 
@@ -129,12 +151,15 @@ class TestTarget(TestCase):
                 print('Current data:')
                 print(target_data.c_flags)
                 print(new_target_data.c_flags)
+                print("")
 
                 target_data.merge(new_target_data)
+                print("")
 
                 # show after merge data
                 print('After merge data:')
                 print(new_target_data.c_flags)
                 print(target_data.c_flags)
+                print("")
 
             self.assertEqual(len(target_data.c_flags), 1)
