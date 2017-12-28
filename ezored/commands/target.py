@@ -35,10 +35,6 @@ class Target(Base):
 
         project = Project.create_from_project_file()
 
-        process_data = ProcessData()
-        process_data.reset()
-        process_data.project_name = project.get_config_value('name')
-
         if target_name:
             Logger.i('Build only target: {0}'.format(target_name))
         else:
@@ -47,6 +43,10 @@ class Target(Base):
         target_found = False
 
         for target in project.targets:
+            process_data = ProcessData()
+            process_data.reset()
+            process_data.project_name = project.get_config_value('name')
+
             can_build = False
 
             if not target_name:
