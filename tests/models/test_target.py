@@ -1,6 +1,7 @@
-import os
-from subprocess import PIPE, Popen as popen
 from unittest import TestCase
+
+import os
+from testfixtures import tempdir
 
 from ezored.models.constants import Constants
 from ezored.models.dependency import Dependency
@@ -9,7 +10,6 @@ from ezored.models.project import Project
 from ezored.models.repository import Repository
 from ezored.models.target import Target
 from ezored.models.target_data import TargetData
-from testfixtures import tempdir
 
 
 class TestTarget(TestCase):
@@ -72,7 +72,10 @@ class TestTarget(TestCase):
 
         self.assertEqual(target.get_name(), 'repository-test')
 
-    def test_merge_target_data(self):
+    @tempdir()
+    def test_merge_target_data(self, d):
+        os.chdir(d.path)
+        
         # create project
         project = Project()
         project.config['name'] = Constants.PROJECT_NAME
