@@ -111,4 +111,7 @@ class TestTarget(TestCase):
 
                 target_data.merge(new_target_data)
 
+                print(new_target_data)
+                print(target_data)
+
             self.assertEqual(len(target_data.c_flags), 1)
