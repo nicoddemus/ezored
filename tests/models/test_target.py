@@ -75,7 +75,7 @@ class TestTarget(TestCase):
     @tempdir()
     def test_merge_target_data(self, d):
         os.chdir(d.path)
-        
+
         # create project
         project = Project()
         project.config['name'] = Constants.PROJECT_NAME
@@ -106,11 +106,9 @@ class TestTarget(TestCase):
             for dependency in project.dependencies:
                 dependency.prepare_from_process_data(process_data)
 
-                new_target_data = dependency.get_target_data_by_target_name_and_parse(
-                    target.get_name(),
-                    process_data
-                )
+                new_target_data = TargetData()
+                new_target_data.c_flags = ['flag']
 
                 target_data.merge(new_target_data)
 
-            # TODO: TargetData can only have current target data
+            self.assertEqual(len(target_data.c_flags), 1)
