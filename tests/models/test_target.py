@@ -101,6 +101,7 @@ class TestTarget(TestCase):
         # process target data
         for target in project.targets:
             # get all target data from project dependencies
+            print(target)
             target_data = TargetData()
 
             for dependency in project.dependencies:
@@ -111,7 +112,7 @@ class TestTarget(TestCase):
 
                 target_data.merge(new_target_data)
 
-                print(new_target_data)
-                print(target_data)
+                print(new_target_data.c_flags)
+                print(target_data.c_flags)
 
             self.assertEqual(len(target_data.c_flags), 1)
