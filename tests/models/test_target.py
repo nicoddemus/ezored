@@ -1,6 +1,6 @@
+import os
 from unittest import TestCase
 
-import os
 from testfixtures import tempdir
 
 from ezored.models.constants import Constants
