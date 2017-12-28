@@ -107,7 +107,7 @@ class TestTarget(TestCase):
                 dependency.prepare_from_process_data(process_data)
 
                 new_target_data = TargetData()
-                new_target_data.c_flags = ['flag']
+                new_target_data.c_flags.extend(['flag'])
 
                 target_data.merge(new_target_data)
 
