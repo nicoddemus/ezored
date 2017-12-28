@@ -98,11 +98,10 @@ class TestTarget(TestCase):
         process_data.reset()
         process_data.project_name = project.get_config_value('name')
 
-        print(project.targets)
-        
         # process target data
         for target in project.targets:
             # get all target data from project dependencies
+            print(target)
             target_data = TargetData()
 
             for dependency in project.dependencies:
