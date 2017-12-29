@@ -1,15 +1,16 @@
 import yaml
-from ezored.models.dependency import Dependency
 
+from ezored.models.dependency import Dependency
 from .constants import Constants
 from .logger import Logger
 from .target import Target
 
 
 class Project(object):
-    config = {}
-    dependencies = []
-    targets = []
+    def __init__(self):
+        self.config = {}
+        self.dependencies = []
+        self.targets = []
 
     @staticmethod
     def create_from_project_file():

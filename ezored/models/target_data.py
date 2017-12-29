@@ -3,21 +3,23 @@ from ezored.models.logger import Logger
 
 class TargetData(object):
     project_name = ''
-    project_config = {}
 
-    header_search_paths = []
-    library_search_paths = []
+    def __init__(self):
+        self.project_config = {}
 
-    source_groups = []
+        self.header_search_paths = []
+        self.library_search_paths = []
 
-    library_links = []
-    framework_links = []
+        self.source_groups = []
 
-    c_flags = []
-    cxx_flags = []
-    compiler_options = []
+        self.library_links = []
+        self.framework_links = []
 
-    copy_files = []
+        self.c_flags = []
+        self.cxx_flags = []
+        self.compiler_options = []
+
+        self.copy_files = []
 
     def parse(self, process_data):
         if process_data:

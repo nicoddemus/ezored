@@ -1,16 +1,15 @@
 import os
 
 import yaml
+
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
 from ezored.models.util.file_util import FileUtil
-
 from .repository import Repository
 
 
 class Target(object):
     name = ''
-    repository = Repository
 
     def __init__(self, name, repository):
         self.name = name

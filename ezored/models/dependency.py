@@ -6,8 +6,6 @@ from .repository import Repository
 
 
 class Dependency(object):
-    repository = Repository
-
     def __init__(self, repository):
         self.repository = repository
 
