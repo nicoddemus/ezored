@@ -19,7 +19,9 @@ Options:
 Examples:
   ezored init
   ezored dependency list
-  ezored target list -d
+  ezored dependency update
+  ezored target list
+  ezored target build
   ezored clean
 
 Help:
@@ -30,11 +32,11 @@ Help:
 from inspect import getmembers, isclass
 from json import dumps
 
-import ezored.commands
 from docopt import docopt
+
+import ezored.commands
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
-
 from . import __version__
 
 
