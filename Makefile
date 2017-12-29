@@ -11,6 +11,7 @@ help:
 	@echo "- install"
 	@echo "- test"
 	@echo "- test-cov"
+	@echo "- test-on-docker"
 	@echo "- deps"
 	@echo "- clean"
 	@echo "- pip-package"
@@ -25,6 +26,9 @@ test:
 
 test-cov:
 	python setup.py test --codecoverage=html
+
+test-on-docker:
+	docker run -it --rm -v "${PWD}":/app -w /app python:2.7.14-jessie make deps test-cov
 
 deps:
 	pip install -r requirements.txt
