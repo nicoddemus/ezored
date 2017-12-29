@@ -9,8 +9,6 @@ from .repository import Repository
 
 
 class Target(object):
-    name = ''
-
     def __init__(self, name, repository):
         self.name = name
         self.repository = repository

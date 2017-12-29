@@ -2,9 +2,8 @@ from ezored.models.logger import Logger
 
 
 class TargetData(object):
-    project_name = ''
-
     def __init__(self):
+        self.project_name = ''
         self.project_config = {}
 
         self.header_search_paths = []

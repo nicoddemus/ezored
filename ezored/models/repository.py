@@ -3,11 +3,12 @@ import re
 import tarfile
 
 import yaml
+from slugify import slugify
+
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
 from ezored.models.util.download_util import DownloadUtil
 from ezored.models.util.file_util import FileUtil
-from slugify import slugify
 
 
 class Repository(object):
@@ -17,10 +18,6 @@ class Repository(object):
     GIT_TYPE_BRANCH = 'b'
     GIT_TYPE_TAG = 't'
     GIT_TYPE_COMMIT = 'c'
-
-    rep_type = ''
-    rep_name = ''
-    rep_version = ''
 
     def __init__(self, rep_type, rep_name, rep_version):
         self.rep_type = rep_type

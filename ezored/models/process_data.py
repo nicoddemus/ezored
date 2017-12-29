@@ -5,24 +5,25 @@ from ezored.models.util.file_util import FileUtil
 
 
 class ProcessData(object):
-    project_name = ''
-    project_home_dir = ''
+    def __init__(self):
+        self.project_name = ''
+        self.project_home_dir = ''
 
-    temp_dir = ''
-    build_dir = ''
-    vendor_dir = ''
+        self.temp_dir = ''
+        self.build_dir = ''
+        self.vendor_dir = ''
 
-    target_temp_dir = ''
-    target_source_dir = ''
-    target_vendor_dir = ''
-    target_build_dir = ''
-    target_name = ''
+        self.target_temp_dir = ''
+        self.target_source_dir = ''
+        self.target_vendor_dir = ''
+        self.target_build_dir = ''
+        self.target_name = ''
 
-    dependency_temp_dir = ''
-    dependency_source_dir = ''
-    dependency_vendor_dir = ''
-    dependency_build_dir = ''
-    dependency_name = ''
+        self.dependency_temp_dir = ''
+        self.dependency_source_dir = ''
+        self.dependency_vendor_dir = ''
+        self.dependency_build_dir = ''
+        self.dependency_name = ''
 
     def get_environ(self):
         env_data = dict(os.environ)

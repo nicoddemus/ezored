@@ -1,6 +1,6 @@
 class SourceGroup(object):
-    name = ''
 
     def __init__(self):
+        self.name = ''
         self.source_files = []
         self.header_files = []
