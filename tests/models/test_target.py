@@ -100,12 +100,17 @@ class TestTarget(TestCase):
             rep_version='1.0.0',
         )
 
-        target = Target(
+        target1 = Target(
             name='test',
             repository=target_repository
         )
 
-        project.targets = [target]
+        target2 = Target(
+            name='test',
+            repository=target_repository
+        )
+
+        project.targets = [target1, target2]
 
         # process data
         process_data = ProcessData()
