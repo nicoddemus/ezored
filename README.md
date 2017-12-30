@@ -13,8 +13,10 @@ EzoRed uses a target list inside it project file to build process. Each target c
 
 Today we have implemented officially this targets:  
 
-- ios
-- android
+- [ios](https://github.com/ezored/target-ios)
+- [android](https://github.com/ezored/target-android)
+
+On each target link you can download the demo application from platform store.
 
 ## Install
 
