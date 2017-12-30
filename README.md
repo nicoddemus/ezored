@@ -7,9 +7,11 @@
 
 <img src="extras/images/doc-logo.png?v=2017-12-06" alt="EzoRed">  
 
-Cross-platform tool to generate a library with single base code for multiple platforms.    
+The main goal of this tool is let you make a single C++ code and generate a library for multiple platforms based on targets.    
 
-EzoRed uses a target list inside it project file to build process. Each target can be an official supported target or your custom target.  
+EzoRed uses a target list inside it project file to the build process. Each target can be an official supported target or your custom target (public, private or local).  
+
+And finally, each target can be modified by project dependencies. One simple example is the HTTP dependency, you dont need write a HTTP Client for iOS or Android, you can use the official HTTP Client dependency.   
 
 Today we have implemented officially this targets:  
 
@@ -17,6 +19,8 @@ Today we have implemented officially this targets:
 - [android](https://github.com/ezored/target-android)
 
 On each target link you can download the demo application from platform store.
+
+All official dependencies and targets are in EzoRed [repository](https://github.com/ezored) page.
 
 ## Install
 
