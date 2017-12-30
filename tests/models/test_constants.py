@@ -24,7 +24,7 @@ config:
     version: 1.0.0
     cpp_standard: '11'
   android:
-    cmake_version: 3.6
+    cmake_version: 3.4.1
     cpp_standard: '11'
 targets:
   - name: ios
