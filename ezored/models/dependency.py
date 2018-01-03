@@ -60,6 +60,10 @@ class Dependency(object):
                                 if target_data_dict['cxx_flags']:
                                     target_data.cxx_flags.extend(target_data_dict['cxx_flags'])
 
+                            if 'library_links' in target_data_dict:
+                                if target_data_dict['library_links']:
+                                    target_data.library_links.extend(target_data_dict['library_links'])
+
                             if 'framework_links' in target_data_dict:
                                 if target_data_dict['framework_links']:
                                     target_data.framework_links.extend(target_data_dict['framework_links'])
