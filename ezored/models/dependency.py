@@ -9,6 +9,7 @@ from .repository import Repository
 class Dependency(object):
     def __init__(self, repository):
         self.repository = repository
+        self.tasks = []
 
     def get_name(self):
         return self.repository.get_name()
