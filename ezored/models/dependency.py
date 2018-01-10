@@ -74,7 +74,7 @@ class Dependency(object):
                                 if target_data_dict['tasks']:
                                     for target_data_task in target_data_dict['tasks']:
                                         task = Task.from_dict(target_data_task)
-                                        target_data.tasks.extend(task)
+                                        target_data.tasks.append(task)
 
                             # create source group if have files for it
                             target_data_header_files = []
