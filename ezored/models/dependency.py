@@ -1,6 +1,7 @@
 from ezored.models.logger import Logger
 from ezored.models.source_group import SourceGroup
 from ezored.models.target_data import TargetData
+from ezored.models.task import Task
 
 from .repository import Repository
 
@@ -68,9 +69,11 @@ class Dependency(object):
                                 if target_data_dict['framework_links']:
                                     target_data.framework_links.extend(target_data_dict['framework_links'])
 
-                            if 'copy_files' in target_data_dict:
-                                if target_data_dict['copy_files']:
-                                    target_data.copy_files.extend(target_data_dict['copy_files'])
+                            if 'tasks' in target_data_dict:
+                                if target_data_dict['tasks']:
+                                    for target_data_task in target_data_dict['tasks']:
+                                        task = Task.from_dict(target_data_task)
+                                        target_data.tasks.extend(task)
 
                             # create source group if have files for it
                             target_data_header_files = []

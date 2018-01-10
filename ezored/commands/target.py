@@ -1,11 +1,9 @@
 """Target command"""
-import os
 
-import jinja2
 from ezored.models.process_data import ProcessData
 from ezored.models.target_data import TargetData
+from ezored.models.task import Task
 from ezored.models.util.file_util import FileUtil
-
 from .base import Base
 
 
@@ -83,40 +81,27 @@ class Target(Base):
                 # back to target data
                 target.prepare_from_process_data(process_data)
 
-                # copy files from dependencies to target directory
-                FileUtil.copy_files_from_list(target_data.copy_files)
-
-                # parse files path and it content
+                # process target data and build
                 target_project_file_data = target.load_target_project_file_data()
 
                 if 'target' in target_project_file_data:
                     target_project_data = target_project_file_data['target']
 
-                    # parse files
-                    if 'parse_files' in target_project_data:
-                        target_project_data_parse_files = target_project_data['parse_files']
+                    # target tasks
+                    if 'tasks' in target_project_data:
+                        target_tasks_data = target_project_data['tasks']
 
-                        if target_project_data_parse_files:
-                            Logger.d('Files to parse from target: {0}'.format(len(target_project_data_parse_files)))
+                        for target_task_data in target_tasks_data:
+                            task = Task.from_dict(target_task_data)
+                            target_data.tasks.extend(task)
 
-                            target_project_data_parse_files = process_data.parse_text_list(
-                                target_project_data_parse_files
-                            )
-
-                            for target_project_data_parse_file in target_project_data_parse_files:
-                                template_loader = jinja2.FileSystemLoader(searchpath='/')
-                                template_env = jinja2.Environment(loader=template_loader)
-                                template_file = target_project_data_parse_file
-                                template = template_env.get_template(template_file)
-                                templ_result = template.render(target=target_data)
-
-                                FileUtil.write_to_file(
-                                    os.path.dirname(target_project_data_parse_file),
-                                    os.path.basename(target_project_data_parse_file),
-                                    str(templ_result)
-                                )
-                        else:
-                            Logger.d('No files need to parse from target: {0}'.format(target.get_name()))
+                    # run all tasks
+                    Task.run_all_tasks(
+                        tasks=target_data.tasks,
+                        process_data=process_data,
+                        template_data=target_data,
+                        working_dir=target.repository.get_vendor_dir()
+                    )
 
                     # build target
                     if 'build' in target_project_data:
