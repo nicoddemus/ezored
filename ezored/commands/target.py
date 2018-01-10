@@ -93,7 +93,7 @@ class Target(Base):
 
                         for target_task_data in target_tasks_data:
                             task = Task.from_dict(target_task_data)
-                            target_data.tasks.extend(task)
+                            target_data.tasks.append(task)
 
                     # run all tasks
                     Task.run_all_tasks(
