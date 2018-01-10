@@ -122,9 +122,9 @@ class Task(object):
     @staticmethod
     def from_dict(dict_data):
         task = Task(
-            task_type=dict_data['type'] if dict_data['type'] else '',
-            task_name=dict_data['name'] if dict_data['name'] else '',
-            task_params=dict_data['params'] if dict_data['params'] else {}
+            task_type=dict_data['type'] if 'type' in dict_data else '',
+            task_name=dict_data['name'] if 'name' in dict_data else '',
+            task_params=dict_data['params'] if 'params' in dict_data else {}
         )
 
         return task
