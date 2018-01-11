@@ -70,7 +70,7 @@ class Task(object):
                     template_env = jinja2.Environment(loader=template_loader)
                     template_file = template_file
                     template = template_env.get_template(template_file)
-                    templ_result = template.render(target=template_data)
+                    templ_result = template.render(template_data)
 
                     FileUtil.write_to_file(
                         os.path.dirname(template_file),
