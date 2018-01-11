@@ -78,9 +78,11 @@ class TestTask(TestCase):
 
         file_content = """
 file = open("test-target-file.txt", "w") 
-file.write("EzoRed") 
+file.write("{0}") 
 file.close()
         """
+
+        file_content = file_content.format(Constants.PROJECT_NAME)
 
         file_path = os.path.join(d.path, 'test-file.py')
         target_file_path = os.path.join(d.path, 'test-target-file.txt')
@@ -91,7 +93,7 @@ file.close()
             task_type=Task.TYPE_RUN,
             task_name='Sample run task',
             task_params={
-                'args': [file_path]
+                'args': ['python', file_path]
             }
         )
 
