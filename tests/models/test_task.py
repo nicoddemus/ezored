@@ -1,4 +1,5 @@
 import os
+import sys
 from unittest import TestCase
 
 import pytest
@@ -178,14 +179,19 @@ file.close()
 
         task.parse(process_data)
 
-        with pytest.raises(OSError) as error:
+        error_type = OSError
+
+        if sys.version_info >= (3,):
+            error_type = FileNotFoundError
+
+        with pytest.raises(error_type) as error:
             task.run(
                 process_data=process_data,
                 template_data=template_data,
                 working_dir=d.path
             )
 
-        self.assertEqual(error.type, OSError)
+        self.assertEqual(error.type, error_type)
 
     def test_task_create_from_dict(self):
         task_name = 'Sample task'
