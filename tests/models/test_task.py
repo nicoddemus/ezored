@@ -87,7 +87,7 @@ file.close()
         file_path = os.path.join(d.path, 'test-file.py')
         target_file_path = os.path.join(d.path, 'test-target-file.txt')
 
-        d.write(file_path, file_content.encode('utf-8'))
+        d.write(file_path, file_content)
 
         task = Task(
             task_type=Task.TYPE_RUN,
