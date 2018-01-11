@@ -99,7 +99,7 @@ class Task(object):
                             Logger.i('Error output while run task: {0}'.format(self.get_name()))
                             Logger.clean(stderr)
 
-                        Logger.f('Failed to run task: {0}'.format(task.get_name()))
+                        Logger.f('Failed to run task: {0}'.format(self.get_name()))
             else:
                 Logger.f('Invalid task type')
         else:
