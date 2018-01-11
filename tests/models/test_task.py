@@ -17,7 +17,7 @@ class TestTask(TestCase):
         from_path = os.path.join(d.path, 'test-copy.txt')
         to_path = os.path.join(d.path, 'test-copy2.txt')
 
-        d.write(from_path, 'sample data')
+        d.write(from_path, 'sample data'.encode('utf-8'))
 
         task = Task(
             task_type=Task.TYPE_COPY_FILE,
@@ -87,7 +87,7 @@ file.close()
         file_path = os.path.join(d.path, 'test-file.py')
         target_file_path = os.path.join(d.path, 'test-target-file.txt')
 
-        d.write(file_path, file_content)
+        d.write(file_path, file_content.encode('utf-8'))
 
         task = Task(
             task_type=Task.TYPE_RUN,
