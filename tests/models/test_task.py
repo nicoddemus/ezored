@@ -197,35 +197,17 @@ file.close()
     def test_task_run_generate_error(self, d):
         os.chdir(d.path)
 
-        # run with output
-        file_content = 'print("Sample task")'
+        file_content = """
+print("Sample task")
+raise Exception('Sample task')
+        """
 
         file_path = os.path.join(d.path, 'test-file.py')
         d.write(file_path, file_content.encode('utf-8'))
 
         task = Task(
             task_type=Task.TYPE_RUN,
-            task_name='Sample run task 1',
-            task_params={
-                'args': ['python', file_path]
-            }
-        )
-
-        task.run(
-            process_data=ProcessData(),
-            template_data={},
-            working_dir=d.path
-        )
-
-        # run with error
-        file_content = '1a=1'
-
-        file_path = os.path.join(d.path, 'test-file.py')
-        d.write(file_path, file_content.encode('utf-8'))
-
-        task = Task(
-            task_type=Task.TYPE_RUN,
-            task_name='Sample run task 2',
+            task_name='Sample run task',
             task_params={
                 'args': ['python', file_path]
             }
