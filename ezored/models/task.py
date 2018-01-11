@@ -57,13 +57,13 @@ class Task(object):
 
         if process_data:
             if self.type == self.TYPE_COPY_FILE:
-                from_path = self.params['from_path'] if self.params['from_path'] else ''
-                to_path = self.params['to_path'] if self.params['to_path'] else ''
+                from_path = self.params['from_path'] if self.params['from_path'] else None
+                to_path = self.params['to_path'] if self.params['to_path'] else None
 
                 FileUtil.copy_file(from_path=from_path, to_path=to_path)
 
             elif self.type == self.TYPE_PARSE_FILE:
-                template_file = self.params['file']
+                template_file = self.params['file'] if 'file' in self.params else None
 
                 if template_file:
                     template_loader = jinja2.FileSystemLoader(searchpath='/')
@@ -79,7 +79,7 @@ class Task(object):
                     )
 
             elif self.type == self.TYPE_RUN:
-                run_args = self.params['args']
+                run_args = self.params['args'] if 'args' in self.params else None
 
                 if run_args:
                     exitcode, stderr, stdout = FileUtil.run(
