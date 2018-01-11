@@ -100,7 +100,9 @@ class Target(Base):
                     Task.run_all_tasks(
                         tasks=target_data.tasks,
                         process_data=process_data,
-                        template_data=target_data,
+                        template_data={
+                            'target': target_data
+                        },
                         working_dir=target.repository.get_vendor_dir()
                     )
 
