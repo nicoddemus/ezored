@@ -46,7 +46,7 @@ class TestTask(TestCase):
 
         file_path = os.path.join(d.path, 'test-file.txt')
 
-        d.write(file_path, '{{ name }}')
+        d.write(file_path, '{{ name }}'.encode('utf-8'))
 
         task = Task(
             task_type=Task.TYPE_PARSE_FILE,
@@ -85,7 +85,7 @@ file.close()
         file_path = os.path.join(d.path, 'test-file.py')
         target_file_path = os.path.join(d.path, 'test-target-file.txt')
 
-        d.write(file_path, file_content)
+        d.write(file_path, file_content.encode('utf-8'))
 
         task = Task(
             task_type=Task.TYPE_PARSE_FILE,
