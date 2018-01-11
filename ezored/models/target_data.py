@@ -18,7 +18,7 @@ class TargetData(object):
         self.cxx_flags = []
         self.compiler_options = []
 
-        self.copy_files = []
+        self.tasks = []
 
     def parse(self, process_data):
         if process_data:
@@ -38,7 +38,7 @@ class TargetData(object):
             self.cxx_flags = process_data.parse_text_list(self.cxx_flags)
             self.compiler_options = process_data.parse_text_list(self.compiler_options)
 
-            self.copy_files = process_data.parse_copy_file_list(self.copy_files)
+            self.tasks = process_data.parse_task_list(self.tasks)
         else:
             Logger.d('Cannot parse target data with invalid source')
 
@@ -58,6 +58,6 @@ class TargetData(object):
             self.cxx_flags.extend(target_data.cxx_flags)
             self.compiler_options.extend(target_data.compiler_options)
 
-            self.copy_files.extend(target_data.copy_files)
+            self.tasks.extend(target_data.tasks)
         else:
             Logger.d('Cannot merge target data with invalid source')

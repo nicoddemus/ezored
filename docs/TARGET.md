@@ -12,21 +12,24 @@ The target block structure has this properties:
   - type
   - name
   - version
+- tasks  
 
-The property `"type"` define how EzoRed will get your target. Today we support types:
+The property `"repository.type"` define how EzoRed will get your target. Today we support types:
 - local  
 - github  
 
-The property `"name"` define how EzoRed will find your target based on `"type"`. Example:  
+The property `"repository.name"` define how EzoRed will find your target based on `"type"`. Example:  
 - `local` = You need set the path to the target directory, ex: `${HOME}/my-target`  
 - `github` = You need set the repository name, ex: `ezored/target-android` 
 
-The property `"version"` define what version EzoRed need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
+The property `"repository.version"` define what version EzoRed need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
 - `b:master` = will download version from branch "master" 
 - `t:1.2.0` = will download version from tag "1.2.0" 
 - `c:ef016c0` = will download version from commit "ef016c0" 
 - `1.2.0` = without prefix will download version from tag "1.2.0" 
 - `empty` = empty version field will download version from branch master 
+
+The property `"tasks"` contains a list of Tasks. This tasks are merged on build process with all dependencies tasks and executed before build command be executed. 
 
 ### Custom targets
 

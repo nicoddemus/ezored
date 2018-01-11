@@ -103,13 +103,12 @@ class ProcessData(object):
 
         return text_list
 
-    def parse_copy_file_list(self, copy_file_list):
-        if copy_file_list:
-            for copy_file in copy_file_list:
-                copy_file['from_path'] = self.parse_text(copy_file['from_path'])
-                copy_file['to_path'] = self.parse_text(copy_file['to_path'])
+    def parse_task_list(self, task_list):
+        if task_list:
+            for task in task_list:
+                task.parse(self)
 
-        return copy_file_list
+        return task_list
 
     def parse_sourge_group_list(self, source_group_list):
         if source_group_list:

@@ -74,8 +74,15 @@ class FileUtil(object):
     @staticmethod
     def copy_files_from_list(copy_file_list):
         if copy_file_list:
-            for copy_file in copy_file_list:
-                FileUtil.create_dir(os.path.dirname(copy_file['from_path']))
-                FileUtil.create_dir(os.path.dirname(copy_file['to_path']))
+            for copy_file_item in copy_file_list:
+                FileUtil.copy_file(
+                    from_path=copy_file_item['from_path'],
+                    to_path=copy_file_item['to_path']
+                )
 
-                shutil.copyfile(copy_file['from_path'], copy_file['to_path'])
+    @staticmethod
+    def copy_file(from_path, to_path):
+        FileUtil.create_dir(os.path.dirname(from_path))
+        FileUtil.create_dir(os.path.dirname(to_path))
+
+        shutil.copyfile(from_path, to_path)

@@ -12,21 +12,24 @@ The dependency block structure has this properties:
   - type
   - name
   - version
+- tasks  
 
-The property `"type"` define how EzoRed will get your dependency. Today we support types:
+The property in `"repository.type"` define how EzoRed will get your dependency. Today we support types:
 - local  
 - github  
 
-The property `"name"` define how EzoRed will find your dependency based on `"type"`. Example:  
+The property `"repository.name"` define how EzoRed will find your dependency based on `"type"`. Example:  
 - `local` = You need set the path to the dependency directory, ex: `${HOME}/my-dependency`  
 - `github` = You need set the repository name, ex: `ezored/dependency-sample` 
 
-The property `"version"` define what version EzoRed need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
+The property `"repository.version"` define what version EzoRed need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
 - `b:master` = will download version from branch "master" 
 - `t:1.2.0` = will download version from tag "1.2.0" 
 - `c:ef016c0` = will download version from commit "ef016c0" 
 - `1.2.0` = without prefix will download version from tag "1.2.0" 
 - `empty` = empty version field will download version from branch master 
+
+The property `"tasks"` contains a list of Tasks. This tasks are merged on build process with target tasks and executed before the target build command be executed.
 
 ### Custom dependencies
 
