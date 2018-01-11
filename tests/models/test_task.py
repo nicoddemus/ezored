@@ -88,7 +88,7 @@ file.close()
         d.write(file_path, file_content.encode('utf-8'))
 
         task = Task(
-            task_type=Task.TYPE_PARSE_FILE,
+            task_type=Task.TYPE_RUN,
             task_name='Sample run task',
             task_params={
                 'args': [file_path]
