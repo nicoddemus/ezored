@@ -193,6 +193,37 @@ file.close()
 
         self.assertEqual(error.type, error_type)
 
+    @tempdir()
+    def test_task_run_generate_error(self, d):
+        os.chdir(d.path)
+
+        file_content = '1a=1'
+        file_path = os.path.join(d.path, 'test-file.py')
+        d.write(file_path, file_content.encode('utf-8'))
+
+        task = Task(
+            task_type=Task.TYPE_RUN,
+            task_name='Sample run task',
+            task_params={
+                'args': ['python', file_path]
+            }
+        )
+
+        process_data = ProcessData()
+        template_data = {}
+
+        task.parse(process_data)
+        
+        with pytest.raises(SystemExit) as error:
+            task.run(
+                process_data=process_data,
+                template_data=template_data,
+                working_dir=d.path
+            )
+
+        self.assertEqual(error.type, SystemExit)
+        self.assertEqual(error.value.code, 1)
+
     def test_task_create_from_dict(self):
         task_name = 'Sample task'
         task_type = Task.TYPE_RUN
