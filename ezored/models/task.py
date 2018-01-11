@@ -11,7 +11,7 @@ class Task(object):
     TYPE_PARSE_FILE = 'parse_file'
     TYPE_RUN = 'run'
 
-    def __init__(self, task_type, task_name, task_params):
+    def __init__(self, task_type, task_name=None, task_params=None):
         self.type = task_type
         self.name = task_name
         self.params = task_params
@@ -32,15 +32,16 @@ class Task(object):
                     self.params['file'] = process_data.parse_text(self.params['file'])
 
             elif self.type == self.TYPE_RUN:
-                if self.params and 'cmd' in self.params:
-                    self.params['cmd'] = process_data.parse_text_list(self.params['cmd'])
+                if self.params and 'args' in self.params:
+                    self.params['args'] = process_data.parse_text_list(self.params['args'])
+
             else:
                 Logger.f('Invalid task type')
         else:
-            Logger.d('Cannot parse task params with invalid source')
+            Logger.d('Cannot parse task params with invalid process data')
 
     def get_name(self):
-        if len(self.name) > 0:
+        if self.name and len(self.name) > 0:
             return self.name
 
         if self.type == self.TYPE_COPY_FILE:
@@ -100,6 +101,7 @@ class Task(object):
                             Logger.clean(stderr)
 
                         Logger.f('Failed to run task: {0}'.format(self.get_name()))
+
             else:
                 Logger.f('Invalid task type')
         else:
