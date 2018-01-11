@@ -13,10 +13,11 @@ class TestTask(TestCase):
     @tempdir()
     def test_task_copy_file(self, d):
         os.chdir(d.path)
-        d.write('test-copy.txt', 'sample data')
 
         from_path = os.path.join(d.path, 'test-copy.txt')
         to_path = os.path.join(d.path, 'test-copy2.txt')
+
+        d.write(from_path, 'sample data')
 
         task = Task(
             task_type=Task.TYPE_COPY_FILE,
@@ -42,9 +43,10 @@ class TestTask(TestCase):
     @tempdir()
     def test_task_parse_file(self, d):
         os.chdir(d.path)
-        d.write('test-file.txt', '{{ name }}')
 
         file_path = os.path.join(d.path, 'test-file.txt')
+
+        d.write(file_path, '{{ name }}')
 
         task = Task(
             task_type=Task.TYPE_PARSE_FILE,
