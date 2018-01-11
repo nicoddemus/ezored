@@ -197,7 +197,11 @@ file.close()
     def test_task_run_generate_error(self, d):
         os.chdir(d.path)
 
-        file_content = '1a=1'
+        file_content = """
+print("Sample task")
+1a=1
+        """
+
         file_path = os.path.join(d.path, 'test-file.py')
         d.write(file_path, file_content.encode('utf-8'))
 
@@ -213,7 +217,7 @@ file.close()
         template_data = {}
 
         task.parse(process_data)
-        
+
         with pytest.raises(SystemExit) as error:
             task.run(
                 process_data=process_data,
