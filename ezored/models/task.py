@@ -22,10 +22,10 @@ class Task(object):
 
             if self.type == self.TYPE_COPY_FILE:
                 if self.params and 'from' in self.params:
-                    self.params['from'] = process_data.parse_text(self.params['from_path'])
+                    self.params['from'] = process_data.parse_text(self.params['from'])
 
                 if self.params and 'to' in self.params:
-                    self.params['to'] = process_data.parse_text(self.params['to_path'])
+                    self.params['to'] = process_data.parse_text(self.params['to'])
 
             elif self.type == self.TYPE_PARSE_FILE:
                 if self.params and 'file' in self.params:
