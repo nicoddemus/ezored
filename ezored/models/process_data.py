@@ -114,7 +114,15 @@ class ProcessData(object):
         if source_group_list:
             for source_group in source_group_list:
                 source_group.name = self.parse_text(source_group.name)
-                source_group.header_files = self.parse_text_list(source_group.header_files)
-                source_group.source_files = self.parse_text_list(source_group.source_files)
+
+                # header files
+                for source_file in source_group.header_files:
+                    source_file.file = self.parse_text(source_file.file)
+                    source_file.compile_flags = self.parse_text(source_file.compile_flags)
+
+                # source files
+                for source_file in source_group.source_files:
+                    source_file.file = self.parse_text(source_file.file)
+                    source_file.compile_flags = self.parse_text(source_file.compile_flags)
 
         return source_group_list
