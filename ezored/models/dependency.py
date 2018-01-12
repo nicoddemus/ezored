@@ -1,4 +1,5 @@
 from ezored.models.logger import Logger
+from ezored.models.source_file import SourceFile
 from ezored.models.source_group import SourceGroup
 from ezored.models.target_data import TargetData
 from ezored.models.task import Task
@@ -82,11 +83,19 @@ class Dependency(object):
 
                             if 'header_files' in target_data_dict:
                                 if target_data_dict['header_files']:
-                                    target_data_header_files = target_data_dict['header_files']
+                                    for file_data in target_data_dict['header_files']:
+                                        source_file = SourceFile.from_dict(file_data)
+
+                                        if source_file:
+                                            target_data_header_files.append(source_file)
 
                             if 'source_files' in target_data_dict:
                                 if target_data_dict['source_files']:
-                                    target_data_source_files = target_data_dict['source_files']
+                                    for file_data in target_data_dict['source_files']:
+                                        source_file = SourceFile.from_dict(file_data)
+
+                                        if source_file:
+                                            target_data_source_files.append(source_file)
 
                             if len(target_data_header_files) > 0 or len(target_data_source_files) > 0:
                                 target_data_source_group = SourceGroup()

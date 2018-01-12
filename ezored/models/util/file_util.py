@@ -76,8 +76,8 @@ class FileUtil(object):
         if copy_file_list:
             for copy_file_item in copy_file_list:
                 FileUtil.copy_file(
-                    from_path=copy_file_item['from_path'],
-                    to_path=copy_file_item['to_path']
+                    from_path=copy_file_item['from'],
+                    to_path=copy_file_item['to']
                 )
 
     @staticmethod

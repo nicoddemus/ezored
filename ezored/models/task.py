@@ -21,11 +21,11 @@ class Task(object):
             Logger.d('Parsing task: {0}...'.format(self.get_name()))
 
             if self.type == self.TYPE_COPY_FILE:
-                if self.params and 'from_path' in self.params:
-                    self.params['from_path'] = process_data.parse_text(self.params['from_path'])
+                if self.params and 'from' in self.params:
+                    self.params['from'] = process_data.parse_text(self.params['from'])
 
-                if self.params and 'to_path' in self.params:
-                    self.params['to_path'] = process_data.parse_text(self.params['to_path'])
+                if self.params and 'to' in self.params:
+                    self.params['to'] = process_data.parse_text(self.params['to'])
 
             elif self.type == self.TYPE_PARSE_FILE:
                 if self.params and 'file' in self.params:
@@ -58,8 +58,8 @@ class Task(object):
 
         if process_data:
             if self.type == self.TYPE_COPY_FILE:
-                from_path = self.params['from_path'] if self.params['from_path'] else None
-                to_path = self.params['to_path'] if self.params['to_path'] else None
+                from_path = self.params['from'] if self.params['from'] else None
+                to_path = self.params['to'] if self.params['to'] else None
 
                 FileUtil.copy_file(from_path=from_path, to_path=to_path)
 
