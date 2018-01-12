@@ -7,7 +7,7 @@ class SourceFile(object):
     @staticmethod
     def from_dict(dict_data):
         source_file = SourceFile(
-            source_file=dict_data['source_file'] if 'source_file' in dict_data else None,
+            source_file=dict_data['file'] if 'file' in dict_data else None,
             compile_flags=dict_data['compile_flags'] if 'compile_flags' in dict_data else None
         )
 
