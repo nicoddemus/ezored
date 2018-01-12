@@ -25,8 +25,8 @@ class TestTask(TestCase):
             task_type=Task.TYPE_COPY_FILE,
             task_name='Sample copy file task',
             task_params={
-                'from_path': from_path,
-                'to_path': to_path
+                'from': from_path,
+                'to': to_path
             }
         )
 
