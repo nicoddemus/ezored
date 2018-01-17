@@ -1,6 +1,7 @@
 """Target command"""
 import os
 
+from ezored.models.constants import Constants
 from ezored.models.process_data import ProcessData
 from ezored.models.target_data import TargetData
 from ezored.models.task import Task
@@ -121,7 +122,7 @@ class Target(Base):
                     try:
                         sys.path.insert(0, target.repository.get_vendor_dir())
 
-                        target_module = importlib.import_module('ezored_target')
+                        target_module = importlib.import_module(Constants.TARGET_MODULE_NAME)
                         do_build = getattr(target_module, 'do_build')
 
                         do_build(
@@ -133,7 +134,7 @@ class Target(Base):
                             }
                         )
 
-                        del sys.modules['ezored_target']
+                        del sys.modules[Constants.TARGET_MODULE_NAME]
                         del target_module
                         del do_build
                     except Exception as e:

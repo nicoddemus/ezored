@@ -179,7 +179,7 @@ class Repository(object):
         try:
             sys.path.insert(0, self.get_temp_dir())
 
-            target_module = importlib.import_module('ezored_vendor')
+            target_module = importlib.import_module(Constants.VENDOR_MODULE_NAME)
             do_build = getattr(target_module, 'do_build')
 
             do_build(
@@ -189,7 +189,7 @@ class Repository(object):
                 }
             )
 
-            del sys.modules['ezored_vendor']
+            del sys.modules[Constants.VENDOR_MODULE_NAME]
             del target_module
             del do_build
         except Exception as e:
@@ -198,18 +198,6 @@ class Repository(object):
 
         sys.path = sys_path
         os.chdir(original_cwd)
-
-    def load_vendor_file_data(self):
-        Logger.d('Loading vendor file...')
-
-        vendor_dir = self.get_temp_dir()
-        vendor_file_path = os.path.join(vendor_dir, Constants.VENDOR_FILE)
-
-        try:
-            with open(vendor_file_path, 'r') as stream:
-                return yaml.load(stream)
-        except IOError as exc:
-            Logger.f('Error while read vendor file: {0}'.format(exc))
 
     def load_target_data_file(self):
         Logger.d('Loading target data file...')

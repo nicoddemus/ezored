@@ -3,12 +3,12 @@ class Constants(object):
 
     PROJECT_NAME = 'EzoRed'
 
-    PROJECT_FILE = 'ezored-project.yml'
-    VENDOR_FILE = 'ezored_vendor'
-    TARGET_FILE = 'ezored_target'
+    PROJECT_FILE = 'ezored_project.yml'
     TARGET_DATA_FILE = 'ezored_target_data.yml'
-    TARGET_PROJECT_FILE = 'ezored-target.yml'
     SOURCE_DIR = 'source'
+
+    TARGET_MODULE_NAME = 'ezored_target'
+    VENDOR_MODULE_NAME = 'ezored_vendor'
 
     ENV_VAR_PREFIX = 'EZORED_'
 
