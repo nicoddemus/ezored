@@ -8,7 +8,7 @@ To build each target inside EzoRed project file, we use a bunch of rules, includ
 
 ### Project file
 
-The project consists in a single file called "ezored-project.json".  
+The project consists in a single file called "ezored_project.yml".  
 
 The project file have this properties:  
 

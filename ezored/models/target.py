@@ -1,7 +1,5 @@
 import os
 
-import yaml
-
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
 from ezored.models.util.file_util import FileUtil
@@ -31,18 +29,6 @@ class Target(object):
 
             if self.repository:
                 self.repository.prepare_from_process_data(process_data)
-
-    def load_target_project_file_data(self):
-        Logger.d('Loading target project file for target: {0}...'.format(self.get_name()))
-
-        vendor_dir = self.repository.get_vendor_dir()
-        target_file_path = os.path.join(vendor_dir, Constants.TARGET_PROJECT_FILE)
-
-        try:
-            with open(target_file_path, 'r') as stream:
-                return yaml.load(stream)
-        except IOError as exc:
-            Logger.f('Error while read target project file: {0}'.format(exc))
 
     def remove(self):
         Logger.d('Removing files for target: {0}...'.format(self.get_name()))
