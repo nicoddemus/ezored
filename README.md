@@ -5,7 +5,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/ezored/ezored/total.svg)]()
 
 
-<img src="extras/images/doc-logo.png?v=2017-12-06" alt="EzoRed">  
+<img src="extras/images/doc-logo.png?v=2017-12-07" alt="EzoRed">  
 
 The main goal of this tool is let you make a single C++ code and generate a library for multiple platforms based on targets.    
 
