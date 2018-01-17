@@ -137,6 +137,8 @@ class Target(Base):
                         del sys.modules[Constants.TARGET_MODULE_NAME]
                         del target_module
                         del do_build
+
+                        Logger.i('Build finished for target: {0}'.format(target.get_name()))
                     except Exception as e:
                         Logger.e("Error while call 'do_build' on target {0}: {1}".format(target.get_name(), e.message))
                         raise

@@ -1,9 +1,10 @@
 import os
 import sys
 
+from tqdm import tqdm
+
 from ezored.models.logger import Logger
 from ezored.models.util.file_util import FileUtil
-from tqdm import tqdm
 
 if sys.version_info >= (3,):
     import urllib.request as urllib2

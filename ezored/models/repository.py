@@ -192,6 +192,8 @@ class Repository(object):
             del sys.modules[Constants.VENDOR_MODULE_NAME]
             del target_module
             del do_build
+
+            Logger.i('Build finished for repository: {0}'.format(self.get_name()))
         except Exception as e:
             Logger.e("Error while call 'do_build' on repository {0}: {1}".format(self.get_name(), e.message))
             raise
