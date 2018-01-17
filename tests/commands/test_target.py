@@ -2,9 +2,10 @@ import os
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
 
+from testfixtures import tempdir
+
 from ezored.models.constants import Constants
 from ezored.models.util.file_util import FileUtil
-from testfixtures import tempdir
 
 
 class TestTarget(TestCase):
@@ -61,8 +62,8 @@ dependencies:
         self.assertTrue(required in output)
 
         self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'file-to-parse.txt')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored-target.yml')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'build.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored_target.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored_target_data.yml')))
 
     @tempdir()
     def test_target_github_build_single(self, d):
@@ -98,8 +99,8 @@ dependencies:
         self.assertTrue(required in output)
 
         self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'file-to-parse.txt')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored-target.yml')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'build.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored_target.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored_target_data.yml')))
 
     @tempdir()
     def test_target_github_copy_file(self, d):
@@ -135,8 +136,8 @@ dependencies:
         self.assertTrue(required in output)
 
         self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'file-to-parse.txt')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored-target.yml')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'build.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored_target.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'ezored_target_data.yml')))
 
         self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test-master', 'source', 'test-copy.py')))
 

@@ -8,7 +8,7 @@ class TestConstants(TestCase):
         self.assertEqual(Constants.DEBUG, False)
 
     def test_project_file(self):
-        self.assertEqual(Constants.PROJECT_FILE, 'ezored-project.yml')
+        self.assertEqual(Constants.PROJECT_FILE, 'ezored_project.yml')
 
     def test_project_file_data(self):
         file_data = """
