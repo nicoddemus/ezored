@@ -31,7 +31,7 @@ class Dependency(object):
     def get_target_data_by_target_name_and_parse(self, target_name, process_data):
         Logger.d('Getting target data from dependency: {0}...'.format(self.get_name()))
 
-        target_file_data = self.repository.load_target_file_data()
+        target_file_data = self.repository.load_target_data_file()
 
         if target_file_data:
             if 'targets' in target_file_data:

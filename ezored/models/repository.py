@@ -1,5 +1,7 @@
+import importlib
 import os
 import re
+import sys
 import tarfile
 
 import yaml
@@ -168,35 +170,34 @@ class Repository(object):
             else:
                 Logger.f('Problems when unpack repository: {0}'.format(self.get_name()))
 
-    def build(self, process_data):
+    def build(self, project, process_data):
         Logger.i('Building repository: {0}...'.format(self.get_name()))
 
-        vendor_file_data = self.load_vendor_file_data()
+        sys_path = list(sys.path)
+        original_cwd = os.getcwd()
 
-        if 'vendor' in vendor_file_data:
-            vendor_data = vendor_file_data['vendor']
+        try:
+            sys.path.insert(0, self.get_temp_dir())
 
-            if 'build' in vendor_data:
-                vendor_data_build = vendor_data['build']
+            target_module = importlib.import_module('ezored_vendor')
+            do_build = getattr(target_module, 'do_build')
 
-                exitcode, stderr, stdout = FileUtil.run(
-                    vendor_data_build,
-                    self.get_temp_dir(),
-                    process_data.get_environ()
-                )
+            do_build(
+                params={
+                    'project': project,
+                    'process_data': process_data,
+                }
+            )
 
-                if exitcode == 0:
-                    Logger.i('Build finished for repository: {0}'.format(self.get_name()))
-                else:
-                    if stdout:
-                        Logger.i('Build output for repository: {0}'.format(self.get_name()))
-                        Logger.clean(stdout)
+            del sys.modules['ezored_vendor']
+            del target_module
+            del do_build
+        except Exception as e:
+            Logger.e("Error while call 'do_build' on repository {0}: {1}".format(self.get_name(), e.message))
+            raise
 
-                    if stderr:
-                        Logger.i('Error output while build repository: {0}'.format(self.get_name()))
-                        Logger.clean(stderr)
-
-                    Logger.f('Failed to build repository: {0}'.format(self.get_name()))
+        sys.path = sys_path
+        os.chdir(original_cwd)
 
     def load_vendor_file_data(self):
         Logger.d('Loading vendor file...')
@@ -210,11 +211,11 @@ class Repository(object):
         except IOError as exc:
             Logger.f('Error while read vendor file: {0}'.format(exc))
 
-    def load_target_file_data(self):
-        Logger.d('Loading target file...')
+    def load_target_data_file(self):
+        Logger.d('Loading target data file...')
 
         vendor_dir = self.get_vendor_dir()
-        target_file_path = os.path.join(vendor_dir, Constants.TARGET_FILE)
+        target_file_path = os.path.join(vendor_dir, Constants.TARGET_DATA_FILE)
 
         try:
             with open(target_file_path, 'r') as stream:

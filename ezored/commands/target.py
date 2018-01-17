@@ -1,9 +1,9 @@
 """Target command"""
+import os
 
 from ezored.models.process_data import ProcessData
 from ezored.models.target_data import TargetData
 from ezored.models.task import Task
-from ezored.models.util.file_util import FileUtil
 from .base import Base
 
 
@@ -30,6 +30,8 @@ class Target(Base):
     def build(self, target_name):
         from ezored.models.logger import Logger
         from ezored.models.project import Project
+        import importlib
+        import sys
 
         project = Project.create_from_project_file()
 
@@ -62,10 +64,14 @@ class Target(Base):
                 # build the target repository after download
                 target.prepare_from_process_data(process_data)
                 target.repository.download()
-                target.repository.build(process_data)
+                target.repository.build(
+                    project=project,
+                    process_data=process_data
+                )
 
                 # get all target data from project dependencies
                 target_data = TargetData()
+                target_data.project_home = target.repository.get_vendor_dir()
                 target_data.project_config = project.config
 
                 for dependency in project.dependencies:
@@ -82,10 +88,10 @@ class Target(Base):
                 target.prepare_from_process_data(process_data)
 
                 # process target data and build
-                target_project_file_data = target.load_target_project_file_data()
+                target_data_file = target.repository.load_target_data_file()
 
-                if 'target' in target_project_file_data:
-                    target_project_data = target_project_file_data['target']
+                if 'target' in target_data_file:
+                    target_project_data = target_data_file['target']
 
                     # target tasks
                     if 'tasks' in target_project_data:
@@ -107,29 +113,35 @@ class Target(Base):
                     )
 
                     # build target
-                    if 'build' in target_project_data:
-                        Logger.i('Building target: {0}...'.format(target.get_name()))
+                    Logger.i('Building target: {0}...'.format(target.get_name()))
 
-                        target_project_data_build = target_project_data['build']
+                    sys_path = list(sys.path)
+                    original_cwd = os.getcwd()
 
-                        exitcode, stderr, stdout = FileUtil.run(
-                            target_project_data_build,
-                            target.repository.get_vendor_dir(),
-                            process_data.get_environ()
+                    try:
+                        sys.path.insert(0, target.repository.get_vendor_dir())
+
+                        target_module = importlib.import_module('ezored_target')
+                        do_build = getattr(target_module, 'do_build')
+
+                        do_build(
+                            params={
+                                'project': project,
+                                'target': target,
+                                'target_data': target_data,
+                                'process_data': process_data,
+                            }
                         )
 
-                        if exitcode == 0:
-                            Logger.i('Build finished for target: {0}'.format(target.get_name()))
-                        else:
-                            if stdout:
-                                Logger.i('Build output for target: {0}'.format(target.get_name()))
-                                Logger.clean(stdout)
+                        del sys.modules['ezored_target']
+                        del target_module
+                        del do_build
+                    except Exception as e:
+                        Logger.e("Error while call 'do_build' on target {0}: {1}".format(target.get_name(), e.message))
+                        raise
 
-                            if stderr:
-                                Logger.i('Error output while build target: {0}'.format(target.get_name()))
-                                Logger.clean(stderr)
-
-                            Logger.f('Failed to build target: {0}'.format(target.get_name()))
+                    sys.path = sys_path
+                    os.chdir(original_cwd)
 
         if not target_found:
             Logger.f('Target not found: {0}'.format(target_name))

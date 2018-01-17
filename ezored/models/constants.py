@@ -4,8 +4,9 @@ class Constants(object):
     PROJECT_NAME = 'EzoRed'
 
     PROJECT_FILE = 'ezored-project.yml'
-    VENDOR_FILE = 'ezored-vendor.yml'
-    TARGET_FILE = 'ezored-target.yml'
+    VENDOR_FILE = 'ezored_vendor'
+    TARGET_FILE = 'ezored_target'
+    TARGET_DATA_FILE = 'ezored_target_data.yml'
     TARGET_PROJECT_FILE = 'ezored-target.yml'
     SOURCE_DIR = 'source'
 
