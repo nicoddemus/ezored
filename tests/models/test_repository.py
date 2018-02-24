@@ -133,7 +133,7 @@ class TestRepository(TestCase):
 
         download_filename = repository.get_download_filename()
 
-        self.assertEqual(download_filename, 'dependency-sample-1-0-0.tar.gz')
+        self.assertEqual(download_filename, 'dependency-sample-1.0.0.tar.gz')
 
     def test_local_download_filename(self):
         repository = Repository.from_dict({
@@ -183,7 +183,7 @@ class TestRepository(TestCase):
 
         dir_name = repository.get_dir_name()
 
-        self.assertEqual(dir_name, 'dependency-sample-1-0-0')
+        self.assertEqual(dir_name, 'dependency-sample-1.0.0')
 
     def test_local_get_dir_name(self):
         repository = Repository.from_dict({
