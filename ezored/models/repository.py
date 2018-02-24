@@ -1,16 +1,15 @@
 import importlib
 import os
 import re
-import sys
 import tarfile
 
+import sys
 import yaml
-from slugify import slugify
-
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
 from ezored.models.util.download_util import DownloadUtil
 from ezored.models.util.file_util import FileUtil
+from slugify import slugify
 
 
 class Repository(object):
@@ -50,11 +49,7 @@ class Repository(object):
             git_data_name_list = str(git_data_name).split('/')
 
             return '{0}.{1}'.format(
-                slugify('{0}-{1}'.format(
-                    git_data_name_list[1],
-                    git_data_version)
-                ),
-                Constants.GITHUB_DOWNLOAD_EXTENSION
+                '{0}-{1}'.format(git_data_name_list[1], git_data_version), Constants.GITHUB_DOWNLOAD_EXTENSION
             )
         elif self.rep_type == Repository.TYPE_LOCAL:
             _, filename = os.path.split(self.rep_name)
@@ -112,7 +107,7 @@ class Repository(object):
         if self.rep_type == Repository.TYPE_GITHUB:
             git_data_name, _, git_data_version = self.get_git_data()
             git_data_name_list = str(git_data_name).split('/')
-            return '{0}-{1}'.format(slugify(git_data_name_list[1]), slugify(git_data_version))
+            return '{0}-{1}'.format(git_data_name_list[1], git_data_version)
         elif self.rep_type == Repository.TYPE_LOCAL:
             _, filename = os.path.split(self.rep_name)
             return slugify(filename)
