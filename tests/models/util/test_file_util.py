@@ -57,3 +57,17 @@ class TestFileUtil(TestCase):
 
         self.assertTrue(os.path.isfile(filename))
         self.assertEqual(os.path.getsize(filename), 12)
+
+    @tempdir()
+    def test_find_files(self, d):
+        os.chdir(d.path)
+
+        FileUtil.write_to_file('.', 'file1.txt', '')
+        FileUtil.write_to_file('.', 'file2.txt', '')
+        FileUtil.write_to_file('.', 'file3.log', '')
+
+        files_txt = FileUtil.find_files('file*.txt')
+        files_log = FileUtil.find_files('file*.log')
+
+        self.assertEqual(len(files_txt), 2)
+        self.assertEqual(len(files_log), 1)

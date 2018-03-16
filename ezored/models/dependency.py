@@ -3,6 +3,7 @@ from ezored.models.source_file import SourceFile
 from ezored.models.source_group import SourceGroup
 from ezored.models.target_data import TargetData
 from ezored.models.task import Task
+from ezored.models.util.file_util import FileUtil
 
 from .repository import Repository
 
@@ -84,18 +85,44 @@ class Dependency(object):
                             if 'header_files' in target_data_dict:
                                 if target_data_dict['header_files']:
                                     for file_data in target_data_dict['header_files']:
-                                        source_file = SourceFile.from_dict(file_data)
+                                        # find all files
+                                        source_file_to_find = SourceFile.from_dict(file_data)
 
-                                        if source_file:
-                                            target_data_header_files.append(source_file)
+                                        if source_file_to_find:
+                                            # process file pattern before
+                                            file_pattern = source_file_to_find.file
+                                            file_pattern = process_data.parse_text(file_pattern)
+                                            found_files = FileUtil.find_files(file_pattern)
+
+                                            # create new source file for each found file
+                                            for f in found_files:
+                                                target_data_header_files.append(
+                                                    SourceFile(
+                                                        source_file=f,
+                                                        compile_flags=source_file_to_find.compile_flags
+                                                    )
+                                                )
 
                             if 'source_files' in target_data_dict:
                                 if target_data_dict['source_files']:
                                     for file_data in target_data_dict['source_files']:
-                                        source_file = SourceFile.from_dict(file_data)
+                                        # find all files
+                                        source_file_to_find = SourceFile.from_dict(file_data)
 
-                                        if source_file:
-                                            target_data_source_files.append(source_file)
+                                        if source_file_to_find:
+                                            # process file pattern before
+                                            file_pattern = source_file_to_find.file
+                                            file_pattern = process_data.parse_text(file_pattern)
+                                            found_files = FileUtil.find_files(file_pattern)
+
+                                            # create new source file for each found file
+                                            for f in found_files:
+                                                target_data_source_files.append(
+                                                    SourceFile(
+                                                        source_file=f,
+                                                        compile_flags=source_file_to_find.compile_flags
+                                                    )
+                                                )
 
                             if len(target_data_header_files) > 0 or len(target_data_source_files) > 0:
                                 target_data_source_group = SourceGroup()

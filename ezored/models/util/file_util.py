@@ -1,3 +1,4 @@
+import glob
 import os
 import shutil
 import subprocess
@@ -86,3 +87,12 @@ class FileUtil(object):
         FileUtil.create_dir(os.path.dirname(to_path))
 
         shutil.copyfile(from_path, to_path)
+
+    @staticmethod
+    def find_files(from_path):
+        files = []
+
+        for f in glob.glob(from_path):
+            files.append(f)
+
+        return files
