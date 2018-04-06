@@ -11,11 +11,16 @@ from .base import Base
 
 class Target(Base):
     def run(self):
+        target_command = self.options['<target-command>'] if '<target-command>' in self.options else None
+        target_name = self.options['<target-name>'] if '<target-name>' in self.options else None
+
         if self.options['list']:
             self.list()
-        elif self.options['build']:
-            target_name = self.options['<target-name>'] if '<target-name>' in self.options else ''
-            self.build(target_name)
+        elif target_command:
+            self.execute_command(
+                target_command=target_command,
+                target_name=target_name
+            )
 
     def list(self):
         from ezored.models.logger import Logger
@@ -29,7 +34,7 @@ class Target(Base):
         for target in project.targets:
             Logger.clean('  - {0}'.format(target.get_name()))
 
-    def build(self, target_name):
+    def execute_command(self, target_command, target_name):
         from ezored.models.logger import Logger
         from ezored.models.project import Project
         import importlib
@@ -38,9 +43,9 @@ class Target(Base):
         project = Project.create_from_project_file()
 
         if target_name:
-            Logger.i('Build only target: {0}'.format(target_name))
+            Logger.i('Execute command "{0}" only on target "{1}"'.format(target_command, target_name))
         else:
-            Logger.i('Build all targets')
+            Logger.i('Execute command "{0}" on all targets'.format(target_command))
 
         target_found = False
         total_targets = len(project.targets)
@@ -59,7 +64,7 @@ class Target(Base):
                     can_build = True
 
                 if can_build:
-                    Logger.d('Getting target data by target name: {0}...'.format(target.get_name()))
+                    Logger.d('Getting target data by target name "{0}"...'.format(target.get_name()))
                     target_found = True
 
                     # targets need be deleted to be always fresh with target data from dependencies
@@ -91,7 +96,7 @@ class Target(Base):
                     # back to target data
                     target.prepare_from_process_data(process_data)
 
-                    # process target data and build
+                    # process target data and execute required command
                     target_data_file = target.repository.load_target_data_file()
 
                     if 'target' in target_data_file:
@@ -116,8 +121,8 @@ class Target(Base):
                             working_dir=target.repository.get_vendor_dir()
                         )
 
-                        # build target
-                        Logger.i('Building target: {0}...'.format(target.get_name()))
+                        # execute command on target
+                        Logger.i('Executing command "{0}" on target "{1}"...'.format(target_command, target.get_name()))
 
                         sys_path = list(sys.path)
                         original_cwd = os.getcwd()
@@ -126,9 +131,9 @@ class Target(Base):
                             sys.path.insert(0, target.repository.get_vendor_dir())
 
                             target_module = importlib.import_module(Constants.TARGET_MODULE_NAME)
-                            do_build = getattr(target_module, 'do_build')
+                            command = getattr(target_module, 'do_' + target_command)
 
-                            do_build(
+                            command(
                                 params={
                                     'project': project,
                                     'target': target,
@@ -139,12 +144,18 @@ class Target(Base):
 
                             del sys.modules[Constants.TARGET_MODULE_NAME]
                             del target_module
-                            del do_build
+                            del command
 
-                            Logger.i('Build finished for target: {0}'.format(target.get_name()))
+                            Logger.i('Command "{0}" finished for target "{1}"'.format(
+                                target_command,
+                                target.get_name()
+                            ))
                         except Exception as e:
-                            Logger.e(
-                                "Error while call 'do_build' on target {0}: {1}".format(target.get_name(), e.message))
+                            Logger.e('Error while call "{0}" on target "{1}": {2}'.format(
+                                target_command,
+                                target.get_name(),
+                                e.message
+                            ))
                             raise
 
                         sys.path = sys_path

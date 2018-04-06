@@ -19,7 +19,7 @@ class Dependency(Base):
         project = Project.create_from_project_file()
 
         if dependency_name:
-            Logger.i('Update only dependency: {0}'.format(dependency_name))
+            Logger.i('Update dependency "{0}"'.format(dependency_name))
         else:
             Logger.i('Update all dependencies')
 
@@ -40,7 +40,7 @@ class Dependency(Base):
                     can_build = True
 
                 if can_build:
-                    Logger.i('Updating dependency: {0}...'.format(dependency.get_name()))
+                    Logger.i('Updating dependency "{0}"...'.format(dependency.get_name()))
                     dependency_found = True
 
                     dependency.prepare_from_process_data(process_data)
@@ -50,7 +50,7 @@ class Dependency(Base):
                         process_data=process_data
                     )
 
-                    Logger.i('Dependency updated: {0}'.format(dependency.get_name()))
+                    Logger.i('Dependency "{0}" updated'.format(dependency.get_name()))
 
             if not dependency_found:
                 Logger.f('Dependency not found: {0}'.format(dependency_name))

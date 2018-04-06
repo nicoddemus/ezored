@@ -7,8 +7,8 @@ Usage:
   ezored [options] dependency update
   ezored [options] dependency update <dependency-name>
   ezored [options] target list
-  ezored [options] target build
-  ezored [options] target build <target-name>
+  ezored [options] target <target-command>
+  ezored [options] target <target-command> <target-name>
   ezored [options] clean
   ezored -h | --help
 
