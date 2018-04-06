@@ -46,7 +46,7 @@ class TestTask(TestCase):
     def test_task_parse_file(self, d):
         os.chdir(d.path)
 
-        file_path = os.path.join(d.path, 'test-file.txt')
+        file_path = os.path.join(d.path, '*.txt')
 
         d.write(file_path, '{{ name }}'.encode('utf-8'))
 

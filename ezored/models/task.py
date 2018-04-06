@@ -1,7 +1,6 @@
 import os
 
 import jinja2
-
 from ezored.models.logger import Logger
 from ezored.models.util.file_util import FileUtil
 
@@ -64,20 +63,23 @@ class Task(object):
                 FileUtil.copy_file(from_path=from_path, to_path=to_path)
 
             elif self.type == self.TYPE_PARSE_FILE:
-                template_file = self.params['file'] if 'file' in self.params else None
+                file_pattern = self.params['file'] if 'file' in self.params else None
+                file_pattern = process_data.parse_text(file_pattern)
+                found_files = FileUtil.find_files(file_pattern)
 
-                if template_file:
-                    template_loader = jinja2.FileSystemLoader(searchpath='/')
-                    template_env = jinja2.Environment(loader=template_loader)
-                    template_file = template_file
-                    template = template_env.get_template(template_file)
-                    templ_result = template.render(template_data)
+                for f in found_files:
+                    if f:
+                        template_loader = jinja2.FileSystemLoader(searchpath='/')
+                        template_env = jinja2.Environment(loader=template_loader)
+                        template_file = f
+                        template = template_env.get_template(template_file)
+                        templ_result = template.render(template_data)
 
-                    FileUtil.write_to_file(
-                        os.path.dirname(template_file),
-                        os.path.basename(template_file),
-                        str(templ_result)
-                    )
+                        FileUtil.write_to_file(
+                            os.path.dirname(template_file),
+                            os.path.basename(template_file),
+                            str(templ_result)
+                        )
 
             elif self.type == self.TYPE_RUN:
                 run_args = self.params['args'] if 'args' in self.params else None

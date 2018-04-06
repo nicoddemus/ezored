@@ -38,21 +38,23 @@ config:
 targets:
   - name: ios
     repository:
-      name: ezored/target-ios
+      path: ezored/target-ios
       type: github
       version: b:master
   - name: android
     repository:
-      name: ezored/target-android
+      path: ezored/target-android
       type: github
       version: b:master
 dependencies:
-  - repository:
-      name: ezored/dependency-djinni-support
+  - name: djinni-support
+    repository:
+      path: ezored/dependency-djinni-support
       type: github
       version: b:master
-  - repository:
-      name: ezored/dependency-sample
+  - name: sample
+    repository:
+      path: ezored/dependency-sample
       type: github
       version: b:master
 """

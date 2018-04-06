@@ -16,7 +16,7 @@ class TestTarget(TestCase):
     def test_constructor(self):
         repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
-            rep_name='/tmp/repository-test',
+            rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
 
@@ -27,13 +27,13 @@ class TestTarget(TestCase):
 
         self.assertEqual(target.get_name(), 'repository-test')
         self.assertEqual(target.repository.rep_type, Repository.TYPE_LOCAL)
-        self.assertEqual(target.repository.rep_name, '/tmp/repository-test')
+        self.assertEqual(target.repository.rep_path, '/tmp/repository-test')
         self.assertEqual(target.repository.rep_version, '1.0.0')
 
     def test_local_get_name(self):
         repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
-            rep_name='/tmp/repository-test',
+            rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
 
@@ -47,7 +47,7 @@ class TestTarget(TestCase):
     def test_local_get_name_with_different_name_from_repository(self):
         repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
-            rep_name='/tmp/repository-test',
+            rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
 
@@ -61,7 +61,7 @@ class TestTarget(TestCase):
     def test_local_get_name_with_null_name(self):
         repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
-            rep_name='/tmp/repository-test',
+            rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
 
@@ -70,7 +70,7 @@ class TestTarget(TestCase):
             repository=repository
         )
 
-        self.assertEqual(target.get_name(), 'repository-test')
+        self.assertEqual(target.get_name(), None)
 
     @tempdir()
     def test_merge_target_data(self, d):
@@ -83,11 +83,12 @@ class TestTarget(TestCase):
         # create dependency
         dep_repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
-            rep_name='/tmp/repository-test',
+            rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
 
         dependency = Dependency(
+            name='repository-test',
             repository=dep_repository
         )
 
@@ -96,7 +97,7 @@ class TestTarget(TestCase):
         # create target
         target_repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
-            rep_name='/tmp/repository-test',
+            rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
 

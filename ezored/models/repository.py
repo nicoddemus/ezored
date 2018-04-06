@@ -20,17 +20,17 @@ class Repository(object):
     GIT_TYPE_TAG = 't'
     GIT_TYPE_COMMIT = 'c'
 
-    def __init__(self, rep_type, rep_name, rep_version):
+    def __init__(self, rep_type, rep_path, rep_version):
         self.rep_type = rep_type
-        self.rep_name = rep_name
+        self.rep_path = rep_path
         self.rep_version = rep_version
 
     def get_name(self):
         if self.rep_type == Repository.TYPE_LOCAL:
-            rep_path, rep_file = os.path.split(self.rep_name)
+            rep_path, rep_file = os.path.split(self.rep_path)
             return slugify(rep_file)
         else:
-            return slugify(self.rep_name)
+            return slugify(self.rep_path)
 
     def get_download_url(self):
         if self.rep_type == Repository.TYPE_GITHUB:
@@ -52,7 +52,7 @@ class Repository(object):
                 '{0}-{1}'.format(git_data_name_list[1], git_data_version), Constants.GITHUB_DOWNLOAD_EXTENSION
             )
         elif self.rep_type == Repository.TYPE_LOCAL:
-            _, filename = os.path.split(self.rep_name)
+            _, filename = os.path.split(self.rep_path)
             return slugify(filename)
         else:
             return ''
@@ -73,17 +73,17 @@ class Repository(object):
 
         if not git_data or len(git_data) != 3:
             if self.rep_version != '':
-                return self.rep_name, Repository.GIT_TYPE_TAG, self.rep_version
+                return self.rep_path, Repository.GIT_TYPE_TAG, self.rep_version
             else:
-                return self.rep_name, Repository.GIT_TYPE_BRANCH, 'master'
+                return self.rep_path, Repository.GIT_TYPE_BRANCH, 'master'
 
-        return self.rep_name, git_data[0], git_data[2]
+        return self.rep_path, git_data[0], git_data[2]
 
     def get_temp_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
             return os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_dir_name())
         elif self.rep_type == Repository.TYPE_LOCAL:
-            return self.rep_name
+            return self.rep_path
         else:
             return ''
 
@@ -99,7 +99,7 @@ class Repository(object):
         if self.rep_type == Repository.TYPE_GITHUB:
             return os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
         elif self.rep_type == Repository.TYPE_LOCAL:
-            return os.path.join(self.rep_name, 'build')
+            return os.path.join(self.rep_path, 'build')
         else:
             return ''
 
@@ -109,7 +109,7 @@ class Repository(object):
             git_data_name_list = str(git_data_name).split('/')
             return '{0}-{1}'.format(git_data_name_list[1], git_data_version)
         elif self.rep_type == Repository.TYPE_LOCAL:
-            _, filename = os.path.split(self.rep_name)
+            _, filename = os.path.split(self.rep_path)
             return slugify(filename)
         else:
             return ''
@@ -210,13 +210,13 @@ class Repository(object):
 
     def prepare_from_process_data(self, process_data):
         if process_data:
-            self.rep_name = process_data.parse_text(self.rep_name)
+            self.rep_path = process_data.parse_text(self.rep_path)
 
     @staticmethod
     def from_dict(dict_data):
         repository = Repository(
             rep_type=dict_data['type'] if 'type' in dict_data else '',
-            rep_name=dict_data['name'] if 'name' in dict_data else '',
+            rep_path=dict_data['path'] if 'path' in dict_data else '',
             rep_version=dict_data['version'] if 'version' in dict_data else '',
         )
 

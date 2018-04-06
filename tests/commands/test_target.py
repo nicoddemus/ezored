@@ -1,11 +1,10 @@
 import os
 from subprocess import PIPE, Popen as popen
-from unittest import TestCase
-
-from testfixtures import tempdir
 
 from ezored.models.constants import Constants
 from ezored.models.util.file_util import FileUtil
+from testfixtures import tempdir
+from unittest import TestCase
 
 
 class TestTarget(TestCase):
@@ -38,12 +37,13 @@ config:
 targets:
   - name: github-test
     repository:
-      name: ezored/target-github-test
+      path: ezored/target-github-test
       type: github
       version: b:master
 dependencies:
-  - repository:
-      name: ezored/dependency-github-test
+  - name: github-test
+    repository:
+      path: ezored/dependency-github-test
       type: github
       version: b:master      
 """
@@ -75,12 +75,13 @@ config:
 targets:
   - name: github-test 
     repository:
-      name: ezored/target-github-test
+      path: ezored/target-github-test
       type: github
       version: b:master
 dependencies:
-  - repository:
-      name: ezored/dependency-github-test
+  - name: github-test
+    repository:
+      path: ezored/dependency-github-test
       type: github
       version: b:master      
 """
@@ -112,12 +113,13 @@ config:
 targets:
   - name: github-test 
     repository:
-      name: ezored/target-github-test
+      path: ezored/target-github-test
       type: github
       version: b:master
 dependencies:
-  - repository:
-      name: ezored/dependency-github-test
+  - name: github-test
+    repository:
+      path: ezored/dependency-github-test
       type: github
       version: b:master      
 """
@@ -151,12 +153,13 @@ config:
 targets:
   - name: github-test 
     repository:
-      name: ezored/target-github-test
+      path: ezored/target-github-test
       type: github
       version: b:master
 dependencies:
-  - repository:
-      name: ezored/dependency-github-test
+  - name: github-test
+    repository:
+      path: ezored/dependency-github-test
       type: github
       version: b:master      
 """
@@ -179,3 +182,21 @@ dependencies:
 
         content = FileUtil.read_file(file_to_read)
         self.assertEqual(content, Constants.PROJECT_NAME)
+
+    @tempdir()
+    def test_no_targets(self, d):
+        os.chdir(d.path)
+
+        project_file_data = """
+config:
+  name: EzoRed
+"""
+
+        d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
+
+        output = popen(['ezored', 'target', 'build'], stdout=PIPE).communicate()[0]
+        output = str(output)
+        print(output)
+
+        required = 'Your project does not have targets'
+        self.assertTrue(required in output)

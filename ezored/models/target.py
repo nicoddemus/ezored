@@ -12,10 +12,7 @@ class Target(object):
         self.repository = repository
 
     def get_name(self):
-        if self.name:
-            return self.name
-        else:
-            return self.repository.get_name()
+        return self.name
 
     def prepare_from_process_data(self, process_data):
         if process_data:

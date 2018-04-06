@@ -9,17 +9,18 @@ from .repository import Repository
 
 
 class Dependency(object):
-    def __init__(self, repository):
+    def __init__(self, name, repository):
+        self.name = name
         self.repository = repository
         self.tasks = []
 
     def get_name(self):
-        return self.repository.get_name()
+        return self.name
 
     def prepare_from_process_data(self, process_data):
         if process_data:
             process_data.set_dependency_data(
-                name=self.repository.get_name(),
+                name=self.get_name(),
                 temp_dir=self.repository.get_temp_dir(),
                 vendor_dir=self.repository.get_vendor_dir(),
                 source_dir=self.repository.get_source_dir(),
@@ -141,6 +142,7 @@ class Dependency(object):
         repository_data = dict_data['repository'] if 'repository' in dict_data else {}
 
         dependency = Dependency(
+            name=dict_data['name'],
             repository=Repository.from_dict(repository_data)
         )
 

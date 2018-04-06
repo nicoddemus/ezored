@@ -5,6 +5,7 @@ Usage:
   ezored [options] init
   ezored [options] dependency list
   ezored [options] dependency update
+  ezored [options] dependency update <dependency-name>
   ezored [options] target list
   ezored [options] target build
   ezored [options] target build <target-name>
