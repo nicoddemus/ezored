@@ -1,9 +1,9 @@
 import importlib
 import os
 import re
+import sys
 import tarfile
 
-import sys
 import yaml
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
@@ -81,7 +81,7 @@ class Repository(object):
 
     def get_temp_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
-            return os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_dir_name())
+            return os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_temp_dir_name())
         elif self.rep_type == Repository.TYPE_LOCAL:
             return self.rep_path
         else:
@@ -104,6 +104,17 @@ class Repository(object):
             return ''
 
     def get_dir_name(self):
+        if self.rep_type == Repository.TYPE_GITHUB:
+            git_data_name, _, git_data_version = self.get_git_data()
+            git_data_name_list = str(git_data_name).split('/')
+            return git_data_name_list[1]
+        elif self.rep_type == Repository.TYPE_LOCAL:
+            _, filename = os.path.split(self.rep_path)
+            return slugify(filename)
+        else:
+            return ''
+
+    def get_temp_dir_name(self):
         if self.rep_type == Repository.TYPE_GITHUB:
             git_data_name, _, git_data_version = self.get_git_data()
             git_data_name_list = str(git_data_name).split('/')

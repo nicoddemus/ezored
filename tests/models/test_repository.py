@@ -160,7 +160,7 @@ class TestRepository(TestCase):
 
         self.assertEqual(
             temp_working_dir,
-            os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, repository.get_dir_name())
+            os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, repository.get_temp_dir())
         )
 
     def test_local_temp_working_dir(self):
@@ -183,7 +183,7 @@ class TestRepository(TestCase):
 
         dir_name = repository.get_dir_name()
 
-        self.assertEqual(dir_name, 'dependency-sample-1.0.0')
+        self.assertEqual(dir_name, 'dependency-sample')
 
     def test_local_get_dir_name(self):
         repository = Repository.from_dict({
