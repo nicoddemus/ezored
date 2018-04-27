@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ezored/ezored.svg?branch=master)](https://travis-ci.org/ezored/ezored)
 [![Coverage Status](https://coveralls.io/repos/github/ezored/ezored/badge.svg?branch=master)](https://coveralls.io/github/ezored/ezored?branchmaster)
-[![Github All Releases](https://img.shields.io/github/downloads/ezored/ezored/total.svg)]()
+<!--[![Github All Releases](https://img.shields.io/github/downloads/ezored/ezored/total.svg)]()-->
 
 
 <img src="extras/images/doc-logo.png?v=2017-12-07" alt="EzoRed">  

@@ -16,6 +16,7 @@ help:
 	@echo "- clean"
 	@echo "- pip-package"
 	@echo "- pip-upload"
+	@echo "- pip-send-update"
 	@echo ""
 
 install:
@@ -44,3 +45,7 @@ pip-package:
 
 pip-upload:
 	twine upload dist/*
+
+pip-send-update:
+	make pip-package
+	make pip-upload
