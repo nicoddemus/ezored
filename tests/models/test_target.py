@@ -1,7 +1,4 @@
 import os
-from unittest import TestCase
-
-from testfixtures import tempdir
 
 from ezored.models.constants import Constants
 from ezored.models.dependency import Dependency
@@ -10,6 +7,8 @@ from ezored.models.project import Project
 from ezored.models.repository import Repository
 from ezored.models.target import Target
 from ezored.models.target_data import TargetData
+from testfixtures import tempdir
+from unittest import TestCase
 
 
 class TestTarget(TestCase):
@@ -83,7 +82,7 @@ class TestTarget(TestCase):
         # create dependency
         dep_repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
-            rep_path='/tmp/repository-test',
+            rep_path='/tmp/dep-repository-test',
             rep_version='1.0.0',
         )
 
@@ -97,7 +96,7 @@ class TestTarget(TestCase):
         # create target
         target_repository = Repository(
             rep_type=Repository.TYPE_LOCAL,
-            rep_path='/tmp/repository-test',
+            rep_path='/tmp/target-repository-test',
             rep_version='1.0.0',
         )
 

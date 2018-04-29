@@ -48,3 +48,38 @@ class TestDependency(TestCase):
         )
 
         self.assertEqual(dependency.get_name(), None)
+
+    def test_match_target_name_and_target_data(self):
+        # create dependency
+        dep_repository = Repository(
+            rep_type=Repository.TYPE_LOCAL,
+            rep_path='dep-repository-test',
+            rep_version='1.0.0',
+        )
+
+        dependency = Dependency(
+            name='repository-test',
+            repository=dep_repository
+        )
+
+        # check match
+        match = dependency.match_name('test1-test2', 'test1-test2')
+        self.assertEqual(match, True)
+
+        match = dependency.match_name('test', 'test1-test2')
+        self.assertEqual(match, True)
+
+        match = dependency.match_name('test1', 'test1-test2')
+        self.assertEqual(match, True)
+
+        match = dependency.match_name('test2', 'test1-test2')
+        self.assertEqual(match, True)
+
+        match = dependency.match_name('-', 'test1-test2')
+        self.assertEqual(match, True)
+
+        match = dependency.match_name('arm', 'armv7-linux')
+        self.assertEqual(match, True)
+
+        match = dependency.match_name('linux', 'armv7-linux')
+        self.assertEqual(match, True)

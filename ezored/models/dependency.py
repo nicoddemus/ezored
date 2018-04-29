@@ -1,3 +1,5 @@
+import re
+
 from ezored.models.logger import Logger
 from ezored.models.source_file import SourceFile
 from ezored.models.source_group import SourceGroup
@@ -42,7 +44,7 @@ class Dependency(object):
                 for target_data_item in targets_data:
                     current_target_name = target_data_item['name']
 
-                    if current_target_name == target_name:
+                    if self.match_name(pattern=current_target_name, name=target_name):
                         # get target data
                         target_data = TargetData()
 
@@ -147,3 +149,12 @@ class Dependency(object):
         )
 
         return dependency
+
+    def match_name(self, pattern, name):
+        match_pattern = re.compile(re.escape(pattern), flags=re.IGNORECASE | re.MULTILINE)
+        match = re.search(match_pattern, name)
+
+        if match is None:
+            return False
+        else:
+            return True
