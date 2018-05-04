@@ -55,7 +55,7 @@ class FileUtil(object):
 
     @staticmethod
     def get_current_dir():
-        return os.getcwd()
+        return FileUtil.normalize_path(os.getcwd())
 
     @staticmethod
     def run(args, cwd, env):
