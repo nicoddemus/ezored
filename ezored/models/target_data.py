@@ -1,4 +1,5 @@
 from ezored.models.logger import Logger
+from ezored.models.util.file_util import FileUtil
 
 
 class TargetData(object):
@@ -27,7 +28,10 @@ class TargetData(object):
             self.project_name = process_data.parse_text(self.project_name)
 
             self.header_search_paths = process_data.parse_text_list(self.header_search_paths)
+            self.header_search_paths = FileUtil.normalize_path_from_list(self.header_search_paths)
+
             self.library_search_paths = process_data.parse_text_list(self.library_search_paths)
+            self.library_search_paths = FileUtil.normalize_path_from_list(self.library_search_paths)
 
             self.source_groups = process_data.parse_sourge_group_list(self.source_groups)
 
