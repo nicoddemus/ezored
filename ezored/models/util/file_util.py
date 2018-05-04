@@ -111,7 +111,7 @@ class FileUtil(object):
             new_path_list = []
 
             for path in paths:
-                new_path_list.extend(FileUtil.normalize_path(path))
+                new_path_list.append(FileUtil.normalize_path(path))
 
             return new_path_list
         else:
