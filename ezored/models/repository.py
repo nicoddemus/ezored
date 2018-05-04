@@ -81,25 +81,35 @@ class Repository(object):
 
     def get_temp_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
-            return os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_temp_dir_name())
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_temp_dir_name())
+            )
         elif self.rep_type == Repository.TYPE_LOCAL:
-            return self.rep_path
+            return FileUtil.normalize_path(self.rep_path)
         else:
             return ''
 
     def get_vendor_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
-            return os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            )
         elif self.rep_type == Repository.TYPE_LOCAL:
-            return os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            )
         else:
             return ''
 
     def get_source_dir(self):
         if self.rep_type == Repository.TYPE_GITHUB:
-            return os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            )
         elif self.rep_type == Repository.TYPE_LOCAL:
-            return os.path.join(self.rep_path, 'build')
+            return FileUtil.normalize_path(
+                os.path.join(self.rep_path, 'build')
+            )
         else:
             return ''
 
