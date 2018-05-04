@@ -71,7 +71,7 @@ class Task(object):
                     if f:
                         template_loader = jinja2.FileSystemLoader(searchpath=os.sep)
                         template_env = jinja2.Environment(loader=template_loader)
-                        template_file = f
+                        template_file = os.path.abspath(f)
                         template = template_env.get_template(template_file)
                         templ_result = template.render(template_data)
 
