@@ -69,10 +69,11 @@ class Task(object):
 
                 for f in found_files:
                     if f:
-                        template_loader = jinja2.FileSystemLoader(searchpath=os.sep)
-                        template_env = jinja2.Environment(loader=template_loader)
                         template_file = os.path.abspath(f)
-                        template = template_env.get_template(template_file)
+                        template_loader = jinja2.FileSystemLoader(searchpath=os.path.dirname(template_file))
+                        template_env = jinja2.Environment(loader=template_loader)
+
+                        template = template_env.get_template(os.path.basename(template_file))
                         templ_result = template.render(template_data)
 
                         FileUtil.write_to_file(
