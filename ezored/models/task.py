@@ -69,7 +69,7 @@ class Task(object):
 
                 for f in found_files:
                     if f:
-                        template_loader = jinja2.FileSystemLoader(searchpath='/')
+                        template_loader = jinja2.FileSystemLoader(searchpath=os.sep)
                         template_env = jinja2.Environment(loader=template_loader)
                         template_file = f
                         template = template_env.get_template(template_file)
