@@ -72,7 +72,6 @@ class Task(object):
                         template_file = os.path.abspath(f)
                         template_loader = jinja2.FileSystemLoader(searchpath=os.path.dirname(template_file))
                         template_env = jinja2.Environment(loader=template_loader)
-
                         template = template_env.get_template(os.path.basename(template_file))
                         templ_result = template.render(template_data)
 
