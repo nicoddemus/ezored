@@ -96,3 +96,23 @@ class FileUtil(object):
             files.append(f)
 
         return files
+
+    @staticmethod
+    def normalize_path(path):
+        if path:
+            path = path.replace('\\', '/')
+            return path
+        else:
+            ''
+
+    @staticmethod
+    def normalize_path_from_list(paths):
+        if paths:
+            new_path_list = []
+
+            for path in paths:
+                new_path_list.extend(FileUtil.normalize_path(path))
+
+            return new_path_list
+        else:
+            return []

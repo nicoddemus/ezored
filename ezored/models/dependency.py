@@ -53,11 +53,15 @@ class Dependency(object):
 
                             if 'header_search_paths' in target_data_dict:
                                 if target_data_dict['header_search_paths']:
-                                    target_data.header_search_paths.extend(target_data_dict['header_search_paths'])
+                                    target_data.header_search_paths.extend(FileUtil.normalize_path_from_list(
+                                        target_data_dict['header_search_paths']
+                                    ))
 
                             if 'library_search_paths' in target_data_dict:
                                 if target_data_dict['library_search_paths']:
-                                    target_data.library_search_paths.extend(target_data_dict['library_search_paths'])
+                                    target_data.library_search_paths.extend(FileUtil.normalize_path_from_list(
+                                        target_data_dict['library_search_paths']
+                                    ))
 
                             if 'c_flags' in target_data_dict:
                                 if target_data_dict['c_flags']:
@@ -122,7 +126,7 @@ class Dependency(object):
                                             for f in found_files:
                                                 target_data_source_files.append(
                                                     SourceFile(
-                                                        source_file=f,
+                                                        source_file=FileUtil.normalize_path(f),
                                                         compile_flags=source_file_to_find.compile_flags
                                                     )
                                                 )
