@@ -2,6 +2,7 @@ import os
 
 from ezored.models.constants import Constants
 from ezored.models.util.file_util import FileUtil
+from os.path import expanduser
 
 
 class ProcessData(object):
@@ -27,6 +28,8 @@ class ProcessData(object):
 
     def get_environ(self):
         env_data = dict(os.environ)
+
+        env_data['HOME'] = expanduser('~')
 
         env_data['{0}PROJECT_NAME'.format(Constants.ENV_VAR_PREFIX)] = self.project_name
         env_data['{0}PROJECT_HOME'.format(Constants.ENV_VAR_PREFIX)] = self.project_home_dir

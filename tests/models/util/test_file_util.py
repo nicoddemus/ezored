@@ -1,8 +1,8 @@
 import os
-from unittest import TestCase
 
 from ezored.models.util.file_util import FileUtil
 from testfixtures import tempdir
+from unittest import TestCase
 
 
 class TestFileUtil(TestCase):
@@ -71,3 +71,18 @@ class TestFileUtil(TestCase):
 
         self.assertEqual(len(files_txt), 2)
         self.assertEqual(len(files_log), 1)
+
+    def test_normalize_path(self):
+        normalized = FileUtil.normalize_path('C:\\EzoRed\\Test')
+        expected = 'C:/EzoRed/Test'
+
+        self.assertEqual(normalized, expected)
+
+    def test_normalize_path_from_list(self):
+        paths = ['C:\\EzoRed\\Test1', 'C:\\EzoRed\\Test2']
+        normalized = FileUtil.normalize_path_from_list(paths)
+        expected1 = 'C:/EzoRed/Test1'
+        expected2 = 'C:/EzoRed/Test2'
+
+        self.assertEqual(normalized[0], expected1)
+        self.assertEqual(normalized[1], expected2)
