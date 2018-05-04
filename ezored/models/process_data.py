@@ -51,7 +51,7 @@ class ProcessData(object):
 
     def reset(self):
         self.project_name = ''
-        self.project_home_dir = FileUtil.get_current_dir()
+        self.project_home_dir = FileUtil.normalize_path(FileUtil.get_current_dir())
 
         self.target_temp_dir = ''
         self.target_source_dir = ''
@@ -65,23 +65,23 @@ class ProcessData(object):
         self.dependency_build_dir = ''
         self.dependency_name = ''
 
-        self.temp_dir = os.path.join(self.project_home_dir, Constants.TEMP_DIR)
-        self.build_dir = os.path.join(self.project_home_dir, Constants.BUILD_DIR)
-        self.vendor_dir = os.path.join(self.project_home_dir, Constants.VENDOR_DIR)
+        self.temp_dir = FileUtil.normalize_path(os.path.join(self.project_home_dir, Constants.TEMP_DIR))
+        self.build_dir = FileUtil.normalize_path(os.path.join(self.project_home_dir, Constants.BUILD_DIR))
+        self.vendor_dir = FileUtil.normalize_path(os.path.join(self.project_home_dir, Constants.VENDOR_DIR))
 
     def set_dependency_data(self, name, temp_dir, vendor_dir, source_dir, build_dir):
         self.dependency_name = self.parse_text(name)
-        self.dependency_temp_dir = self.parse_text(temp_dir)
-        self.dependency_vendor_dir = self.parse_text(vendor_dir)
-        self.dependency_source_dir = self.parse_text(source_dir)
-        self.dependency_build_dir = self.parse_text(build_dir)
+        self.dependency_temp_dir = self.parse_text(FileUtil.normalize_path(temp_dir))
+        self.dependency_vendor_dir = self.parse_text(FileUtil.normalize_path(vendor_dir))
+        self.dependency_source_dir = self.parse_text(FileUtil.normalize_path(source_dir))
+        self.dependency_build_dir = self.parse_text(FileUtil.normalize_path(build_dir))
 
     def set_target_data(self, name, temp_dir, vendor_dir, source_dir, build_dir):
         self.target_name = self.parse_text(name)
-        self.target_temp_dir = self.parse_text(temp_dir)
-        self.target_vendor_dir = self.parse_text(vendor_dir)
-        self.target_source_dir = self.parse_text(source_dir)
-        self.target_build_dir = self.parse_text(build_dir)
+        self.target_temp_dir = self.parse_text(FileUtil.normalize_path(temp_dir))
+        self.target_vendor_dir = self.parse_text(FileUtil.normalize_path(vendor_dir))
+        self.target_source_dir = self.parse_text(FileUtil.normalize_path(source_dir))
+        self.target_build_dir = self.parse_text(FileUtil.normalize_path(build_dir))
 
     def parse_text(self, text):
         var_list = self.get_environ()
