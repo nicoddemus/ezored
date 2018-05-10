@@ -56,13 +56,6 @@ install:
      python -c "import sys,platform,struct;
      print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
 
-  # Compile bootloader.
-  - cd bootloader
-  - python waf all --target-arch=%PYTHON_ARCH%bit
-  # Verify the bootloaders have the expected arch
-  - python ../tests/scripts/check-pefile-arch.py %PYTHON_ARCH% build/*/*.exe
-  - cd ..
-
   ### Install the PyInstaller dependencies.
   # If some dependencies contain
   # compiled extensions and are not provided as pre-built wheel packages, pip
