@@ -65,7 +65,7 @@ setup(
     install_requires=[
         'pyyaml==3.12',
         'docopt==0.6.2',
-        'python-slugify==1.2.4',
+        'python-slugify==1.2.5',
         'tqdm==4.19.4',
         'jinja2==2.10'
     ],
