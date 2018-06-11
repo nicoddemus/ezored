@@ -7,6 +7,7 @@ from ezored.models.util.file_util import FileUtil
 
 class Task(object):
     TYPE_COPY_FILE = 'copy_file'
+    TYPE_COPY_FILES = 'copy_files'
     TYPE_PARSE_FILE = 'parse_file'
     TYPE_RUN = 'run'
 
@@ -20,6 +21,13 @@ class Task(object):
             Logger.d('Parsing task: {0}...'.format(self.get_name()))
 
             if self.type == self.TYPE_COPY_FILE:
+                if self.params and 'from' in self.params:
+                    self.params['from'] = process_data.parse_text(self.params['from'])
+
+                if self.params and 'to' in self.params:
+                    self.params['to'] = process_data.parse_text(self.params['to'])
+
+            elif self.type == self.TYPE_COPY_FILES:
                 if self.params and 'from' in self.params:
                     self.params['from'] = process_data.parse_text(self.params['from'])
 
@@ -45,6 +53,8 @@ class Task(object):
 
         if self.type == self.TYPE_COPY_FILE:
             return 'Copy file'
+        elif self.type == self.TYPE_COPY_FILES:
+            return 'Copy files'
         elif self.type == self.TYPE_PARSE_FILE:
             return 'Parse file'
         elif self.type == self.TYPE_RUN:
@@ -61,6 +71,16 @@ class Task(object):
                 to_path = self.params['to'] if self.params['to'] else None
 
                 FileUtil.copy_file(from_path=from_path, to_path=to_path)
+
+            elif self.type == self.TYPE_COPY_FILES:
+                to_path = self.params['to'] if self.params['to'] else None
+                file_pattern = self.params['from'] if 'from' in self.params else None
+                file_pattern = process_data.parse_text(file_pattern)
+                found_files = FileUtil.find_files(file_pattern)
+
+                for f in found_files:
+                    if f:
+                        FileUtil.copy_file(from_path=f, to_path=os.path.join(to_path, os.path.basename(f)))
 
             elif self.type == self.TYPE_PARSE_FILE:
                 file_pattern = self.params['file'] if 'file' in self.params else None

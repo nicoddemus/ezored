@@ -325,3 +325,38 @@ raise Exception('Sample task')
         task.parse(
             process_data=None
         )
+
+    @tempdir()
+    def test_task_copy_files(self, d):
+        os.chdir(d.path)
+
+        file_path1 = os.path.join(d.path, 'test-copy-1.txt')
+        file_path2 = os.path.join(d.path, 'test-copy-2.txt')
+        to_path = os.path.join(d.path, 'files')
+
+        d.write(file_path1, 'sample data'.encode('utf-8'))
+        d.write(file_path2, 'sample data'.encode('utf-8'))
+
+        FileUtil.create_dir(to_path)
+
+        task = Task(
+            task_type=Task.TYPE_COPY_FILES,
+            task_name='Sample copy files task',
+            task_params={
+                'from': os.path.join(d.path, '*.txt'),
+                'to': to_path
+            }
+        )
+
+        process_data = ProcessData()
+        template_data = {}
+
+        task.parse(process_data)
+        task.run(
+            process_data=process_data,
+            template_data=template_data,
+            working_dir=d.path
+        )
+
+        self.assertTrue(os.path.exists(os.path.join(to_path, 'test-copy-1.txt')))
+        self.assertTrue(os.path.exists(os.path.join(to_path, 'test-copy-2.txt')))
