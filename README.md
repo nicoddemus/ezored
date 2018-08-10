@@ -9,7 +9,7 @@
 
 Ezored is a build tool with focus on progressive integration with native code.
 
-Ezored has everything that you need to integrative native C++ code into your current application (mobile, desktop etc).   
+Ezored has everything that you need to integrative native C++ code into your current application (mobile, desktop etc), because native code is more secure and faster.     
 
 The main goal of ezored is let you code a single C++ code and generate a library for multiple platforms, instead of write the same business logic code in all used languages and for all used platforms.    
 
