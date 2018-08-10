@@ -53,7 +53,7 @@ Detailed changes for each release are documented in the [release notes](docs/REL
 
 ## Diagram
 
-<img src="extras/images/what-is.png?v=2018-08-09" alt="ezored">
+<img src="extras/images/what-is.png?v=2018-08-09" alt="ezored - what is" style="max-width: 300px;">
 
 ## Contact
 
