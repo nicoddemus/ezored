@@ -14,15 +14,15 @@ The dependency block structure has this properties:
   - version
 - tasks  
 
-The property in `"repository.type"` define how ezored will get your dependency. Today we support types:
+The property in `"repository.type"` define how Ezored will get your dependency. Today we support types:
 - local  
 - github  
 
-The property `"repository.name"` define how ezored will find your dependency based on `"type"`. Example:  
+The property `"repository.name"` define how Ezored will find your dependency based on `"type"`. Example:  
 - `local` = You need set the path to the dependency directory, ex: `${HOME}/my-dependency`  
 - `github` = You need set the repository name, ex: `ezored/dependency-sample` 
 
-The property `"repository.version"` define what version ezored need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
+The property `"repository.version"` define what version Ezored need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
 - `b:master` = will download version from branch "master" 
 - `t:1.2.0` = will download version from tag "1.2.0" 
 - `c:ef016c0` = will download version from commit "ef016c0" 

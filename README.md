@@ -7,25 +7,38 @@
 
 <img src="extras/images/doc-logo.png?v=2017-12-07" alt="ezored">  
 
-The main goal of this tool is let you make a single C++ code and generate a library for multiple platforms based on targets.    
+Ezored is a build tool with focus on progressive integration with native code.  
 
-Ezored uses a target list inside it project file to the build process. Each target can be an official supported target or your custom target (public, private or local).  
+Ezored has everything that you need to integrative native C++ code into your current application (mobile, desktop etc).   
 
-And finally, each target can be modified by project dependencies. One simple example is the HTTP dependency, you dont need write a HTTP Client for iOS or Android, you can use the official HTTP Client dependency.   
+The main goal of Ezored is let you code a single C++ code and generate a library for multiple platforms, instead of write the same business logic code in all used languages and for all used platforms.    
+
+Ezored use a dependency concept to fragment parts of your C++ code into small modules (you business logic classes, log classes, http client classes, helper classes).  
+
+Ezored use a target concept to understand how it will compile the C++ code (joining all dependency C++ code) and generate the final library file (.so, .a, .framework, .dll, dylib etc).   
 
 Today we have implemented officially this targets:  
 
 - [ios](https://github.com/ezored/target-ios)
 - [android](https://github.com/ezored/target-android)
-
-On each target link you can download the demo application from platform store.
+- [linux](https://github.com/ezored/target-linux)
+- [windows](https://github.com/ezored/target-windows)
+- [macos](https://github.com/ezored/target-macos)
 
 All official dependencies and targets are in ezored [repository](https://github.com/ezored) page.
+
+Remember that targets and dependencies can be any repository, local or remote (github).  
 
 ## Install
 
 ```
 pip install ezored 
+```
+
+If you have problems with permission, try:
+
+```
+pip install ezored --user 
 ```
 
 ## Documentation
