@@ -1,5 +1,5 @@
 """
-Ezored
+ezored
 
 Usage:
   ezored [options] init

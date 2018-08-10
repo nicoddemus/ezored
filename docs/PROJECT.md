@@ -4,7 +4,7 @@ Ezored project file contains one or more targets inside, that you can build usin
  
 The final target project generally is a library that have all native code compiled for the target specific platform.
 
-To build each target inside Ezored project file, we use a bunch of rules, including target project and all project dependencies rules.
+To build each target inside ezored project file, we use a bunch of rules, including target project and all project dependencies rules.
 
 ### Project file
 
@@ -29,7 +29,7 @@ Today we have implemented officially this targets:
 
 ### Sample
 
-A sample Ezored project file:
+A sample ezored project file:
 
 ```yaml
 config:
