@@ -7,6 +7,8 @@
 
 <img src="extras/images/doc-logo.png?v=2017-12-07" alt="ezored">  
 
+<img src="extras/images/what-is.png?v=2018-08-09" alt="ezored">
+
 Ezored is a build tool with focus on progressive integration with native code.  
 
 Ezored has everything that you need to integrative native C++ code into your current application (mobile, desktop etc).   
