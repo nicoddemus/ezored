@@ -73,16 +73,16 @@ class TestFileUtil(TestCase):
         self.assertEqual(len(files_log), 1)
 
     def test_normalize_path(self):
-        normalized = FileUtil.normalize_path('C:\\EzoRed\\Test')
-        expected = 'C:/EzoRed/Test'
+        normalized = FileUtil.normalize_path('C:\\ezored\\Test')
+        expected = 'C:/ezored/Test'
 
         self.assertEqual(normalized, expected)
 
     def test_normalize_path_from_list(self):
-        paths = ['C:\\EzoRed\\Test1', 'C:\\EzoRed\\Test2']
+        paths = ['C:\\ezored\\Test1', 'C:\\ezored\\Test2']
         normalized = FileUtil.normalize_path_from_list(paths)
-        expected1 = 'C:/EzoRed/Test1'
-        expected2 = 'C:/EzoRed/Test2'
+        expected1 = 'C:/ezored/Test1'
+        expected2 = 'C:/ezored/Test2'
 
         self.assertEqual(normalized[0], expected1)
         self.assertEqual(normalized[1], expected2)

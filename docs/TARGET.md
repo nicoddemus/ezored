@@ -14,15 +14,15 @@ The target block structure has this properties:
   - version
 - tasks  
 
-The property `"repository.type"` define how EzoRed will get your target. Today we support types:
+The property `"repository.type"` define how ezored will get your target. Today we support types:
 - local  
 - github  
 
-The property `"repository.name"` define how EzoRed will find your target based on `"type"`. Example:  
+The property `"repository.name"` define how ezored will find your target based on `"type"`. Example:  
 - `local` = You need set the path to the target directory, ex: `${HOME}/my-target`  
 - `github` = You need set the repository name, ex: `ezored/target-android` 
 
-The property `"repository.version"` define what version EzoRed need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
+The property `"repository.version"` define what version ezored need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
 - `b:master` = will download version from branch "master" 
 - `t:1.2.0` = will download version from tag "1.2.0" 
 - `c:ef016c0` = will download version from commit "ef016c0" 

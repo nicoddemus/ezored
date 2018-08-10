@@ -33,7 +33,7 @@ class TestTarget(TestCase):
 
         project_file_data = """
 config:
-  name: EzoRed
+  name: ezored
 targets:
   - name: github-test
     repository:
@@ -71,7 +71,7 @@ dependencies:
 
         project_file_data = """
 config:
-  name: EzoRed
+  name: ezored
 targets:
   - name: github-test 
     repository:
@@ -109,7 +109,7 @@ dependencies:
 
         project_file_data = """
 config:
-  name: EzoRed
+  name: ezored
 targets:
   - name: github-test 
     repository:
@@ -149,7 +149,7 @@ dependencies:
 
         project_file_data = """
 config:
-  name: EzoRed
+  name: ezored
 targets:
   - name: github-test 
     repository:
@@ -189,7 +189,7 @@ dependencies:
 
         project_file_data = """
 config:
-  name: EzoRed
+  name: ezored
 """
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
@@ -207,7 +207,7 @@ config:
 
         project_file_data = """
 config:
-  name: EzoRed
+  name: ezored
 targets:
   - name: github-test 
     repository:

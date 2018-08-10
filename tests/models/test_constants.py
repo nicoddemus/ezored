@@ -13,7 +13,7 @@ class TestConstants(TestCase):
     def test_project_file_data(self):
         file_data = """
 config:
-  name: EzoRed
+  name: ezored
   ios:
     cmake_version: 3.9
     bundle_id: com.ezored.library

@@ -4,7 +4,7 @@ There is a lot of docs and ready tools to accelerate development process.
 
 ### Installing
 
-Install EzoRed typing in your terminal:
+Install ezored typing in your terminal:
 
 ```
 pip install ezored 

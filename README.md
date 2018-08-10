@@ -1,15 +1,15 @@
-# EzoRed
+# ezored
 
 [![Build Status](https://travis-ci.org/ezored/ezored.svg?branch=master)](https://travis-ci.org/ezored/ezored)
 [![Coverage Status](https://coveralls.io/repos/github/ezored/ezored/badge.svg?branch=master)](https://coveralls.io/github/ezored/ezored?branchmaster)
 <!--[![Github All Releases](https://img.shields.io/github/downloads/ezored/ezored/total.svg)]()-->
 
 
-<img src="extras/images/doc-logo.png?v=2017-12-07" alt="EzoRed">  
+<img src="extras/images/doc-logo.png?v=2017-12-07" alt="ezored">  
 
 The main goal of this tool is let you make a single C++ code and generate a library for multiple platforms based on targets.    
 
-EzoRed uses a target list inside it project file to the build process. Each target can be an official supported target or your custom target (public, private or local).  
+Ezored uses a target list inside it project file to the build process. Each target can be an official supported target or your custom target (public, private or local).  
 
 And finally, each target can be modified by project dependencies. One simple example is the HTTP dependency, you dont need write a HTTP Client for iOS or Android, you can use the official HTTP Client dependency.   
 
@@ -20,7 +20,7 @@ Today we have implemented officially this targets:
 
 On each target link you can download the demo application from platform store.
 
-All official dependencies and targets are in EzoRed [repository](https://github.com/ezored) page.
+All official dependencies and targets are in ezored [repository](https://github.com/ezored) page.
 
 ## Install
 

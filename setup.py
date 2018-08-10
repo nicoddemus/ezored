@@ -41,7 +41,7 @@ class RunTests(Command):
 setup(
     name='ezored',
     version=__version__,
-    description='EzoRed cli tool.',
+    description='Ezored cli tool.',
     long_description=long_description,
     url='https://github.com/ezored/ezored',
     author='Paulo Coutinho',

@@ -23,4 +23,4 @@ class Init(Base):
             project_file.close()
             Logger.d('Project file created')
 
-        Logger.i('EzoRed was initialized with success')
+        Logger.i('Ezored was initialized with success')

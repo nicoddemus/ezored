@@ -16,7 +16,7 @@ class TestProject(TestCase):
 
         project = Project.create_from_project_file()
 
-        self.assertEqual(project.config['name'], 'EzoRed')
+        self.assertEqual(project.config['name'], 'ezored')
 
     @tempdir()
     def test_project_file_not_exists(self, d):

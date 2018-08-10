@@ -1,10 +1,10 @@
 # Project
 
-EzoRed project file contains one or more targets inside, that you can build using the EzoRed from command-line.
+Ezored project file contains one or more targets inside, that you can build using the ezored from command-line.
  
 The final target project generally is a library that have all native code compiled for the target specific platform.
 
-To build each target inside EzoRed project file, we use a bunch of rules, including target project and all project dependencies rules.
+To build each target inside ezored project file, we use a bunch of rules, including target project and all project dependencies rules.
 
 ### Project file
 
@@ -29,11 +29,11 @@ Today we have implemented officially this targets:
 
 ### Sample
 
-A sample EzoRed project file:
+A sample ezored project file:
 
 ```yaml
 config:
-  name: EzoRed
+  name: ezored
   ios:
     cmake_version: 3.9
     development_team_id: ABCDEFGHIJ

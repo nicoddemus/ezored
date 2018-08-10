@@ -2,7 +2,7 @@
 
 <br />
 
-<img src="../extras/images/doc-workflow-repository-download.png?v=2017-12-15-2" alt="EzoRed">
+<img src="../extras/images/doc-workflow-repository-download.png?v=2017-12-15-2" alt="ezored">
 
 <br />
 <br />

@@ -1,7 +1,7 @@
 class Constants(object):
     DEBUG = False
 
-    PROJECT_NAME = 'EzoRed'
+    PROJECT_NAME = 'ezored'
 
     PROJECT_FILE = 'ezored_project.yml'
     TARGET_DATA_FILE = 'ezored_target_data.yml'
@@ -22,7 +22,7 @@ class Constants(object):
 
     PROJECT_FILE_DATA = """
 config:
-  name: EzoRed
+  name: ezored
   ios:
     cmake_version: 3.9
     bundle_id: com.ezored.library
