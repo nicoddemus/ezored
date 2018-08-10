@@ -11,13 +11,13 @@ Ezored is a build tool with focus on progressive integration with native code.
 
 Ezored has everything that you need to integrative native C++ code into your current application (mobile, desktop etc).   
 
-The main goal of Ezored is let you code a single C++ code and generate a library for multiple platforms, instead of write the same business logic code in all used languages and for all used platforms.    
+The main goal of ezored is let you code a single C++ code and generate a library for multiple platforms, instead of write the same business logic code in all used languages and for all used platforms.    
+
+Progressive integration let you attach ezored generated library into your current application or into a new application as part of it. The aim is not replace platform UI code, but the business logic code.
 
 Ezored use a dependency concept to fragment parts of your C++ code into small modules (you business logic classes, log classes, http client classes, helper classes).  
 
-Ezored use a target concept to understand how it will compile the C++ code (joining all dependency C++ code) and generate the final library file (.so, .a, .framework, .dll, dylib etc).
-
-Progressive integration let you attach ezored generated library into your current application or into a new application as part of it. The aim is not replace platform UI code, but the business logic code.     
+Ezored use a target concept to understand how it will compile the C++ code (joining all dependency C++ code) and generate the final library file (.so, .a, .framework, .dll, dylib etc).     
 
 Today we have implemented officially this targets:  
 
