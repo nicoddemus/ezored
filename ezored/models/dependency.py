@@ -99,7 +99,9 @@ class Dependency(object):
                                             # process file pattern before
                                             file_pattern = source_file_to_find.file
                                             file_pattern = process_data.parse_text(file_pattern)
+
                                             found_files = FileUtil.find_files(file_pattern)
+                                            found_files = FileUtil.normalize_path_from_list(found_files)
 
                                             # create new source file for each found file
                                             for f in found_files:
@@ -120,7 +122,9 @@ class Dependency(object):
                                             # process file pattern before
                                             file_pattern = source_file_to_find.file
                                             file_pattern = process_data.parse_text(file_pattern)
+
                                             found_files = FileUtil.find_files(file_pattern)
+                                            found_files = FileUtil.normalize_path_from_list(found_files)
 
                                             # create new source file for each found file
                                             for f in found_files:
