@@ -1,6 +1,7 @@
 import os
 
 import jinja2
+
 from ezored.models.logger import Logger
 from ezored.models.util.file_util import FileUtil
 
@@ -108,7 +109,7 @@ class Task(object):
                     exitcode, stderr, stdout = FileUtil.run(
                         run_args,
                         working_dir,
-                        process_data.get_environ()
+                        process_data.get_merged_data_for_runner()
                     )
 
                     if exitcode == 0:

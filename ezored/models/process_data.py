@@ -1,8 +1,8 @@
 import os
+from os.path import expanduser
 
 from ezored.models.constants import Constants
 from ezored.models.util.file_util import FileUtil
-from os.path import expanduser
 
 
 class ProcessData(object):
@@ -26,8 +26,11 @@ class ProcessData(object):
         self.dependency_build_dir = ''
         self.dependency_name = ''
 
-    def get_environ(self):
-        env_data = dict(os.environ)
+    def get_environment_data(self):
+        return dict(os.environ)
+
+    def get_local_data(self):
+        env_data = dict()
 
         env_data['HOME'] = expanduser('~')
 
@@ -51,6 +54,14 @@ class ProcessData(object):
         env_data['{0}VENDOR_DIR'.format(Constants.ENV_VAR_PREFIX)] = self.vendor_dir
 
         return env_data
+
+    def get_merged_data_for_runner(self):
+        return self.merge_two_dicts(self.get_local_data(), self.get_environment_data())
+
+    def merge_two_dicts(self, dict_a, dict_b):
+        dict_merged = dict_a.copy()
+        dict_merged.update(dict_b)
+        return dict_merged
 
     def reset(self):
         self.project_name = ''
@@ -87,11 +98,19 @@ class ProcessData(object):
         self.target_build_dir = self.parse_text(build_dir)
 
     def parse_text(self, text):
-        var_list = self.get_environ()
+        # local data
+        local_var_list = self.get_local_data()
 
-        if text and var_list:
-            for var in var_list:
-                text = text.replace('${' + var + '}', var_list.get(var))
+        if text and local_var_list:
+            for var in local_var_list:
+                text = text.replace('${' + var + '}', local_var_list.get(var))
+
+        # environment data
+        env_var_list = self.get_environment_data()
+
+        if text and env_var_list:
+            for var in env_var_list:
+                text = text.replace('$ENV{' + var + '}', env_var_list.get(var))
 
         return text
 
