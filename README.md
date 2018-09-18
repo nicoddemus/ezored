@@ -55,18 +55,9 @@ Detailed changes for each release are documented in the [release notes](docs/REL
 
 <img src="extras/images/what-is.png?v=2018-08-09" alt="ezored - what is" style="max-width: 300px;">
 
-## Contact
-
-You can send email to me, to talk about anything related to the project:  
-[paulo@prsolucoes.com](paulo@prsolucoes.com)
-
 ## Supported By Jetbrains IntelliJ IDEA
 
 ![Supported By Jetbrains IntelliJ IDEA](extras/images/jetbrains-logo.png "Supported By Jetbrains IntelliJ IDEA")
-
-## Author WebSite
-
-> http://www.pcoutinho.com
 
 ## License
 
