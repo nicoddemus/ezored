@@ -9,6 +9,7 @@ help:
 	@echo ""
 	@echo "- help"
 	@echo "- install"
+	@echo "- install-user"
 	@echo "- test"
 	@echo "- test-cov"
 	@echo "- test-on-docker"
@@ -21,6 +22,9 @@ help:
 
 install:
 	pip install -e .[test]
+
+install-user:
+	pip install -e .[test] --user
 
 test:
 	python setup.py test
