@@ -39,6 +39,9 @@ clean:
 	find . -type d -name __pycache__ -exec rm -r {} \+
 	rm -rf htmlcov
 	rm -rf dist
+	rm -rf ezored.egg-info
+	rm -rf .cache
+	rm -rf .pytest_cache
 
 pip-package:
 	python setup.py sdist
