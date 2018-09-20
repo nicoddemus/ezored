@@ -1,6 +1,6 @@
 # Project
 
-Ezored project file contains one or more targets inside, that you can build using the ezored from command-line.
+A project file of ezored contains one or more targets inside, that you can build using the ezored from command-line.
  
 The final target project generally is a library that have all native code compiled for the target specific platform.
 

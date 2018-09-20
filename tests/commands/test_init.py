@@ -15,7 +15,7 @@ class TestInit(TestCase):
         output = str(output)
         print(output)
 
-        required = 'Ezored was initialized with success'
+        required = 'A new ezored project was initialized with success'
         self.assertTrue(required in output)
 
     @tempdir()
@@ -28,5 +28,5 @@ class TestInit(TestCase):
         output = str(output)
         print(output)
 
-        required = 'Ezored was initialized with success'
+        required = 'A new ezored project was initialized with success'
         self.assertTrue(required in output)
