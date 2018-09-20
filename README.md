@@ -7,17 +7,15 @@
 
 <img src="extras/images/doc-logo.png?v=2017-12-07" alt="ezored">  
 
-The ezored is a build tool with focus on progressive integration with native code.
+The ezored is a build tool with focus on progressive integration with native code.  
 
-It has everything that you need to integrative native C++ code into your current application (mobile, desktop etc), because native code is more secure and faster.     
+Progressive integration means that if you are building a new application or already have one (mobile, desktop or cli), you can integrate it with a compiled code with ezored.    
 
-The main goal of ezored is let you code a single C++ code and generate a library for multiple platforms, instead of write the same business logic code in all used languages and for all used platforms.    
+Running native code means fast execution (the code is compiled to machine code) and safe execution (since it is harder to disassemble and/or modify).         
 
-Progressive integration let you attach ezored generated library into your current application or into a new application as part of it. The aim is not replace platform UI code, but the business logic code.
-
-The ezored use a dependency concept to fragment parts of your C++ code into small modules (you business logic classes, log classes, http client classes, helper classes).  
-
-The ezored use a target concept to understand how it will compile the C++ code (joining all dependency C++ code) and generate the final library file (.so, .a, .framework, .dll, dylib etc).     
+Some concepts are used internally to make it happen:
+- Dependency: Is a fragment of C++ code. Can be a full http client implementation or can be your private business logic.    
+- Target: Is the way of all dependencies are compiled. Each platform has their rules, and the target know it and compile the code using the correct way.  
 
 Today we have implemented officially this targets:  
 
@@ -29,7 +27,7 @@ Today we have implemented officially this targets:
 
 All official dependencies and targets are in ezored [repository](https://github.com/ezored) page.
 
-Remember that targets and dependencies can be any repository, local or remote (github).  
+Remember that targets and dependencies can be any git repository, remote zip file or local folders.    
 
 ## Install
 
