@@ -2,8 +2,8 @@ import os
 
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
-from ezored.models.util.file_util import FileUtil
 from ezored.models.repository import Repository
+from ezored.models.util.file_util import FileUtil
 
 
 class Target(object):

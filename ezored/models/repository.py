@@ -16,12 +16,6 @@ from ezored.models.util.git_util import GitUtil
 
 
 class Repository(object):
-    TYPE_LOCAL = 'local'
-    TYPE_GIT = 'git'
-
-    GIT_TYPE_BRANCH = 'b'
-    GIT_TYPE_TAG = 't'
-    GIT_TYPE_COMMIT = 'c'
 
     def __init__(self, rep_type, rep_path, rep_version):
         self.rep_type = rep_type
@@ -29,33 +23,32 @@ class Repository(object):
         self.rep_version = rep_version
 
     def get_name(self):
-        if self.rep_type == Repository.TYPE_LOCAL:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
+            filename = self.get_download_filename()
+            return slugify(filename)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             rep_path, rep_file = os.path.split(self.rep_path)
             return slugify(rep_file)
         else:
-            return slugify(self.rep_path)
+            return ''
 
     def get_download_url(self):
-        if self.rep_type == Repository.TYPE_GIT:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
             return self.rep_path
         else:
             return ''
 
     def get_download_filename(self):
-        if self.rep_type == Repository.TYPE_GIT:
-            git_data_path, _, _ = self.get_git_data()
-            git_data_path_list = str(git_data_path).split('/')
-            git_data_name = git_data_path_list[len(git_data_path_list) - 1]
-            git_data_name = git_data_name.replace('.git', '')
-            return git_data_name
-        elif self.rep_type == Repository.TYPE_LOCAL:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
+            return GitUtil.get_repository_name(self.rep_path)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             _, filename = os.path.split(self.rep_path)
             return slugify(filename)
         else:
             return ''
 
     def download(self):
-        if self.rep_type == Repository.TYPE_GIT:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
             self.download_from_git()
 
     def get_git_data(self):
@@ -70,28 +63,28 @@ class Repository(object):
 
         if not git_data or len(git_data) != 3:
             if self.rep_version != '':
-                return self.rep_path, Repository.GIT_TYPE_TAG, self.rep_version
+                return self.rep_path, Constants.GIT_TYPE_TAG, self.rep_version
             else:
-                return self.rep_path, Repository.GIT_TYPE_BRANCH, 'master'
+                return self.rep_path, Constants.GIT_TYPE_BRANCH, 'master'
 
         return self.rep_path, git_data[0], git_data[2]
 
     def get_temp_dir(self):
-        if self.rep_type == Repository.TYPE_GIT:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
             return FileUtil.normalize_path(
                 os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_temp_dir_name())
             )
-        elif self.rep_type == Repository.TYPE_LOCAL:
+        elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             return FileUtil.normalize_path(self.rep_path)
         else:
             return ''
 
     def get_vendor_dir(self):
-        if self.rep_type == Repository.TYPE_GIT:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
             return FileUtil.normalize_path(
                 os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
             )
-        elif self.rep_type == Repository.TYPE_LOCAL:
+        elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             return FileUtil.normalize_path(
                 os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
             )
@@ -99,11 +92,11 @@ class Repository(object):
             return ''
 
     def get_source_dir(self):
-        if self.rep_type == Repository.TYPE_GIT:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
             return FileUtil.normalize_path(
                 os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
             )
-        elif self.rep_type == Repository.TYPE_LOCAL:
+        elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             return FileUtil.normalize_path(
                 os.path.join(self.rep_path, 'build')
             )
@@ -111,22 +104,20 @@ class Repository(object):
             return ''
 
     def get_dir_name(self):
-        if self.rep_type == Repository.TYPE_GIT:
-            git_data_name, _, git_data_version = self.get_git_data()
-            git_data_name_list = str(git_data_name).split('/')
-            return git_data_name_list[1]
-        elif self.rep_type == Repository.TYPE_LOCAL:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
+            return GitUtil.get_repository_name(self.rep_path)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             _, filename = os.path.split(self.rep_path)
             return slugify(filename)
         else:
             return ''
 
     def get_temp_dir_name(self):
-        if self.rep_type == Repository.TYPE_GIT:
-            git_data_name, _, git_data_version = self.get_git_data()
-            git_data_name_list = str(git_data_name).split('/')
-            return '{0}-{1}'.format(git_data_name_list[1], git_data_version)
-        elif self.rep_type == Repository.TYPE_LOCAL:
+        if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
+            _, _, git_data_version = self.get_git_data()
+            rep_name = GitUtil.get_repository_name(self.rep_path)
+            return '{0}-{1}'.format(rep_name, git_data_version)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             _, filename = os.path.split(self.rep_path)
             return slugify(filename)
         else:
@@ -234,7 +225,7 @@ class Repository(object):
         download_dest_dir = Constants.TEMP_DIR
         download_dest_path = os.path.join(download_dest_dir, download_filename)
 
-        if rep_type == Repository.GIT_TYPE_BRANCH:
+        if rep_type == Constants.GIT_TYPE_BRANCH:
             force_download = True
 
         # skip if exists

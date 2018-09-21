@@ -1,8 +1,9 @@
 import os
+from unittest import TestCase
+
+from testfixtures import tempdir
 
 from ezored.models.util.file_util import FileUtil
-from testfixtures import tempdir
-from unittest import TestCase
 
 
 class TestFileUtil(TestCase):

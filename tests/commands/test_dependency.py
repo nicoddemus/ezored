@@ -2,8 +2,9 @@ import os
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
 
-from ezored.models.constants import Constants
 from testfixtures import tempdir
+
+from ezored.models.constants import Constants
 
 
 class TestDependency(TestCase):

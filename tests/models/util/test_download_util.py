@@ -1,8 +1,9 @@
 import os
 from unittest import TestCase
 
-from ezored.models.util.download_util import DownloadUtil
 from testfixtures import tempdir
+
+from ezored.models.util.download_util import DownloadUtil
 
 
 class TestDownloadUtil(TestCase):

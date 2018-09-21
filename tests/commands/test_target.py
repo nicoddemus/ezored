@@ -1,10 +1,11 @@
 import os
 from subprocess import PIPE, Popen as popen
+from unittest import TestCase
+
+from testfixtures import tempdir
 
 from ezored.models.constants import Constants
 from ezored.models.util.file_util import FileUtil
-from testfixtures import tempdir
-from unittest import TestCase
 
 
 class TestTarget(TestCase):
@@ -37,13 +38,13 @@ config:
 targets:
   - name: git-test
     repository:
-      path: ezored/target-git-test
+      path: https://github.com/ezored/target-git-test.git
       type: git
       version: b:master
 dependencies:
   - name: git-test
     repository:
-      path: ezored/dependency-git-test
+      path: https://github.com/ezored/dependency-git-test.git
       type: git
       version: b:master      
 """
@@ -75,13 +76,13 @@ config:
 targets:
   - name: git-test 
     repository:
-      path: ezored/target-git-test
+      path: https://github.com/ezored/target-git-test.git
       type: git
       version: b:master
 dependencies:
   - name: git-test
     repository:
-      path: ezored/dependency-git-test
+      path: https://github.com/ezored/dependency-git-test.git
       type: git
       version: b:master      
 """
@@ -113,13 +114,13 @@ config:
 targets:
   - name: git-test 
     repository:
-      path: ezored/target-git-test
+      path: https://github.com/ezored/target-git-test.git
       type: git
       version: b:master
 dependencies:
   - name: git-test
     repository:
-      path: ezored/dependency-git-test
+      path: https://github.com/ezored/dependency-git-test.git
       type: git
       version: b:master      
 """
@@ -153,13 +154,13 @@ config:
 targets:
   - name: git-test 
     repository:
-      path: ezored/target-git-test
+      path: https://github.com/ezored/target-git-test.git
       type: git
       version: b:master
 dependencies:
   - name: git-test
     repository:
-      path: ezored/dependency-git-test
+      path: https://github.com/ezored/dependency-git-test.git
       type: git
       version: b:master      
 """
@@ -211,7 +212,7 @@ config:
 targets:
   - name: git-test 
     repository:
-      path: ezored/target-git-test
+      path: https://github.com/ezored/target-git-test.git
       type: git
       version: b:master
 """

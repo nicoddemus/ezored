@@ -1,11 +1,12 @@
 import os
 from unittest import TestCase
 
+from testfixtures import tempdir
+
 from ezored.models.constants import Constants
 from ezored.models.process_data import ProcessData
 from ezored.models.repository import Repository
 from ezored.models.util.file_util import FileUtil
-from testfixtures import tempdir
 
 
 class TestProcessData(TestCase):

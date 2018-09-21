@@ -1,8 +1,9 @@
 import os
+import re
 from subprocess import check_output, STDOUT
 
+from ezored.models.constants import Constants
 from ezored.models.logger import Logger
-from ezored.models.repository import Repository
 from ezored.models.util.file_util import FileUtil
 from ezored.models.util.type_util import TypeUtil
 
@@ -19,7 +20,7 @@ class GitUtil(object):
 
         # if repository type or version is empty, we will use "branch:master"
         if TypeUtil.is_empty(rep_version):
-            rep_type = Repository.GIT_TYPE_BRANCH
+            rep_type = Constants.GIT_TYPE_BRANCH
             rep_version = 'master'
 
         # clone the repository
@@ -32,23 +33,34 @@ class GitUtil(object):
             dest,
         ]
 
-        FileUtil.run(args, FileUtil.get_current_dir(), None)
+        exitcode, stderr, stdout = FileUtil.run(args, FileUtil.get_current_dir(), None)
+
+        if exitcode == 0:
+            Logger.i('Repository cloned with success:')
+        else:
+            if stdout:
+                Logger.i('Repository clone output:')
+                Logger.clean(stdout)
+
+            if stderr:
+                Logger.i('Error output while clone repository')
+                Logger.clean(stderr)
 
         # change to the desired repository version
-        if rep_type == Repository.GIT_TYPE_BRANCH:
+        if rep_type == Constants.GIT_TYPE_BRANCH:
             args = [
                 'git',
                 'checkout',
                 rep_version,
             ]
-        elif rep_type == Repository.GIT_TYPE_COMMIT:
+        elif rep_type == Constants.GIT_TYPE_COMMIT:
             args = [
                 'git',
                 'reset',
                 '--hard',
                 rep_version,
             ]
-        elif rep_type == Repository.GIT_TYPE_TAG:
+        elif rep_type == Constants.GIT_TYPE_TAG:
             args = [
                 'git',
                 'checkout',
@@ -57,7 +69,18 @@ class GitUtil(object):
         else:
             raise Exception('Git repository type is invalid')
 
-        FileUtil.run(args, dest, None)
+        exitcode, stderr, stdout = FileUtil.run(args, dest, None)
+
+        if exitcode == 0:
+            Logger.i('Repository version changed with success')
+        else:
+            if stdout:
+                Logger.i('Repository version change output:')
+                Logger.clean(stdout)
+
+            if stderr:
+                Logger.i('Error output while change repository version:')
+                Logger.clean(stderr)
 
     @staticmethod
     def check_if_git_is_installed():
@@ -68,3 +91,10 @@ class GitUtil(object):
                 raise Exception('Required tool was not installed (git)')
             else:
                 raise
+
+    @staticmethod
+    def get_repository_name(rep_path):
+        p = re.compile('([^/]+)\.git$', re.IGNORECASE)
+        data_list = p.findall(rep_path)
+        rep_name = data_list[0] if len(data_list) == 1 else None
+        return rep_name

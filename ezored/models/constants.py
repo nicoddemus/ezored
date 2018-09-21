@@ -18,6 +18,13 @@ class Constants(object):
     TEMP_DIR = 'temp'
     BUILD_DIR = 'build'
 
+    REPOSITORY_TYPE_LOCAL = 'local'
+    REPOSITORY_TYPE_GIT = 'git'
+
+    GIT_TYPE_BRANCH = 'b'
+    GIT_TYPE_TAG = 't'
+    GIT_TYPE_COMMIT = 'c'
+
     PROJECT_FILE_DATA = """
 config:
   name: ezored
