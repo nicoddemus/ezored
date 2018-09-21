@@ -18,8 +18,6 @@ class Constants(object):
     TEMP_DIR = 'temp'
     BUILD_DIR = 'build'
 
-    GITHUB_DOWNLOAD_EXTENSION = 'tar.gz'
-
     PROJECT_FILE_DATA = """
 config:
   name: ezored
@@ -55,22 +53,22 @@ targets:
   - name: ios
     repository:
       path: ezored/target-ios
-      type: github
+      type: git
       version: b:master
   - name: android
     repository:
       path: ezored/target-android
-      type: github
+      type: git
       version: b:master
 dependencies:
   - name: djinni-support
     repository:
       path: ezored/dependency-djinni-support
-      type: github
+      type: git
       version: b:master
   - name: sample
     repository:
       path: ezored/dependency-sample
-      type: github
+      type: git
       version: b:master
 """

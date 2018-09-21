@@ -28,23 +28,23 @@ class TestTarget(TestCase):
         self.assertTrue(required in output)
 
     @tempdir()
-    def test_target_github_build_all(self, d):
+    def test_target_git_build_all(self, d):
         os.chdir(d.path)
 
         project_file_data = """
 config:
   name: ezored
 targets:
-  - name: github-test
+  - name: git-test
     repository:
-      path: ezored/target-github-test
-      type: github
+      path: ezored/target-git-test
+      type: git
       version: b:master
 dependencies:
-  - name: github-test
+  - name: git-test
     repository:
-      path: ezored/dependency-github-test
-      type: github
+      path: ezored/dependency-git-test
+      type: git
       version: b:master      
 """
 
@@ -58,31 +58,31 @@ dependencies:
         output = str(output)
         print(output)
 
-        required = 'Command "build" finished for target "github-test"'
+        required = 'Command "build" finished for target "git-test"'
         self.assertTrue(required in output)
 
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'file-to-parse.txt')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'ezored_target.py')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'ezored_target_data.yml')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'file-to-parse.txt')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'ezored_target.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'ezored_target_data.yml')))
 
     @tempdir()
-    def test_target_github_build_single(self, d):
+    def test_target_git_build_single(self, d):
         os.chdir(d.path)
 
         project_file_data = """
 config:
   name: ezored
 targets:
-  - name: github-test 
+  - name: git-test 
     repository:
-      path: ezored/target-github-test
-      type: github
+      path: ezored/target-git-test
+      type: git
       version: b:master
 dependencies:
-  - name: github-test
+  - name: git-test
     repository:
-      path: ezored/dependency-github-test
-      type: github
+      path: ezored/dependency-git-test
+      type: git
       version: b:master      
 """
 
@@ -92,35 +92,35 @@ dependencies:
         output = str(output)
         print(output)
 
-        output = popen(['ezored', 'target', 'build', 'github-test', '-d'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'target', 'build', 'git-test', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
-        required = 'Command "build" finished for target "github-test"'
+        required = 'Command "build" finished for target "git-test"'
         self.assertTrue(required in output)
 
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'file-to-parse.txt')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'ezored_target.py')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'ezored_target_data.yml')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'file-to-parse.txt')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'ezored_target.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'ezored_target_data.yml')))
 
     @tempdir()
-    def test_target_github_copy_file(self, d):
+    def test_target_git_copy_file(self, d):
         os.chdir(d.path)
 
         project_file_data = """
 config:
   name: ezored
 targets:
-  - name: github-test 
+  - name: git-test 
     repository:
-      path: ezored/target-github-test
-      type: github
+      path: ezored/target-git-test
+      type: git
       version: b:master
 dependencies:
-  - name: github-test
+  - name: git-test
     repository:
-      path: ezored/dependency-github-test
-      type: github
+      path: ezored/dependency-git-test
+      type: git
       version: b:master      
 """
 
@@ -130,37 +130,37 @@ dependencies:
         output = str(output)
         print(output)
 
-        output = popen(['ezored', 'target', 'build', 'github-test', '-d'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'target', 'build', 'git-test', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
-        required = 'Command "build" finished for target "github-test"'
+        required = 'Command "build" finished for target "git-test"'
         self.assertTrue(required in output)
 
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'file-to-parse.txt')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'ezored_target.py')))
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'ezored_target_data.yml')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'file-to-parse.txt')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'ezored_target.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'ezored_target_data.yml')))
 
-        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-github-test', 'source', 'test-copy.py')))
+        self.assertTrue(os.path.exists(os.path.join('vendor', 'target-git-test', 'source', 'test-copy.py')))
 
     @tempdir()
-    def test_target_github_parse_file(self, d):
+    def test_target_git_parse_file(self, d):
         os.chdir(d.path)
 
         project_file_data = """
 config:
   name: ezored
 targets:
-  - name: github-test 
+  - name: git-test 
     repository:
-      path: ezored/target-github-test
-      type: github
+      path: ezored/target-git-test
+      type: git
       version: b:master
 dependencies:
-  - name: github-test
+  - name: git-test
     repository:
-      path: ezored/dependency-github-test
-      type: github
+      path: ezored/dependency-git-test
+      type: git
       version: b:master      
 """
 
@@ -170,14 +170,14 @@ dependencies:
         output = str(output)
         print(output)
 
-        output = popen(['ezored', 'target', 'build', 'github-test', '-d'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'target', 'build', 'git-test', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
-        required = 'Command "build" finished for target "github-test"'
+        required = 'Command "build" finished for target "git-test"'
         self.assertTrue(required in output)
 
-        file_to_read = os.path.join('vendor', 'target-github-test', 'file-to-parse.txt')
+        file_to_read = os.path.join('vendor', 'target-git-test', 'file-to-parse.txt')
         self.assertTrue(os.path.exists(file_to_read))
 
         content = FileUtil.read_file(file_to_read)
@@ -209,18 +209,18 @@ config:
 config:
   name: ezored
 targets:
-  - name: github-test 
+  - name: git-test 
     repository:
-      path: ezored/target-github-test
-      type: github
+      path: ezored/target-git-test
+      type: git
       version: b:master
 """
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'target', 'test', 'github-test', '-d'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'target', 'test', 'git-test', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
-        required = 'Command "test" finished for target "github-test"'
+        required = 'Command "test" finished for target "git-test"'
         self.assertTrue(required in output)

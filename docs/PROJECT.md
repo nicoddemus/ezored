@@ -50,21 +50,21 @@ targets:
   - name: ios
     repository:
       name: ezored/target-ios
-      type: github
+      type: git
       version: b:master
   - name: android
     repository:
       name: ezored/target-android
-      type: github
+      type: git
       version: b:master
 dependencies:
   - repository:
       name: ezored/dependency-djinni-support
-      type: github
+      type: git
       version: b:master
   - repository:
       name: ezored/dependency-sample
-      type: github
+      type: git
       version: b:master
 ```
 

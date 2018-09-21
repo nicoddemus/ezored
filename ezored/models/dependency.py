@@ -1,13 +1,12 @@
 import re
 
 from ezored.models.logger import Logger
+from ezored.models.repository import Repository
 from ezored.models.source_file import SourceFile
 from ezored.models.source_group import SourceGroup
 from ezored.models.target_data import TargetData
 from ezored.models.task import Task
 from ezored.models.util.file_util import FileUtil
-
-from .repository import Repository
 
 
 class Dependency(object):

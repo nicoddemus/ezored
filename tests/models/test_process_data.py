@@ -54,8 +54,8 @@ class TestProcessData(TestCase):
         process_data.reset()
 
         repository = Repository.from_dict({
-            'type': 'github',
-            'path': 'ezored/dependency-sample',
+            'type': 'git',
+            'path': 'https://github.com/ezored/dependency-sample.git',
             'version': 't:1.0.0',
         })
 
@@ -77,8 +77,8 @@ class TestProcessData(TestCase):
         process_data.reset()
 
         repository = Repository.from_dict({
-            'type': 'github',
-            'path': 'ezored/dependency-sample',
+            'type': 'git',
+            'path': 'https://github.com/ezored/dependency-sample.git',
             'version': 't:1.0.0',
         })
 
@@ -110,8 +110,8 @@ class TestProcessData(TestCase):
         process_data.reset()
 
         repository = Repository.from_dict({
-            'type': 'github',
-            'path': 'ezored/dependency-sample',
+            'type': 'git',
+            'path': 'https://github.com/ezored/dependency-sample.git',
             'version': 't:1.0.0',
         })
 

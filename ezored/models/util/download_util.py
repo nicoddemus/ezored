@@ -18,7 +18,7 @@ class DownloadUtil(object):
     @staticmethod
     def download_file(url, dest=None, filename=None):
         """
-        Download and save a file specified by url to dest directory,
+        Download and save a file specified by url to dest directory.
         """
         Logger.d('New download request')
 

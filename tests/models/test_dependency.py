@@ -1,6 +1,7 @@
+from unittest import TestCase
+
 from ezored.models.dependency import Dependency
 from ezored.models.repository import Repository
-from unittest import TestCase
 
 
 class TestDependency(TestCase):

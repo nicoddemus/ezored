@@ -28,9 +28,9 @@ class TestRepository(TestCase):
 
         self.assertEqual(repository.get_name(), 'repository-test')
 
-    def test_github_get_name(self):
+    def test_git_get_name(self):
         repository = Repository(
-            rep_type=Repository.TYPE_GITHUB,
+            rep_type=Repository.TYPE_GIT,
             rep_path='ezored/dependency-sample',
             rep_version='b:master',
         )
@@ -39,18 +39,18 @@ class TestRepository(TestCase):
 
     def test_from_dict(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': '1.0.0',
         })
 
-        self.assertEqual(repository.rep_type, Repository.TYPE_GITHUB)
+        self.assertEqual(repository.rep_type, Repository.TYPE_GIT)
         self.assertEqual(repository.rep_path, 'ezored/dependency-sample')
         self.assertEqual(repository.rep_version, '1.0.0')
 
     def test_get_git_data_branch(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': 'b:master',
         })
@@ -63,7 +63,7 @@ class TestRepository(TestCase):
 
     def test_get_git_data_tag_without_prefix(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': '1.0.0',
         })
@@ -76,7 +76,7 @@ class TestRepository(TestCase):
 
     def test_get_git_data_tag(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': 't:1.0.0',
         })
@@ -89,7 +89,7 @@ class TestRepository(TestCase):
 
     def test_get_git_data_commit(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': 'c:123456',
         })
@@ -102,7 +102,7 @@ class TestRepository(TestCase):
 
     def test_get_git_data_empty_version(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': '',
         })
@@ -113,9 +113,9 @@ class TestRepository(TestCase):
         self.assertEqual(git_data_type, Repository.GIT_TYPE_BRANCH)
         self.assertEqual(git_data_version, 'master')
 
-    def test_github_download_url(self):
+    def test_git_download_url(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': 't:1.0.0',
         })
@@ -124,9 +124,9 @@ class TestRepository(TestCase):
 
         self.assertEqual(download_url, 'https://github.com/ezored/dependency-sample/archive/1.0.0.tar.gz')
 
-    def test_github_download_filename(self):
+    def test_git_download_filename(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': 't:1.0.0',
         })
@@ -147,11 +147,11 @@ class TestRepository(TestCase):
         self.assertEqual(download_filename, 'sample-dependency')
 
     @tempdir()
-    def test_github_temp_working_dir(self, d):
+    def test_git_temp_working_dir(self, d):
         os.chdir(d.path)
 
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': 't:1.0.0',
         })
@@ -174,9 +174,9 @@ class TestRepository(TestCase):
 
         self.assertEqual(temp_working_dir, '/opt/ezored/sample-dependency')
 
-    def test_github_get_dir_name(self):
+    def test_git_get_dir_name(self):
         repository = Repository.from_dict({
-            'type': 'github',
+            'type': 'git',
             'path': 'ezored/dependency-sample',
             'version': 't:1.0.0',
         })

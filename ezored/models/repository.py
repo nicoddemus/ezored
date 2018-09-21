@@ -3,18 +3,21 @@ import os
 import re
 import sys
 import tarfile
+import zipfile
 
 import yaml
+from slugify import slugify
+
 from ezored.models.constants import Constants
 from ezored.models.logger import Logger
 from ezored.models.util.download_util import DownloadUtil
 from ezored.models.util.file_util import FileUtil
-from slugify import slugify
+from ezored.models.util.git_util import GitUtil
 
 
 class Repository(object):
     TYPE_LOCAL = 'local'
-    TYPE_GITHUB = 'github'
+    TYPE_GIT = 'git'
 
     GIT_TYPE_BRANCH = 'b'
     GIT_TYPE_TAG = 't'
@@ -33,24 +36,18 @@ class Repository(object):
             return slugify(self.rep_path)
 
     def get_download_url(self):
-        if self.rep_type == Repository.TYPE_GITHUB:
-            git_data_name, _, git_data_version = self.get_git_data()
-            return 'https://github.com/{0}/archive/{1}.{2}'.format(
-                git_data_name,
-                git_data_version,
-                Constants.GITHUB_DOWNLOAD_EXTENSION
-            )
+        if self.rep_type == Repository.TYPE_GIT:
+            return self.rep_path
         else:
             return ''
 
     def get_download_filename(self):
-        if self.rep_type == Repository.TYPE_GITHUB:
-            git_data_name, _, git_data_version = self.get_git_data()
-            git_data_name_list = str(git_data_name).split('/')
-
-            return '{0}.{1}'.format(
-                '{0}-{1}'.format(git_data_name_list[1], git_data_version), Constants.GITHUB_DOWNLOAD_EXTENSION
-            )
+        if self.rep_type == Repository.TYPE_GIT:
+            git_data_path, _, _ = self.get_git_data()
+            git_data_path_list = str(git_data_path).split('/')
+            git_data_name = git_data_path_list[len(git_data_path_list) - 1]
+            git_data_name = git_data_name.replace('.git', '')
+            return git_data_name
         elif self.rep_type == Repository.TYPE_LOCAL:
             _, filename = os.path.split(self.rep_path)
             return slugify(filename)
@@ -58,8 +55,8 @@ class Repository(object):
             return ''
 
     def download(self):
-        if self.rep_type == Repository.TYPE_GITHUB:
-            self.download_from_github()
+        if self.rep_type == Repository.TYPE_GIT:
+            self.download_from_git()
 
     def get_git_data(self):
         # it will return a tuple of 3 elements with this pattern
@@ -80,7 +77,7 @@ class Repository(object):
         return self.rep_path, git_data[0], git_data[2]
 
     def get_temp_dir(self):
-        if self.rep_type == Repository.TYPE_GITHUB:
+        if self.rep_type == Repository.TYPE_GIT:
             return FileUtil.normalize_path(
                 os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_temp_dir_name())
             )
@@ -90,7 +87,7 @@ class Repository(object):
             return ''
 
     def get_vendor_dir(self):
-        if self.rep_type == Repository.TYPE_GITHUB:
+        if self.rep_type == Repository.TYPE_GIT:
             return FileUtil.normalize_path(
                 os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
             )
@@ -102,7 +99,7 @@ class Repository(object):
             return ''
 
     def get_source_dir(self):
-        if self.rep_type == Repository.TYPE_GITHUB:
+        if self.rep_type == Repository.TYPE_GIT:
             return FileUtil.normalize_path(
                 os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
             )
@@ -114,7 +111,7 @@ class Repository(object):
             return ''
 
     def get_dir_name(self):
-        if self.rep_type == Repository.TYPE_GITHUB:
+        if self.rep_type == Repository.TYPE_GIT:
             git_data_name, _, git_data_version = self.get_git_data()
             git_data_name_list = str(git_data_name).split('/')
             return git_data_name_list[1]
@@ -125,7 +122,7 @@ class Repository(object):
             return ''
 
     def get_temp_dir_name(self):
-        if self.rep_type == Repository.TYPE_GITHUB:
+        if self.rep_type == Repository.TYPE_GIT:
             git_data_name, _, git_data_version = self.get_git_data()
             git_data_name_list = str(git_data_name).split('/')
             return '{0}-{1}'.format(git_data_name_list[1], git_data_version)
@@ -135,25 +132,19 @@ class Repository(object):
         else:
             return ''
 
-    def download_from_github(self):
+    def download_from_tar_gz(self):
         # download
         Logger.i('Downloading repository: {0}...'.format(self.get_name()))
 
         download_url = self.get_download_url()
         download_filename = self.get_download_filename()
         download_dest_dir = Constants.TEMP_DIR
-        download_dest_path = os.path.join(Constants.TEMP_DIR, download_filename)
+        download_dest_path = os.path.join(download_dest_dir, download_filename)
         unpacked_dir = self.get_temp_dir()
-        unpack_dir = Constants.TEMP_DIR
-        force_download = False
-
-        _, git_data_type, git_data_version = self.get_git_data()
-
-        if git_data_type == Repository.GIT_TYPE_BRANCH:
-            force_download = True
+        unpack_dir = download_dest_dir
 
         # skip if exists
-        if not force_download and os.path.isfile(download_dest_path):
+        if os.path.isfile(download_dest_path):
             Logger.i('Repository already downloaded: {0}'.format(self.get_name()))
         else:
             FileUtil.remove_file(download_dest_path)
@@ -169,22 +160,96 @@ class Repository(object):
         # unpack
         Logger.i('Unpacking repository: {0}...'.format(self.get_name()))
 
-        if not force_download and os.path.isdir(unpacked_dir):
+        if os.path.isdir(unpacked_dir):
             Logger.i('Repository already unpacked: {0}...'.format(self.get_name()))
         else:
             FileUtil.remove_dir(unpacked_dir)
 
-            # untar file
+            # unpack file
             FileUtil.create_dir(unpack_dir)
 
-            tar = tarfile.open(download_dest_path)
-            tar.extractall(path=unpack_dir)
-            tar.close()
+            tarref = tarfile.open(download_dest_path)
+            tarref.extractall(path=unpack_dir)
+            tarref.close()
 
             if os.path.isdir(unpacked_dir):
                 Logger.i('Repository unpacked: {0}'.format(self.get_name()))
             else:
                 Logger.f('Problems when unpack repository: {0}'.format(self.get_name()))
+
+    def download_from_zip(self):
+        # download
+        Logger.i('Downloading repository: {0}...'.format(self.get_name()))
+
+        download_url = self.get_download_url()
+        download_filename = self.get_download_filename()
+        download_dest_dir = Constants.TEMP_DIR
+        download_dest_path = os.path.join(download_dest_dir, download_filename)
+        unpacked_dir = self.get_temp_dir()
+        unpack_dir = download_dest_dir
+
+        # skip if exists
+        if os.path.isfile(download_dest_path):
+            Logger.i('Repository already downloaded: {0}'.format(self.get_name()))
+        else:
+            FileUtil.remove_file(download_dest_path)
+
+            DownloadUtil.download_file(download_url, download_dest_dir, download_filename)
+
+            # check if file was downloaded
+            if os.path.isfile(download_dest_path):
+                Logger.i('Repository downloaded: {0}'.format(self.get_name()))
+            else:
+                Logger.f('Problems when download repository: {0}'.format(self.get_name()))
+
+        # unpack
+        Logger.i('Unpacking repository: {0}...'.format(self.get_name()))
+
+        if os.path.isdir(unpacked_dir):
+            Logger.i('Repository already unpacked: {0}...'.format(self.get_name()))
+        else:
+            FileUtil.remove_dir(unpacked_dir)
+
+            # unpack file
+            FileUtil.create_dir(unpack_dir)
+
+            zipref = zipfile.ZipFile(download_dest_path, 'r')
+            zipref.extractall(path=unpack_dir)
+            zipref.close()
+
+            if os.path.isdir(unpacked_dir):
+                Logger.i('Repository unpacked: {0}'.format(self.get_name()))
+            else:
+                Logger.f('Problems when unpack repository: {0}'.format(self.get_name()))
+
+    def download_from_git(self):
+        # download
+        Logger.i('Downloading repository: {0}...'.format(self.get_name()))
+
+        force_download = False
+
+        rep_path, rep_type, rep_version = self.get_git_data()
+
+        download_filename = self.get_download_filename()
+        download_dest_dir = Constants.TEMP_DIR
+        download_dest_path = os.path.join(download_dest_dir, download_filename)
+
+        if rep_type == Repository.GIT_TYPE_BRANCH:
+            force_download = True
+
+        # skip if exists
+        if not force_download and os.path.isfile(download_dest_path):
+            Logger.i('Repository already downloaded: {0}'.format(self.get_name()))
+        else:
+            FileUtil.remove_dir(download_dest_path)
+
+            GitUtil.download(rep_path, rep_type, rep_version)
+
+            # check if file was downloaded
+            if os.path.isdir(download_dest_path):
+                Logger.i('Repository downloaded: {0}'.format(self.get_name()))
+            else:
+                Logger.f('Problems when download repository: {0}'.format(self.get_name()))
 
     def build(self, project, process_data):
         Logger.i('Building repository: {0}...'.format(self.get_name()))

@@ -16,11 +16,11 @@ The target block structure has this properties:
 
 The property `"repository.type"` define how ezored will get your target. Today we support types:
 - local  
-- github  
+- git  
 
 The property `"repository.name"` define how ezored will find your target based on `"type"`. Example:  
 - `local` = You need set the path to the target directory, ex: `${HOME}/my-target`  
-- `github` = You need set the repository name, ex: `ezored/target-android` 
+- `git` = You need set the repository name, ex: `https://github.com/ezored/target-android.git` 
 
 The property `"repository.version"` define what version ezored need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
 - `b:master` = will download version from branch "master" 
@@ -46,7 +46,7 @@ targets:
   - name: ios
     repository:
       name: ezored/target-ios
-      type: github
+      type: git
       version: b:master
 ```
 
