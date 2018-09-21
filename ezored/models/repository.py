@@ -132,7 +132,7 @@ class Repository(object):
         else:
             return ''
 
-    def download_from_tar_gz(self):
+    def download_from_tar(self):
         # download
         Logger.i('Downloading repository: {0}...'.format(self.get_name()))
 
