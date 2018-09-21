@@ -18,7 +18,7 @@ class GitUtil(object):
         GitUtil.check_if_git_is_installed()
 
         # if repository type or version is empty, we will use "branch:master"
-        if TypeUtil.is_empty(rep_type) or TypeUtil.is_empty(rep_version):
+        if TypeUtil.is_empty(rep_version):
             rep_type = Repository.GIT_TYPE_BRANCH
             rep_version = 'master'
 
