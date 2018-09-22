@@ -29,53 +29,58 @@ class Constants(object):
 config:
   name: ezored
   ios:
-    cmake_version: 3.9
     bundle_id: com.ezored.library
     version: 1.0.0
-    cpp_standard: 11
-    development_team_id: ABCDEFGHIJ
-    code_sign_identity: iPhone Developer
-    deployment_target: 8.0
-    device_family: 1,2
-    archs:
-      - iphoneos
-      - iphonesimulator
+    development_team_id: ABCDEFGHIJ    
   android:
-    cmake_version: 3.4.1
     bundle_id: com.ezored.library
     version: 1.0.0
     version_code: 1
-    version_name: 1.0.0
-    cpp_standard: 11
-    gradle_plugin: 3.1.1
-    compile_sdk_version: 27
-    build_tools_version: 27.0.3
-    min_sdk_version: 15
-    target_sdk_version: 26
-    support_lib_version: 27.1.1
+    use_ndk_unified_headers: true
     dependencies:
       - type: implementation
         path: com.android.support:appcompat-v7:${project.ext.supportLibVersion}
+  macos:
+    type: framework
+  linux:
+    type: shared-lib
+  windows:
+    type: shared-lib
 targets:
   - name: ios
     repository:
-      path: ezored/target-ios
+      path: https://github.com/ezored/target-ios.git
       type: git
       version: b:master
   - name: android
     repository:
-      path: ezored/target-android
+      path: https://github.com/ezored/target-android.git
+      type: git
+      version: b:master
+  - name: linux
+    repository:
+      path: https://github.com/ezored/target-linux.git
+      type: git
+      version: b:master
+  - name: windows
+    repository:
+      path: https://github.com/ezored/target-windows.git
+      type: git
+      version: b:master
+  - name: macos
+    repository:
+      path: https://github.com/ezored/target-macos.git
       type: git
       version: b:master
 dependencies:
   - name: djinni-support
     repository:
-      path: ezored/dependency-djinni-support
+      path: https://github.com/ezored/dependency-djinni-support.git
       type: git
-      version: b:master
+      version: t:1.0.1
   - name: sample
     repository:
-      path: ezored/dependency-sample
+      path: https://github.com/ezored/dependency-sample.git
       type: git
       version: b:master
 """

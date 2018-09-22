@@ -114,9 +114,7 @@ class Repository(object):
 
     def get_temp_dir_name(self):
         if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
-            _, _, git_data_version = self.get_git_data()
-            rep_name = GitUtil.get_repository_name(self.rep_path)
-            return '{0}-{1}'.format(rep_name, git_data_version)
+            return GitUtil.get_repository_name(self.rep_path)
         elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             _, filename = os.path.split(self.rep_path)
             return slugify(filename)
@@ -234,7 +232,7 @@ class Repository(object):
         else:
             FileUtil.remove_dir(download_dest_path)
 
-            GitUtil.download(rep_path, rep_type, rep_version)
+            GitUtil.download(rep_path, rep_type, rep_version, download_dest_path)
 
             # check if file was downloaded
             if os.path.isdir(download_dest_path):

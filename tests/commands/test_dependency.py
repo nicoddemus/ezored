@@ -48,7 +48,7 @@ dependencies:
         output = str(output)
         print(output)
 
-        required = 'Build finished for repository: ezored-dependency-git-test'
+        required = 'Build finished for repository: dependency-git-test'
         self.assertTrue(required in output)
 
     @tempdir()
@@ -90,7 +90,7 @@ dependencies:
         output = str(output)
         print(output)
 
-        required = 'Build finished for repository: ezored-dependency-git-test'
+        required = 'Build finished for repository: dependency-git-test'
         self.assertTrue(required in output)
 
     @tempdir()

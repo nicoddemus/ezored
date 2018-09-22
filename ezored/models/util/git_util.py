@@ -33,7 +33,11 @@ class GitUtil(object):
             dest,
         ]
 
-        exitcode, stderr, stdout = FileUtil.run(args, FileUtil.get_current_dir(), None)
+        exitcode, stderr, stdout = FileUtil.run(
+            args=args,
+            cwd=FileUtil.get_current_dir(),
+            env=dict(os.environ)
+        )
 
         if exitcode == 0:
             Logger.i('Repository cloned with success:')
