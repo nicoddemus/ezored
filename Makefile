@@ -54,6 +54,6 @@ pip-upload:
 	twine upload dist/*
 
 pip-send-update:
-	rm -rf dist
+	make clean
 	make pip-package
 	make pip-upload
