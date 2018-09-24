@@ -29,11 +29,21 @@ class Repository(object):
         elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             rep_path, rep_file = os.path.split(self.rep_path)
             return slugify(rep_file)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            filename = DownloadUtil.get_filename_from_url_without_extension(self.rep_path)
+            return slugify(filename)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
+            filename = DownloadUtil.get_filename_from_url_without_extension(self.rep_path)
+            return slugify(filename)
         else:
             return ''
 
     def get_download_url(self):
         if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
+            return self.rep_path
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            return self.rep_path
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
             return self.rep_path
         else:
             return ''
@@ -44,12 +54,22 @@ class Repository(object):
         elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             _, filename = os.path.split(self.rep_path)
             return slugify(filename)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            filename = DownloadUtil.get_filename_from_url(self.rep_path)
+            return filename
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
+            filename = DownloadUtil.get_filename_from_url(self.rep_path)
+            return filename
         else:
             return ''
 
     def download(self):
         if self.rep_type == Constants.REPOSITORY_TYPE_GIT:
             self.download_from_git()
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            self.download_from_zip()
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
+            self.download_from_tar()
 
     def get_git_data(self):
         # it will return a tuple of 3 elements with this pattern
@@ -76,6 +96,14 @@ class Repository(object):
             )
         elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             return FileUtil.normalize_path(self.rep_path)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_temp_dir_name())
+            )
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, self.get_temp_dir_name())
+            )
         else:
             return ''
 
@@ -85,6 +113,14 @@ class Repository(object):
                 os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
             )
         elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            )
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            )
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
             return FileUtil.normalize_path(
                 os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
             )
@@ -100,6 +136,14 @@ class Repository(object):
             return FileUtil.normalize_path(
                 os.path.join(self.rep_path, 'build')
             )
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            )
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
+            return FileUtil.normalize_path(
+                os.path.join(FileUtil.get_current_dir(), Constants.VENDOR_DIR, self.get_dir_name())
+            )
         else:
             return ''
 
@@ -109,6 +153,12 @@ class Repository(object):
         elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             _, filename = os.path.split(self.rep_path)
             return slugify(filename)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            filename = DownloadUtil.get_filename_from_url_without_extension(self.rep_path)
+            return slugify(filename)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
+            filename = DownloadUtil.get_filename_from_url_without_extension(self.rep_path)
+            return slugify(filename)
         else:
             return ''
 
@@ -117,6 +167,12 @@ class Repository(object):
             return GitUtil.get_repository_name(self.rep_path)
         elif self.rep_type == Constants.REPOSITORY_TYPE_LOCAL:
             _, filename = os.path.split(self.rep_path)
+            return slugify(filename)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_ZIP:
+            filename = DownloadUtil.get_filename_from_url_without_extension(self.rep_path)
+            return slugify(filename)
+        elif self.rep_type == Constants.REPOSITORY_TYPE_TAR:
+            filename = DownloadUtil.get_filename_from_url_without_extension(self.rep_path)
             return slugify(filename)
         else:
             return ''

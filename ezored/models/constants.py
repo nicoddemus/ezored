@@ -20,7 +20,9 @@ class Constants(object):
 
     REPOSITORY_TYPE_LOCAL = 'local'
     REPOSITORY_TYPE_GIT = 'git'
-    
+    REPOSITORY_TYPE_ZIP = 'zip'
+    REPOSITORY_TYPE_TAR = 'tar'
+
     GIT_TYPE_BRANCH = 'b'
     GIT_TYPE_TAG = 't'
     GIT_TYPE_COMMIT = 'c'
