@@ -68,7 +68,7 @@ dependencies:
     repository:
       path: https://github.com/ezored/dependency-sample.git
       type: git
-      version: b:master
+      version: t:1.0.0
 """
 
         self.assertEqual(Constants.PROJECT_FILE_DATA, file_data)

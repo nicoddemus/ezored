@@ -8,32 +8,12 @@ from ezored.models.repository import Repository
 from ezored.models.util.file_util import FileUtil
 
 
-class TestRepository(TestCase):
-    def test_constructor(self):
-        repository = Repository(
-            rep_type=Constants.REPOSITORY_TYPE_LOCAL,
-            rep_path='/tmp/repository-test',
-            rep_version='1.0.0',
-        )
-
-        self.assertEqual(repository.rep_type, Constants.REPOSITORY_TYPE_LOCAL)
-        self.assertEqual(repository.rep_path, '/tmp/repository-test')
-        self.assertEqual(repository.rep_version, '1.0.0')
-
-    def test_local_get_name(self):
-        repository = Repository(
-            rep_type=Constants.REPOSITORY_TYPE_LOCAL,
-            rep_path='/tmp/repository-test',
-            rep_version='1.0.0',
-        )
-
-        self.assertEqual(repository.get_name(), 'repository-test')
-
+class TestRepositoryGit(TestCase):
     def test_git_get_name(self):
         repository = Repository(
             rep_type=Constants.REPOSITORY_TYPE_GIT,
             rep_path='https://github.com/ezored/dependency-sample.git',
-            rep_version='b:master',
+            rep_version='t:1.0.0',
         )
 
         self.assertEqual(repository.get_name(), 'dependency-sample')
@@ -136,17 +116,6 @@ class TestRepository(TestCase):
 
         self.assertEqual(download_filename, 'dependency-sample')
 
-    def test_local_download_filename(self):
-        repository = Repository.from_dict({
-            'type': Constants.REPOSITORY_TYPE_LOCAL,
-            'path': '/opt/ezored/sample-dependency',
-            'version': '',
-        })
-
-        download_filename = repository.get_download_filename()
-
-        self.assertEqual(download_filename, 'sample-dependency')
-
     @tempdir()
     def test_git_temp_working_dir(self, d):
         os.chdir(d.path)
@@ -164,17 +133,6 @@ class TestRepository(TestCase):
             os.path.join(FileUtil.get_current_dir(), Constants.TEMP_DIR, repository.get_temp_dir())
         )
 
-    def test_local_temp_working_dir(self):
-        repository = Repository.from_dict({
-            'type': Constants.REPOSITORY_TYPE_LOCAL,
-            'path': '/opt/ezored/sample-dependency',
-            'version': '',
-        })
-
-        temp_working_dir = repository.get_temp_dir()
-
-        self.assertEqual(temp_working_dir, '/opt/ezored/sample-dependency')
-
     def test_git_get_dir_name(self):
         repository = Repository.from_dict({
             'type': Constants.REPOSITORY_TYPE_GIT,
@@ -185,14 +143,3 @@ class TestRepository(TestCase):
         dir_name = repository.get_dir_name()
 
         self.assertEqual(dir_name, 'dependency-sample')
-
-    def test_local_get_dir_name(self):
-        repository = Repository.from_dict({
-            'type': Constants.REPOSITORY_TYPE_LOCAL,
-            'path': '/opt/ezored/sample-dependency',
-            'version': '',
-        })
-
-        dir_name = repository.get_dir_name()
-
-        self.assertEqual(dir_name, 'sample-dependency')

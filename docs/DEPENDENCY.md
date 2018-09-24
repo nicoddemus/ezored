@@ -46,9 +46,9 @@ Some dependencies examples:
 ```yaml
 dependencies:
   - repository:
-      name: ezored/dependency-sample
+      name: https://github.com/ezored/dependency-sample.git
       type: git
-      version: b:master
+      version: t:1.0.0
 ```
  
 

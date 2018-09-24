@@ -35,37 +35,60 @@ A sample ezored project file:
 config:
   name: ezored
   ios:
-    cmake_version: 3.9
-    development_team_id: ABCDEFGHIJ
     bundle_id: com.ezored.library
-    code_sign_identity: iPhone Developer
-    deployment_target: '8.0'
-    device_family: '1,2'
     version: 1.0.0
-    cpp_standard: '11'
+    development_team_id: ABCDEFGHIJ    
   android:
-    cmake_version: 3.4.1
-    cpp_standard: '11'
+    bundle_id: com.ezored.library
+    version: 1.0.0
+    version_code: 1
+    use_ndk_unified_headers: true
+    dependencies:
+      - type: implementation
+        path: com.android.support:appcompat-v7:${project.ext.supportLibVersion}
+  macos:
+    type: framework
+  linux:
+    type: shared-lib
+  windows:
+    type: shared-lib
 targets:
   - name: ios
     repository:
-      name: ezored/target-ios
+      path: https://github.com/ezored/target-ios.git
       type: git
       version: b:master
   - name: android
     repository:
-      name: ezored/target-android
+      path: https://github.com/ezored/target-android.git
+      type: git
+      version: b:master
+  - name: linux
+    repository:
+      path: https://github.com/ezored/target-linux.git
+      type: git
+      version: b:master
+  - name: windows
+    repository:
+      path: https://github.com/ezored/target-windows.git
+      type: git
+      version: b:master
+  - name: macos
+    repository:
+      path: https://github.com/ezored/target-macos.git
       type: git
       version: b:master
 dependencies:
-  - repository:
-      name: ezored/dependency-djinni-support
+  - name: djinni-support
+    repository:
+      path: https://github.com/ezored/dependency-djinni-support.git
       type: git
-      version: b:master
-  - repository:
-      name: ezored/dependency-sample
+      version: t:1.0.1
+  - name: sample
+    repository:
+      path: https://github.com/ezored/dependency-sample.git
       type: git
-      version: b:master
+      version: t:1.0.0
 ```
 
 ### Thoubleshoots
