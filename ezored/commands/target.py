@@ -5,7 +5,6 @@ from ezored.models.constants import Constants
 from ezored.models.process_data import ProcessData
 from ezored.models.target_data import TargetData
 from ezored.models.task import Task
-
 from .base import Base
 
 

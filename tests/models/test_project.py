@@ -2,9 +2,10 @@ import os
 from unittest import TestCase
 
 import pytest
+from testfixtures import tempdir
+
 from ezored.models.constants import Constants
 from ezored.models.project import Project
-from testfixtures import tempdir
 
 
 class TestProject(TestCase):

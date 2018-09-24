@@ -18,11 +18,14 @@ class DownloadUtil(object):
     @staticmethod
     def download_file(url, dest=None, filename=None):
         """
-        Download and save a file specified by url to dest directory,
+        Download and save a file specified by url to dest directory.
         """
-        Logger.d('New download request')
+        Logger.d('New download request: {0}'.format(url))
+        Logger.d('Destination: {0}'.format(dest))
+        Logger.d('Filename: {0}'.format(filename))
 
-        u = urllib2.urlopen(url)
+        req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        u = urllib2.urlopen(req)
 
         scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
 
@@ -84,6 +87,16 @@ class DownloadUtil(object):
 
         if not filename:
             filename = 'downloaded.file'
+
+        Logger.d('Filename from download URL: {0}'.format(filename))
+
+        return filename
+
+    @staticmethod
+    def get_filename_from_url_without_extension(url):
+        Logger.d('Parsing URL to get filename...')
+
+        filename = url.split('\\').pop().split('/').pop().rsplit('.', -1)[0]
 
         Logger.d('Filename from download URL: {0}'.format(filename))
 

@@ -16,11 +16,13 @@ The dependency block structure has this properties:
 
 The property in `"repository.type"` define how ezored will get your dependency. Today we support types:
 - local  
-- github  
+- git  
+- zip  
+- tar  
 
 The property `"repository.name"` define how ezored will find your dependency based on `"type"`. Example:  
 - `local` = You need set the path to the dependency directory, ex: `${HOME}/my-dependency`  
-- `github` = You need set the repository name, ex: `ezored/dependency-sample` 
+- `git` = You need set the repository name, ex: `https://github.com/ezored/dependency-sample.git` 
 
 The property `"repository.version"` define what version ezored need download, ex: `"1.2.0"`. Git repositories have some especial version parse rules:
 - `b:master` = will download version from branch "master" 
@@ -44,9 +46,9 @@ Some dependencies examples:
 ```yaml
 dependencies:
   - repository:
-      name: ezored/dependency-sample
-      type: github
-      version: b:master
+      name: https://github.com/ezored/dependency-sample.git
+      type: git
+      version: t:1.0.0
 ```
  
 

@@ -1,11 +1,12 @@
 import os
 from unittest import TestCase
 
+from testfixtures import tempdir
+
 from ezored.models.constants import Constants
 from ezored.models.process_data import ProcessData
 from ezored.models.repository import Repository
 from ezored.models.util.file_util import FileUtil
-from testfixtures import tempdir
 
 
 class TestProcessData(TestCase):
@@ -54,8 +55,8 @@ class TestProcessData(TestCase):
         process_data.reset()
 
         repository = Repository.from_dict({
-            'type': 'github',
-            'path': 'ezored/dependency-sample',
+            'type': 'git',
+            'path': 'https://github.com/ezored/dependency-sample.git',
             'version': 't:1.0.0',
         })
 
@@ -77,8 +78,8 @@ class TestProcessData(TestCase):
         process_data.reset()
 
         repository = Repository.from_dict({
-            'type': 'github',
-            'path': 'ezored/dependency-sample',
+            'type': 'git',
+            'path': 'https://github.com/ezored/dependency-sample.git',
             'version': 't:1.0.0',
         })
 
@@ -110,8 +111,8 @@ class TestProcessData(TestCase):
         process_data.reset()
 
         repository = Repository.from_dict({
-            'type': 'github',
-            'path': 'ezored/dependency-sample',
+            'type': 'git',
+            'path': 'https://github.com/ezored/dependency-sample.git',
             'version': 't:1.0.0',
         })
 

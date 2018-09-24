@@ -10,6 +10,12 @@ Install ezored typing in your terminal:
 pip install ezored 
 ```
 
+or, if you have permission problem, use:
+
+```
+pip install ezored --user 
+```
+
 ### Commands
 
 Use the follow pattern to execute commands:  
@@ -20,8 +26,10 @@ More commands:
 - `-h` or `--help`: Show all available commands.
 - `init`: Initialize a new project with sample dependencies and required files.
 - `dependency update`: Update all dependencies inside project file.
-- `target build <target-name>`: Build the specified target. If target name is ommited, all targets will be builded.
-- `clean`: Clean all temporary data
+- `dependency update <dependency-name>`: Update a single dependency inside project file.
+- `target build`: Build all targets inside project file.
+- `target build <target-name>`: Build a single target inside project file.
+- `clean`: Clean all temporary and downloaded data
 
 ### Get started NOW, please!
 
@@ -31,10 +39,11 @@ Execute the following commands to create a initial directory with all required f
 > cd ezored-test  
 > ezored init  
 > ezored dependency update  
-> ezored target build  
+> ezored target build [linux, macos or windows] 
 
 
-You can use only `"ezored build <target-name>"` command to build a single target.
+** You can use only `"ezored build <target-name>"` command to build a single target.  
+** You can use `"ezored build [ios or android]"` if you have everything installed for it.   
 
 ### Documentation Index
 

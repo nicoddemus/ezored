@@ -1,12 +1,14 @@
+from unittest import TestCase
+
+from ezored.models.constants import Constants
 from ezored.models.dependency import Dependency
 from ezored.models.repository import Repository
-from unittest import TestCase
 
 
 class TestDependency(TestCase):
     def test_constructor(self):
         repository = Repository(
-            rep_type=Repository.TYPE_LOCAL,
+            rep_type=Constants.REPOSITORY_TYPE_LOCAL,
             rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
@@ -17,13 +19,13 @@ class TestDependency(TestCase):
         )
 
         self.assertEqual(dependency.get_name(), 'repository-test')
-        self.assertEqual(dependency.repository.rep_type, Repository.TYPE_LOCAL)
+        self.assertEqual(dependency.repository.rep_type, Constants.REPOSITORY_TYPE_LOCAL)
         self.assertEqual(dependency.repository.rep_path, '/tmp/repository-test')
         self.assertEqual(dependency.repository.rep_version, '1.0.0')
 
     def test_local_get_name(self):
         repository = Repository(
-            rep_type=Repository.TYPE_LOCAL,
+            rep_type=Constants.REPOSITORY_TYPE_LOCAL,
             rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
@@ -37,7 +39,7 @@ class TestDependency(TestCase):
 
     def test_local_get_name_with_null_name(self):
         repository = Repository(
-            rep_type=Repository.TYPE_LOCAL,
+            rep_type=Constants.REPOSITORY_TYPE_LOCAL,
             rep_path='/tmp/repository-test',
             rep_version='1.0.0',
         )
@@ -52,7 +54,7 @@ class TestDependency(TestCase):
     def test_match_target_name_and_target_data(self):
         # create dependency
         dep_repository = Repository(
-            rep_type=Repository.TYPE_LOCAL,
+            rep_type=Constants.REPOSITORY_TYPE_LOCAL,
             rep_path='dep-repository-test',
             rep_version='1.0.0',
         )

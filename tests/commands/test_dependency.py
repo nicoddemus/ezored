@@ -2,8 +2,9 @@ import os
 from subprocess import PIPE, Popen as popen
 from unittest import TestCase
 
-from ezored.models.constants import Constants
 from testfixtures import tempdir
+
+from ezored.models.constants import Constants
 
 
 class TestDependency(TestCase):
@@ -27,17 +28,17 @@ class TestDependency(TestCase):
         self.assertTrue(required in output)
 
     @tempdir()
-    def test_dependency_github_update(self, d):
+    def test_dependency_git_update(self, d):
         os.chdir(d.path)
 
         project_file_data = """
 config:
   name: ezored
 dependencies:
-  - name: github-test
+  - name: git-test
     repository:
-      path: ezored/dependency-github-test
-      type: github
+      path: https://github.com/ezored/dependency-git-test.git
+      type: git
       version: b:master
 """
 
@@ -47,7 +48,53 @@ dependencies:
         output = str(output)
         print(output)
 
-        required = 'Build finished for repository: ezored-dependency-github-test'
+        required = 'Build finished for repository: dependency-git-test'
+        self.assertTrue(required in output)
+
+    @tempdir()
+    def test_dependency_zip_update(self, d):
+        os.chdir(d.path)
+
+        project_file_data = """
+config:
+  name: ezored
+dependencies:
+  - name: zip-test
+    repository:
+      path: http://ezored.com/downloads/dependency-sample.zip
+      type: zip
+"""
+
+        d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
+
+        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = str(output)
+        print(output)
+
+        required = 'Build finished for repository: dependency-sample'
+        self.assertTrue(required in output)
+
+    @tempdir()
+    def test_dependency_tar_update(self, d):
+        os.chdir(d.path)
+
+        project_file_data = """
+config:
+  name: ezored
+dependencies:
+  - name: tar-test
+    repository:
+      path: http://ezored.com/downloads/dependency-sample.tar.gz
+      type: tar
+"""
+
+        d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
+
+        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = str(output)
+        print(output)
+
+        required = 'Build finished for repository: dependency-sample'
         self.assertTrue(required in output)
 
     @tempdir()
@@ -76,20 +123,20 @@ config:
 config:
   name: ezored
 dependencies:
-  - name: github-test
+  - name: git-test
     repository:
-      path: ezored/dependency-github-test
-      type: github
+      path: https://github.com/ezored/dependency-git-test.git
+      type: git
       version: b:master
 """
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update', 'github-test'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'update', 'git-test'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
-        required = 'Build finished for repository: ezored-dependency-github-test'
+        required = 'Build finished for repository: dependency-git-test'
         self.assertTrue(required in output)
 
     @tempdir()
@@ -100,10 +147,10 @@ dependencies:
 config:
   name: ezored
 dependencies:
-  - name: github-test
+  - name: git-test
     repository:
-      path: ezored/dependency-github-test
-      type: github
+      path: https://github.com/ezored/dependency-git-test.git
+      type: git
       version: b:master
 """
 
