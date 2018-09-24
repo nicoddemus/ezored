@@ -52,6 +52,52 @@ dependencies:
         self.assertTrue(required in output)
 
     @tempdir()
+    def test_dependency_zip_update(self, d):
+        os.chdir(d.path)
+
+        project_file_data = """
+config:
+  name: ezored
+dependencies:
+  - name: zip-test
+    repository:
+      path: http://ezored.com/downloads/dependency-sample.zip
+      type: zip
+"""
+
+        d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
+
+        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = str(output)
+        print(output)
+
+        required = 'Build finished for repository: dependency-sample'
+        self.assertTrue(required in output)
+
+    @tempdir()
+    def test_dependency_tar_update(self, d):
+        os.chdir(d.path)
+
+        project_file_data = """
+config:
+  name: ezored
+dependencies:
+  - name: tar-test
+    repository:
+      path: http://ezored.com/downloads/dependency-sample.tar.gz
+      type: tar
+"""
+
+        d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
+
+        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = str(output)
+        print(output)
+
+        required = 'Build finished for repository: dependency-sample'
+        self.assertTrue(required in output)
+
+    @tempdir()
     def test_no_dependencies(self, d):
         os.chdir(d.path)
 
