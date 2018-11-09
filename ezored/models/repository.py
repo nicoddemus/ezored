@@ -283,7 +283,7 @@ class Repository(object):
             force_download = True
 
         # skip if exists
-        if not force_download and os.path.isfile(download_dest_path):
+        if not force_download and os.path.isdir(download_dest_path):
             Logger.i('Repository already downloaded: {0}'.format(self.get_name()))
         else:
             FileUtil.remove_dir(download_dest_path)
