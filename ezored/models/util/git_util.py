@@ -27,8 +27,6 @@ class GitUtil(object):
         args = [
             'git',
             'clone',
-            '--depth',
-            '1',
             rep_path,
             dest,
         ]
@@ -52,22 +50,31 @@ class GitUtil(object):
 
         # change to the desired repository version
         if rep_type == Constants.GIT_TYPE_BRANCH:
+            Logger.i('Changing repository to branch {0}...'.format(rep_version))
+
             args = [
                 'git',
                 'checkout',
                 rep_version,
             ]
         elif rep_type == Constants.GIT_TYPE_COMMIT:
-            args = [
-                'git',
-                'reset',
-                '--hard',
-                rep_version,
-            ]
-        elif rep_type == Constants.GIT_TYPE_TAG:
+            Logger.i('Changing repository to commit {0}...'.format(rep_version))
+
             args = [
                 'git',
                 'checkout',
+                '-b',
+                rep_version,
+                rep_version,
+            ]
+        elif rep_type == Constants.GIT_TYPE_TAG:
+            Logger.i('Changing repository to tag {0}...'.format(rep_version))
+
+            args = [
+                'git',
+                'checkout',
+                'tags/{0}'.format(rep_version),
+                '-b',
                 rep_version,
             ]
         else:
@@ -102,3 +109,31 @@ class GitUtil(object):
         data_list = p.findall(rep_path)
         rep_name = data_list[0] if len(data_list) == 1 else None
         return rep_name
+
+    @staticmethod
+    def get_current_downloaded_repository_version(path):
+        if path is None:
+            return None
+
+        if not os.path.isdir(path):
+            return None
+
+        args = [
+            'git',
+            'rev-parse',
+            '--abbrev-ref',
+            'HEAD',
+        ]
+
+        exitcode, stderr, stdout = FileUtil.run(args, path, None)
+
+        if exitcode == 0:
+            return os.path.basename(stdout).strip()
+        else:
+            if stdout:
+                Logger.i('Get downloaded repository version output:')
+                Logger.clean(stdout)
+
+            if stderr:
+                Logger.i('Error output while get downloaded repository version:')
+                Logger.clean(stderr)

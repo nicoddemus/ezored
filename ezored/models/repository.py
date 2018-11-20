@@ -279,8 +279,21 @@ class Repository(object):
         download_dest_dir = Constants.TEMP_DIR
         download_dest_path = os.path.join(download_dest_dir, download_filename)
 
+        downloaded_version = GitUtil.get_current_downloaded_repository_version(download_dest_path)
+
         if rep_type == Constants.GIT_TYPE_BRANCH:
             force_download = True
+
+        if downloaded_version is not None:
+            if downloaded_version != rep_version:
+                Logger.i(
+                    'Repository downloaded version ({0}) is different from configured version ({1}), '
+                    'downloading configured version...'.format(
+                        downloaded_version.strip(),
+                        rep_version.strip()
+                    ))
+
+                force_download = True
 
         # skip if exists
         if not force_download and os.path.isdir(download_dest_path):

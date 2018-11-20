@@ -51,7 +51,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update', '-d'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -89,7 +89,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update', '-d'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -127,7 +127,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update', '-d'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -167,7 +167,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update', '-d'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install', '-d'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 

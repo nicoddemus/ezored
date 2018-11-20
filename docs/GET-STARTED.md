@@ -25,8 +25,8 @@ More commands:
 
 - `-h` or `--help`: Show all available commands.
 - `init`: Initialize a new project with sample dependencies and required files.
-- `dependency update`: Update all dependencies inside project file.
-- `dependency update <dependency-name>`: Update a single dependency inside project file.
+- `dependency install`: Install all dependencies inside project file.
+- `dependency install <dependency-name>`: Install a single dependency inside project file.
 - `target build`: Build all targets inside project file.
 - `target build <target-name>`: Build a single target inside project file.
 - `clean`: Clean all temporary and downloaded data
@@ -38,7 +38,7 @@ Execute the following commands to create a initial directory with all required f
 > mkdir ezored-test  
 > cd ezored-test  
 > ezored init  
-> ezored dependency update  
+> ezored dependency install  
 > ezored target build [linux, macos or windows] 
 
 

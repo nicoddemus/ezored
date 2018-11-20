@@ -40,7 +40,7 @@ class TestClean(TestCase):
         output = str(output)
         print(output)
 
-        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 

@@ -28,7 +28,7 @@ class TestDependency(TestCase):
         self.assertTrue(required in output)
 
     @tempdir()
-    def test_dependency_git_update(self, d):
+    def test_dependency_git_install(self, d):
         os.chdir(d.path)
 
         project_file_data = """
@@ -44,7 +44,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -52,7 +52,7 @@ dependencies:
         self.assertTrue(required in output)
 
     @tempdir()
-    def test_dependency_zip_update(self, d):
+    def test_dependency_zip_install(self, d):
         os.chdir(d.path)
 
         project_file_data = """
@@ -67,7 +67,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -75,7 +75,7 @@ dependencies:
         self.assertTrue(required in output)
 
     @tempdir()
-    def test_dependency_tar_update(self, d):
+    def test_dependency_tar_install(self, d):
         os.chdir(d.path)
 
         project_file_data = """
@@ -90,7 +90,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -108,7 +108,7 @@ config:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -116,7 +116,7 @@ config:
         self.assertTrue(required in output)
 
     @tempdir()
-    def test_dependency_single_update(self, d):
+    def test_dependency_single_install(self, d):
         os.chdir(d.path)
 
         project_file_data = """
@@ -132,7 +132,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update', 'git-test'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install', 'git-test'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 
@@ -140,7 +140,7 @@ dependencies:
         self.assertTrue(required in output)
 
     @tempdir()
-    def test_dependency_single_update_invalid(self, d):
+    def test_dependency_single_install_invalid(self, d):
         os.chdir(d.path)
 
         project_file_data = """
@@ -156,7 +156,7 @@ dependencies:
 
         d.write(Constants.PROJECT_FILE, project_file_data.encode('utf-8'))
 
-        output = popen(['ezored', 'dependency', 'update', 'test-invalid'], stdout=PIPE).communicate()[0]
+        output = popen(['ezored', 'dependency', 'install', 'test-invalid'], stdout=PIPE).communicate()[0]
         output = str(output)
         print(output)
 

@@ -6,22 +6,22 @@ from .base import Base
 
 class Dependency(Base):
     def run(self):
-        if self.options['update']:
+        if self.options['install']:
             dependency_name = self.options['<dependency-name>'] if '<dependency-name>' in self.options else ''
-            self.update(dependency_name)
+            self.install(dependency_name)
         elif self.options['list']:
             self.list()
 
-    def update(self, dependency_name):
+    def install(self, dependency_name):
         from ezored.models.logger import Logger
         from ezored.models.project import Project
 
         project = Project.create_from_project_file()
 
         if dependency_name:
-            Logger.i('Update dependency "{0}"'.format(dependency_name))
+            Logger.i('Install dependency "{0}"'.format(dependency_name))
         else:
-            Logger.i('Update all dependencies')
+            Logger.i('Install all dependencies')
 
         dependency_found = False
         total_deps = len(project.dependencies)
@@ -40,7 +40,7 @@ class Dependency(Base):
                     can_build = True
 
                 if can_build:
-                    Logger.i('Updating dependency "{0}"...'.format(dependency.get_name()))
+                    Logger.i('Installing dependency "{0}"...'.format(dependency.get_name()))
                     dependency_found = True
 
                     dependency.prepare_from_process_data(process_data)
@@ -50,7 +50,7 @@ class Dependency(Base):
                         process_data=process_data
                     )
 
-                    Logger.i('Dependency "{0}" updated'.format(dependency.get_name()))
+                    Logger.i('Dependency "{0}" installed'.format(dependency.get_name()))
 
             if not dependency_found:
                 Logger.f('Dependency not found: {0}'.format(dependency_name))

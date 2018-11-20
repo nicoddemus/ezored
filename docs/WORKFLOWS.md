@@ -6,7 +6,7 @@ With workflows images you can have a graphical overview about all process and co
 
 - [Repository Download](WORKFLOW-REPOSITORY-DOWNLOAD.md)
 - [Repository Build](WORKFLOW-REPOSITORY-BUILD.md)
-- [Dependency Update](WORKFLOW-DEPENDENCY-UPDATE.md)
+- [Dependency Instaa](WORKFLOW-DEPENDENCY-INSTALL.md)
 - [Target Build](WORKFLOW-TARGET-BUILD.md)
 
 <br />

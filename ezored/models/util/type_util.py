@@ -5,8 +5,8 @@ class TypeUtil(object):
             return True
         elif isinstance(value, str):
             if value and value.strip():
-                return True
-            else:
                 return False
+            else:
+                return True
 
         return False

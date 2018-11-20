@@ -4,8 +4,8 @@ ezored
 Usage:
   ezored [options] init
   ezored [options] dependency list
-  ezored [options] dependency update
-  ezored [options] dependency update <dependency-name>
+  ezored [options] dependency install
+  ezored [options] dependency install <dependency-name>
   ezored [options] target list
   ezored [options] target <target-command>
   ezored [options] target <target-command> <target-name>
@@ -20,7 +20,7 @@ Options:
 Examples:
   ezored init
   ezored dependency list
-  ezored dependency update
+  ezored dependency install
   ezored target list
   ezored target build
   ezored clean
