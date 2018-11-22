@@ -41,6 +41,19 @@ If you have problems with permission, try:
 pip install ezored --user 
 ```
 
+## Upgrade
+
+```
+pip install ezored --upgrade 
+```
+
+If you have problems with permission, try:
+
+```
+pip install ezored  --upgrade --user 
+```
+
+
 ## Documentation
 
 To check out live docs, visit [docs](docs/GET-STARTED.md) folder.
