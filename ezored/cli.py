@@ -29,7 +29,8 @@ Help:
   For help using this tool, please open an issue on the Github repository:
   https://github.com/ezored/ezored
 """
-
+import os
+import platform
 from inspect import getmembers, isclass
 from json import dumps
 
@@ -48,8 +49,12 @@ def main():
     # show all params for debug
     if ('--debug' in options and options['--debug']) or ('-d' in options and options['-d']):
         Constants.DEBUG = True
-        Logger.d('You supplied the following options: ')
-        Logger.d('\n{0}'.format(dumps(options, indent=2, sort_keys=False)))
+        Logger.clean('System information: ')
+        Logger.clean('> Process id: {0}'.format(os.getpid()))
+        Logger.clean('> Python: {0}'.format(platform.python_version()))
+        Logger.clean('')
+        Logger.clean('You supplied the following options: ')
+        Logger.clean('{0}'.format(dumps(options, indent=2, sort_keys=False)))
         Logger.clean('')
 
     # dynamically match the command that user is trying to run

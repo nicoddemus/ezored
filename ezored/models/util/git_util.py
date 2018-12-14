@@ -128,7 +128,7 @@ class GitUtil(object):
         exitcode, stderr, stdout = FileUtil.run(args, path, None)
 
         if exitcode == 0:
-            return os.path.basename(stdout).strip()
+            return os.path.basename(stdout).strip().decode()
         else:
             if stdout:
                 Logger.i('Get downloaded repository version output:')

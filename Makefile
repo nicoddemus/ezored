@@ -10,6 +10,8 @@ help:
 	@echo "- help"
 	@echo "- install"
 	@echo "- install-user"
+	@echo "- install-p3"
+	@echo "- install-user-p3"
 	@echo "- test"
 	@echo "- test-cov"
 	@echo "- test-on-docker"
@@ -25,6 +27,12 @@ install:
 
 install-user:
 	pip install -e .[test] --user
+
+install-p3:
+	pip3 install -e .[test]
+
+install-user-p3:
+	pip3 install -e .[test] --user
 
 test:
 	python setup.py test
