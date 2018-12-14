@@ -34,7 +34,7 @@ class TestCLI(TestCase):
         os.chdir(d.path)
         d.write(Constants.PROJECT_FILE, Constants.PROJECT_FILE_DATA.encode('utf-8'))
 
-        required = 'DEBUG: You supplied the following options:'
+        required = 'You supplied the following options:'
 
         output = popen(['ezored', 'init', '--debug'], stdout=PIPE).communicate()[0]
         output = str(output)
