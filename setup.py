@@ -64,10 +64,10 @@ setup(
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),
     install_requires=[
-        'pyyaml==3.12',
+        'pyyaml==4.2b1',
         'docopt==0.6.2',
-        'python-slugify==1.2.5',
-        'tqdm==4.19.4',
+        'python-slugify==2.0.1',
+        'tqdm==4.28.1',
         'jinja2==2.10'
     ],
     extras_require={
