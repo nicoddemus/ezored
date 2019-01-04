@@ -54,6 +54,7 @@ clean:
 	rm -rf ezored.egg-info
 	rm -rf .cache
 	rm -rf .pytest_cache
+	rm -rf .coverage*
 
 pip-package:
 	python setup.py sdist
