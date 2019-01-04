@@ -64,7 +64,7 @@ setup(
     keywords='cli',
     packages=find_packages(exclude=['docs', 'tests*']),
     install_requires=[
-        'pyyaml==4.2b1',
+        'pyyaml==4.2b2',
         'docopt==0.6.2',
         'python-slugify==2.0.1',
         'tqdm==4.28.1',
