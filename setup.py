@@ -50,8 +50,8 @@ setup(
     license='MIT',
     classifiers=[
         'Intended Audience :: Developers',
-        'Topic :: Utilities',
-        'License :: Public Domain',
+        'Topic :: Software Development :: Build Tools',
+        'License :: MIT',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
