@@ -72,10 +72,10 @@ setup(
     ],
     extras_require={
         'test': [
-            'coverage',
-            'pytest',
-            'pytest-cov',
-            'testfixtures'
+            'coverage==4.5.2',
+            'pytest==4.1.0',
+            'pytest-cov==2.6.1',
+            'testfixtures==6.4.1'
         ],
     },
     entry_points={
